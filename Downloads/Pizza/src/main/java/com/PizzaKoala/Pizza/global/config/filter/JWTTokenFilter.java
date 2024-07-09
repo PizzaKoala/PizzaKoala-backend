@@ -39,9 +39,23 @@ public class JWTTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@Nullable HttpServletRequest request, @Nullable HttpServletResponse response,
                                     @Nullable FilterChain filterChain) throws ServletException, IOException {
+
+
         if (request == null || response == null || filterChain == null) {
             log.error("Request, Response, or FilterChain is null");
             return;
+        }
+        String requestUri = request.getRequestURI();
+
+//        if (requestUri.matches("^\\/login(?:\\/.*)?$")) {
+//
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+        if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
+
+            filterChain.doFilter(request, response);
+            return; //재로그인 무한로프 방지.
         }
         String accessToken = request.getHeader("access");
 

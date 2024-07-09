@@ -18,13 +18,18 @@ public class PizzaApplication {
 		//더 보안을 원한다면-->api 바뀌면 새 로그인(웹만) https://www.youtube.com/watch?v=Y__6n73AlJk&list=PLJkjrxxiBSFATow4HY2qr5wLvXM6Rg-BM&index=10
 
 
-		//TODO 월요일까지 구글 로그인!!, 레포지토리에 올리기
+		//TODO 월요일까지 구글 로그인! 회원가입떄 사진을 올리는데 구글로그인떄는 구글계정에서 사진을 가져온다.
+		//https://www.youtube.com/watch?v=OddaHR7oIWE 리액트랑 연결하는 방식 참고하기
+		//yml 파일에 oauth2서비스 변수 등록을 하면 됐지만 커스텀하게 정보를 가져오기위해서 클래스를 통해 직접 진행하는 방법인 client registration방식을 사용했다
+		//프로필 사진을 가져와야했다
+		//2개의 토큰(Refresh/Access)을 사용하는 경우 Refresh만 쿠키로 응답 받고 프론트측에서 다시 Refresh로 Access를 받도록 진행하셔도 됩니다.
+		// !, 레포지토리에 올리기
 		//aouth2- 대형서비스 개발 포럼은 보안규격에서 코드나 access토큰을 프론트에서 전송하는걸 지양한다.
 		//모든 책임을 백앤드나 프론트 한쪽에서 다 맡아야한다. 카카오 dev톡에선 네이티브앱일때는 프론트가 웹일떄는 백엔드가 책임을 맡는게 적합하고 한다.
 		//하이퍼링크를 백앤드로 보내서 모든 책임을 백앤드가 맡게하는게 가장 적합한 방식
 		//https://www.youtube.com/watch?v=6XZ8oJOex_U
 		//https://substantial-park-a17.notion.site/2-acacb442fdce473b91ebdd4e708d5214
-
+		//https://www.youtube.com/watch?v=9g_iN6rLQcQ 이부분은어떻게 하지.. 안했음 아직
 		//TODO s3 사진-프로필, 포스트 :(
 		//TODO git 에 올리기
 		// TODO 알람도 해야햇!!!!

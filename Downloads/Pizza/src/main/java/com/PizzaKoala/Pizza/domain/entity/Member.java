@@ -41,6 +41,7 @@ public class Member extends CreatedEntity{
     private LocalDateTime registeredAt;
     private LocalDateTime deletedAt;
 
+
     @PrePersist
     void registeredAt() {
         this.registeredAt = LocalDateTime.now();

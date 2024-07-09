@@ -1,13 +1,14 @@
 package com.PizzaKoala.Pizza.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-
+@Entity
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class ProfileImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +24,6 @@ public class ProfileImage {
     private String imageLogicalName;
     @CreatedDate
     private LocalDateTime createdAt;
-
 
 
 

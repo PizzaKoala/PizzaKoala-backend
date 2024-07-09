@@ -26,7 +26,7 @@ public class Post extends CreatedEntity {
     private String title;
     private String desc;
 
-    private Long likes=0L;
+    private Long likes;
 
     private LocalDateTime deletedAt;
 
