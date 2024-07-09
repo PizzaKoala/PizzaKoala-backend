@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
+    //ㅠㅠㅠㅠㅠㅠ
     private final ProfileImageRepository profileImageRepository;
 
     public CustomOAuth2UserService(MemberRepository memberRepository, ProfileImageRepository profileImageRepository) {
@@ -81,7 +82,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             return new CustomOAuth2User(userOAuth2Dto);
 
-        }
+        }//모지
 
 
     }
