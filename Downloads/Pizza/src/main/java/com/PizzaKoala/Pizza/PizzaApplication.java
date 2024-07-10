@@ -30,6 +30,7 @@ public class PizzaApplication {
 		//https://www.youtube.com/watch?v=6XZ8oJOex_U
 		//https://substantial-park-a17.notion.site/2-acacb442fdce473b91ebdd4e708d5214
 		//https://www.youtube.com/watch?v=9g_iN6rLQcQ 이부분은어떻게 하지.. 안했음 아직
+		//https://www.youtube.com/watch?v=Xiv5KFoEW4w
 		//TODO s3 사진-프로필, 포스트 :(
 		//TODO git 에 올리기
 		// TODO 알람도 해야햇!!!!
