@@ -27,8 +27,6 @@ public class Member extends CreatedEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long profileImageId;
-
     private String email;
 
     private String nickName;
@@ -40,6 +38,7 @@ public class Member extends CreatedEntity{
 
     private LocalDateTime registeredAt;
     private LocalDateTime deletedAt;
+    private String profileImageUrl;
 
 
     @PrePersist
@@ -47,12 +46,13 @@ public class Member extends CreatedEntity{
         this.registeredAt = LocalDateTime.now();
     }
 
-    public static Member of(String nickName, String email, String password) {
+    public static Member of(String nickName, String email, String password, String url) {
         return Member.builder()
                 .email(email)
                 .nickName(nickName)
                 .password(password)
                 .role(MemberRole.USER)
+                .profileImageUrl(url)
                 .build();
     }
 

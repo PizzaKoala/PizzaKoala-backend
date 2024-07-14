@@ -52,7 +52,7 @@ public class MemberServiceTest {
         when(memberRepository.findByNickName(nickName)).thenReturn(Optional.empty());
         when(passwordEncoder.encode(password)).thenReturn("encrypt_password");
         when(memberRepository.save(any())).thenReturn(MemberEntityFixture.getSignUp(nickName, email, password,id));
-        Assertions.assertDoesNotThrow(() -> memberService.join(nickName, password, email));
+        Assertions.assertDoesNotThrow(() -> memberService.join(files,nickName, password, email));
     }
     @Test
     void 회원가입시_이미_닉네임이_존재하는_경우() {
@@ -73,7 +73,7 @@ public class MemberServiceTest {
         //닉네임 존재 검증
         when(memberRepository.findByNickName(nickName)).thenReturn(Optional.of(fixture));
         when(memberRepository.save(any())).thenReturn(Optional.of(fixture));
-        PizzaAppException e = Assertions.assertThrows(PizzaAppException.class, () -> memberService.join(nickName, email,password));
+        PizzaAppException e = Assertions.assertThrows(PizzaAppException.class, () -> memberService.join(files,nickName, email,password));
         Assertions.assertEquals(e.getErrorCode(), ErrorCode.DUPLICATED_NICKNAME);
     }
     @Test
@@ -95,7 +95,7 @@ public class MemberServiceTest {
         //닉네임 존재 검증
         when(memberRepository.findByNickName(nickName)).thenReturn(Optional.empty());
         when(memberRepository.save(any())).thenReturn(Optional.of(mock(Member.class)));
-        PizzaAppException e = Assertions.assertThrows(PizzaAppException.class, () -> memberService.join(nickName,email, password));
+        PizzaAppException e = Assertions.assertThrows(PizzaAppException.class, () -> memberService.join(files,nickName,email, password));
         Assertions.assertEquals(e.getErrorCode(),ErrorCode.DUPLICATED_EMAIL_ADDRESS);
     }
     @Test

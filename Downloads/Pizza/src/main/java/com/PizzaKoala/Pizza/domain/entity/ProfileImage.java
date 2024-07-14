@@ -19,12 +19,27 @@ public class ProfileImage {
 
     private String url;
     private String format;
-    private String size;
-    private String imagePhysicalName;
+    private Long size;
     private String imageLogicalName;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @PrePersist
+    void createdAt() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public static ProfileImage of(Long memberId, String url, String format, Long size, String imageLogicalName) {
+
+        return new ProfileImageBuilder()
+                .memberId(memberId)
+                .url(url)
+                .format(format)
+                .size(size)
+                .imageLogicalName(imageLogicalName)
+                .build();
+    }
 
 
 }

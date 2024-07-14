@@ -7,6 +7,7 @@ import com.PizzaKoala.Pizza.domain.exception.CustomAuthenticationEntryPoint;
 import com.PizzaKoala.Pizza.domain.oauth2.CustomClientRegistrationRepo;
 import com.PizzaKoala.Pizza.domain.oauth2.CustomOAuth2UserService;
 import com.PizzaKoala.Pizza.domain.oauth2.Handler.CustomOAuth2SuccessHandler;
+import com.PizzaKoala.Pizza.domain.service.AuthenticationService;
 import com.PizzaKoala.Pizza.domain.service.MemberService;
 import com.PizzaKoala.Pizza.global.config.filter.CustomLogoutFilter;
 import com.PizzaKoala.Pizza.global.config.filter.JWTTokenFilter;
@@ -45,14 +46,17 @@ public class SecurityConfig {
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+    private final AuthenticationService authenticationService;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTTokenUtils jwtUtil, RefreshRepository refreshRepository, CustomClientRegistrationRepo customClientRegistrationRepo, CustomOAuth2UserService customOAuth2UserService,CustomOAuth2SuccessHandler customOAuth2SuccessHandler) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTTokenUtils jwtUtil, RefreshRepository refreshRepository, CustomClientRegistrationRepo customClientRegistrationRepo, CustomOAuth2UserService customOAuth2UserService,CustomOAuth2SuccessHandler customOAuth2SuccessHandler, AuthenticationService authenticationService) {
         this.customClientRegistrationRepo = customClientRegistrationRepo;
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
         this.customOAuth2UserService = customOAuth2UserService;
         this.customOAuth2SuccessHandler = customOAuth2SuccessHandler;
+        this.authenticationService = authenticationService;
+
     }
 
     @Bean
@@ -110,7 +114,7 @@ public class SecurityConfig {
                     }
                 }));
         http
-                .addFilterAt(new NewLoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new NewLoginFilter(authenticationManager(authenticationConfiguration), authenticationService), UsernamePasswordAuthenticationFilter.class);
         http
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
         http

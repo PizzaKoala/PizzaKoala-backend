@@ -11,12 +11,15 @@ public class UserJoinResponse {
     private Long id;
     private String email;
     private MemberRole role;
+    private String profileImageUrl;
+
 
     public static UserJoinResponse fromJoinUserDTO(UserDTO member) {
         return new UserJoinResponse(
                 member.getId(),
                 member.getEmail(),
-                member.getRole()
+                member.getRole(),
+                member.getProfileImageUrl()
         );
 
     }

@@ -7,7 +7,8 @@ import java.sql.Timestamp;
 
 @Getter
 @AllArgsConstructor
-public class Response<T> {
+public class
+Response<T> {
     private String resultCode;
     private T result;
 

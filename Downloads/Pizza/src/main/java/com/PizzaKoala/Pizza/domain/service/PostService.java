@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -24,12 +27,11 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final AlarmRepository alarmRepository;
     @Transactional
-    public void create(String email, String title, String desc) {
-        //image's quantity check
-//        List<MultipartFile> files
-//        if (files.size() > 5||files.isEmpty()) {
-//            throw new PizzaAppException(ErrorCode.IMAGE_UPLOAD_REQUIRED);
-//        }
+    public void create(List<MultipartFile> files,String email, String title, String desc) {
+//        image's quantity check
+        if (files.size() > 5||files.isEmpty()) {
+            throw new PizzaAppException(ErrorCode.IMAGE_UPLOAD_REQUIRED);
+        }
         //find user
         Member member = getMemberOrException(email);
 

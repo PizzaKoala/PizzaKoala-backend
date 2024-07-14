@@ -11,7 +11,7 @@ public class UserDTO {
     private Long id;
     private MemberRole role;
     private String nickName;
-    private String password;
+    private String profileImageUrl;
     private String email;
     private LocalDateTime registeredAt;
     private LocalDateTime deletedAt;
@@ -22,7 +22,7 @@ public class UserDTO {
                 member.getId(),
                 member.getRole(),
                 member.getNickName(),
-                member.getPassword(),
+                member.getProfileImageUrl(),
                 member.getEmail(),
                 member.getRegisteredAt(),
                 member.getDeletedAt(),
