@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
-    //ㅠㅠㅠㅠㅠㅠ
     private final ProfileImageRepository profileImageRepository;
 
     public CustomOAuth2UserService(MemberRepository memberRepository, ProfileImageRepository profileImageRepository) {
@@ -50,14 +49,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             Member member= Member.builder()
                     .email(oAuth2Response.getEmail())
                     .nickName(oAuth2Response.getName())
+                    .profileImageUrl(oAuth2Response.getProfileImg())
                     .role(MemberRole.USER)
                     .build();
             memberRepository.save(member);
-            //TODO: img는 어떻게 넣어주지?
-            ProfileImage profileImage= ProfileImage.builder()
-                    .url(oAuth2Response.getProfileImg())
-                    .build();
-            profileImageRepository.save(profileImage);
+            //TODO 사진은 저장하지 말까남..
+//            ProfileImage profileImage= ProfileImage.builder()
+//                    .url(oAuth2Response.getProfileImg())
+//                    .build();
+
+//            profileImageRepository.save(profileImage);
 
             UserOAuth2Dto userOAuth2Dto= UserOAuth2Dto.builder()
                     .email(oAuth2Response.getEmail())
@@ -67,18 +68,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .build();
             return new CustomOAuth2User(userOAuth2Dto);
         } else { //로그임
-            //TODO: 구글 로그인떄 이름(nickname)이나 이메일, 사진이 바뀌었을떄 업데이트하는 부분 만들어야한다.
+            //TODO: 구글 로그인떄 이름(nickname), 사진이 바뀌었을떄 업데이트하는 부분 만들어야한다.
 //            existData.setEmail(oAuth2Response.getEmail());
 //            existData.setName(oAuth2Response.getName());
 //
 //            userRepository.save(existData);
 
+
             UserOAuth2Dto userOAuth2Dto= UserOAuth2Dto.builder()
                     .username(oAuth2Response.getName())
                     .profileImg(oAuth2Response.getProfileImg())
-                    .email(oAuth2Response.getEmail())
                     .role(existData.getRole())
                     .build();
+
 
             return new CustomOAuth2User(userOAuth2Dto);
 

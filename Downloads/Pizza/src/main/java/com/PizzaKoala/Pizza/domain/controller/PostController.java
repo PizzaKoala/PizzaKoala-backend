@@ -23,7 +23,7 @@ public class PostController {
     @PostMapping
     public Response<Void> create(@RequestBody PostCreateRequest request, Authentication authentication) {
 
-        postService.create(authentication.getName(), request.getTitle(), request.getDesc());
+        postService.create(request.getFile(),authentication.getName(), request.getTitle(), request.getDesc());
 //        request.getFile()
         return Response.success();
     }

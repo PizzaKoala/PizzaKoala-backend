@@ -50,21 +50,22 @@ public class MemberControllerTest {
     @MockBean
     private PasswordEncoder passwordEncoder;
 
+
     @Test
     public void 회원가입() throws Exception {
         String password = "password";
         String nickname = "nickname";
         String email = "email";
-//        MockMultipartFile files =
-//                new MockMultipartFile("files", "meepyday1.jpg", MediaType.IMAGE_JPEG_VALUE, "file content 1".getBytes());
+        MockMultipartFile files =
+                new MockMultipartFile("files", "meepyday1.jpg", MediaType.IMAGE_JPEG_VALUE, "file content 1".getBytes());
 
 
-        when(memberService.join(nickname,email,password)).thenReturn(mock(UserDTO.class));
+        when(memberService.join(files,nickname,email,password)).thenReturn(mock(UserDTO.class));
 
         mockMvc.perform(post("/api/v1/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         //TODO : add request body
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(nickname,email, password)))
+                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(nickname,email,password,files)))
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -76,12 +77,12 @@ public class MemberControllerTest {
         String email = "email";
         MockMultipartFile files =
                 new MockMultipartFile("files", "meepyday1.jpg", MediaType.IMAGE_JPEG_VALUE, "file content 1".getBytes());
-        when(memberService.join(nickname,email,password)).thenThrow(new PizzaAppException(ErrorCode.DUPLICATED_EMAIL_ADDRESS,""));
+        when(memberService.join(files,nickname,email,password)).thenThrow(new PizzaAppException(ErrorCode.DUPLICATED_EMAIL_ADDRESS,""));
 
         mockMvc.perform(post("/api/v1/join")
                     .contentType(MediaType.APPLICATION_JSON)
                     //TODO : add request body
-                    .content(objectMapper.writeValueAsBytes(new UserJoinRequest(nickname,email, password)))
+                    .content(objectMapper.writeValueAsBytes(new UserJoinRequest(nickname,email, password,files)))
                 ).andDo(print())
                 .andExpect(status().isConflict());
     }

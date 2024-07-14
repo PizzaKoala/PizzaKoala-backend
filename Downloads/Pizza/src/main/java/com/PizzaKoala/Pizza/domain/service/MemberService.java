@@ -2,13 +2,17 @@ package com.PizzaKoala.Pizza.domain.service;
 
 import com.PizzaKoala.Pizza.domain.Repository.AlarmRepository;
 import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
+import com.PizzaKoala.Pizza.domain.Repository.ProfileImageRepository;
 import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
 import com.PizzaKoala.Pizza.domain.entity.Member;
+import com.PizzaKoala.Pizza.domain.entity.ProfileImage;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 
 import com.PizzaKoala.Pizza.domain.model.AlarmDTO;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;
+import com.PizzaKoala.Pizza.global.config.filter.NewLoginFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,24 +23,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final AlarmRepository alarmRepository;
+    private final S3ImageUploadService s3ImageUploadService;
+    private final ProfileImageRepository profileImageRepository;
+    private final AuthenticationService authenticationService;
 
 //    @Value("${jwt.secret-key}")
 //    private String secretKey;
 //
 //    @Value("${jwt.token.expired-time-ms}")
 //    private Long expiredTimeMs;
-    @Transactional //exception     발생할 경우 롤백되어서 저장되지 않는다
-    public UserDTO join(String nickName, String email, String password) { //email, nickname, password, profile-photo
-        //TODO
-//        , MultipartFile file
-        //사진 프로필 올리기
 
+//    return UserDTO
+    @Transactional //exception     발생할 경우 롤백되어서 저장되지 않는다
+    public UserDTO join(MultipartFile file,String nickName, String email, String password, HttpServletResponse response) throws IOException { //email, nickname, password, profile-photo
 
         //이메일이 이미 가입되어있는지
         memberRepository.findByEmail(email).ifPresent(it -> {
@@ -47,11 +54,28 @@ public class MemberService {
         memberRepository.findByNickName(nickName).ifPresent(it -> {
             throw new PizzaAppException(ErrorCode.DUPLICATED_NICKNAME, String.format("%s is duplicated", nickName));
         });
-        Member member = Member.of(nickName, email, passwordEncoder.encode(password));
+
+        //TODO 사진 프로필 올리기
+        /*s3 이미지 업로드 로직*/
+        String profileImage = s3ImageUploadService.upload(file);
+
+        Member member = Member.of(nickName, email, passwordEncoder.encode(password), profileImage);
 
         // 회원가입 등록
         Member result = memberRepository.save(member);
 //        throw new PizzaAppException(ErrorCode.DUPLICATED_EMAIL_ADDRESS, String.format("%is Duplicated", email));
+
+
+        /* db에 저장*/
+        try {
+            ProfileImage profile = ProfileImage.of(result.getId(), profileImage, file.getContentType(), file.getSize(), file.getOriginalFilename());
+            profileImageRepository.save(profile);
+        } catch (Exception e) {
+            s3ImageUploadService.deleteFiles(profileImage);
+            memberRepository.delete(member);
+            throw new PizzaAppException(ErrorCode.IMAGE_UPLOAD_REQUIRED);
+        }
+        authenticationService.handleSuccessfulAuthentication(member.getEmail(),member.getRole().toString(),response);
         return UserDTO.fromMemberEntity(result);
     }
 

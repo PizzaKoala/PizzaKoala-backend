@@ -2,6 +2,7 @@ package com.PizzaKoala.Pizza.global.config.filter;
 
 import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
 import com.PizzaKoala.Pizza.domain.model.CustomUserDetailsDTO;
+import com.PizzaKoala.Pizza.domain.service.AuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -22,11 +23,12 @@ import java.util.Iterator;
 
 public class NewLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
-    private final JWTTokenUtils jwtTokenUtils;
+    private final AuthenticationService authenticationService;
 
-    public NewLoginFilter(AuthenticationManager authenticationManager, JWTTokenUtils jwtTokenUtils) {
+    public NewLoginFilter(AuthenticationManager authenticationManager, AuthenticationService authenticationService) {
         this.authenticationManager = authenticationManager;
-        this.jwtTokenUtils = jwtTokenUtils;
+//        this.jwtTokenUtils = jwtTokenUtils;
+        this.authenticationService = authenticationService;
         setFilterProcessesUrl("/api/v1/login");
     }
 
@@ -54,15 +56,16 @@ public class NewLoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String access = jwtTokenUtils.generatedToken("access",email, role, 600000L);
-        String refresh = jwtTokenUtils.generatedToken("refresh",email, role, 86400000L);
-        response.setHeader("access", access);
-        response.addCookie(jwtTokenUtils.createCookie("refresh", refresh));
-        response.setStatus(HttpStatus.OK.value());
+//        String access = jwtTokenUtils.generatedToken("access",email, role, 600000L);
+//        String refresh = jwtTokenUtils.generatedToken("refresh",email, role, 86400000L);
+//        response.setHeader("access", access);
+//        response.addCookie(jwtTokenUtils.createCookie("refresh", refresh));
+//        response.setStatus(HttpStatus.OK.value());
+//
+//        //refresh 토큰 db에 저장
+//        jwtTokenUtils.addRefreshEntity(email,refresh,86400000L);
 
-        //refresh 토큰 db에 저장
-        jwtTokenUtils.addRefreshEntity(email,refresh,86400000L);
-
+        authenticationService.handleSuccessfulAuthentication(email,role,response);
 
     }
 
