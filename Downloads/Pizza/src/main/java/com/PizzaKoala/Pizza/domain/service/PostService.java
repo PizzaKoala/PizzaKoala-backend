@@ -27,6 +27,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -113,6 +115,8 @@ public class PostService {
             throw new PizzaAppException(ErrorCode.INVALID_PERMISSION, String.format("$S has no permission with %s", member.getNickName(), post.getTitle()));
         }
         imageRepository.softDeleteByPostId(postId);
+        commentRepository.softDeleteByPostId(postId);
+
         post.delete();
        postRepository.saveAndFlush(post);
     }
@@ -230,7 +234,26 @@ public class PostService {
         Post post= getPostOrException(postId);
         return commentRepository.findAllByPostId(post, pageable).map(CommentDTO::fromCommentEntity);
     }
+    /**
+     * 포스트에 쓴 댓글 삭제 -
+     */
+    public Boolean commentDelete(Long postId, Long commentId, String email) {
+        Optional<Comments> comments= commentRepository.findById(commentId);
 
+        if (comments.isEmpty()) {
+            throw new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+            Comments comment=comments.get();
+
+        if (!comment.getPostId().getId().equals(postId)) {
+            throw new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+        if (!comment.getMember().getEmail().equals(email)) {
+            throw new PizzaAppException(ErrorCode.INVALID_PERMISSION);
+        }
+        commentRepository.deleteById(commentId);
+        return true;
+    }
 
 
 

@@ -33,17 +33,16 @@ public class PizzaApplication {
 
 		// TODO 알람도 해야햇!!!!
 		// TODO unlike도 해야함
-
-		//TODO comment-사진도 가져와야함, 삭제하기
 		// TODO calender도 떠야해 :(
-
 		//TODO refactoring, 빠트린거 있나 살펴 보기
 
-		//일- s3 -profile, post, comment, 피드-좋아요순
+
 		// 월 - 로그아웃, 토큰-리프레쉬, 언라이크, 댓글 삭제
 		// 화 - 캘린더, 검색 가져오기.
 		// 수
 		//TODO
+		//포스트가 삭제될떄 - 포스트, 커멘트 는 softdelete 포스트의 liked는 그냥 삭제
+		//댓글 단건 삭제는 그냥 삭제.
 
 		//클라이언트에게 요청이 들어오면 서블렛 컨테이더에 있는 필터에 있는 delegating filter proxy 가 요청을 가로채서 시큐리티 필터로 요청을 검증한다.
 

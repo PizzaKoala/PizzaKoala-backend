@@ -70,6 +70,13 @@ public class PostController {
         Page<PostWithCommentsDTO> postWithCommentsDTOS = postService.getAPost(postId, pageable);
         return Response.success(postWithCommentsDTOS);
     }
+    /**
+     * get post comments - 특정 포스트의 달린 댓글 가져오기
+     */
+    @GetMapping("/{postId}/comments")
+    public Response<Page<CommentResponse>> getComments(@PathVariable Long postId, Pageable pageable, Authentication authentication) {
+        return Response.success( postService.getComments(postId, pageable).map(CommentResponse::fromCommentDTO));
+    }
 
     /**
      * recent posts 최신 포스트들
@@ -125,8 +132,6 @@ public class PostController {
         return Response.success(postService.likeCount(postId));
     }
 
-
-
     /**
      * leave a comment - 댓글 달기
      */
@@ -137,10 +142,12 @@ public class PostController {
     }
 
     /**
-     * get post comments - 특정 포스트의 달린 댓글 가져오기
+     *  delete a comment - 댓글 삭제
      */
-    @GetMapping("/{postId}/comments")
-    public Response<Page<CommentResponse>> getComments(@PathVariable Long postId, Pageable pageable, Authentication authentication) {
-        return Response.success( postService.getComments(postId, pageable).map(CommentResponse::fromCommentDTO));
+    @DeleteMapping("/{postId}/{commentId}")
+    public Response<Boolean> deleteComment(@PathVariable Long postId, @PathVariable Long commentId, Authentication authentication) {
+        return Response.success(postService.commentDelete(postId,commentId,authentication.getName()));
     }
+
+
 }
