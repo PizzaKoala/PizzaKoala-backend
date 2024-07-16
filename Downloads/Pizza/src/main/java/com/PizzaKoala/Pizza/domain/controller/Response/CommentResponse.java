@@ -9,23 +9,26 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 public class CommentResponse {
+    private Long memberId;
+    private String nickName;
+    private String profileUrl;
+
     private Long id;
     private String comment;
-    private String nickName;
     private Long postId;
     private LocalDateTime createdAt;
-    private LocalDateTime deletedAt;
     private LocalDateTime modifiedAt;
-
     public static CommentResponse fromCommentDTO(CommentDTO commentDTO) {
         return new CommentResponse(
+                commentDTO.getMemberId(),
+                commentDTO.getNickName(),
+                commentDTO.getProfileUrl(),
+
                 commentDTO.getId(),
                 commentDTO.getComment(),
-                commentDTO.getNickName(),
                 commentDTO.getPostId(),
-                commentDTO.getModifiedAt(),
-                commentDTO.getDeletedAt(),
-                commentDTO.getCreatedAt()
+                commentDTO.getCreatedAt(),
+                commentDTO.getModifiedAt()
         );
 
     }

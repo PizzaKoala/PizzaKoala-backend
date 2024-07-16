@@ -57,13 +57,18 @@ public class JWTTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return; //재로그인 무한로프 방지.
         }
-        String accessToken = request.getHeader("access");
 
-        //토큰이 없다면 다음 필터로 넘김
-        if (accessToken == null) {
+        String header = request.getHeader("Authorization");
+        String accessToken = null;
+        if (header != null && header.startsWith("Bearer ")) {
+            accessToken = header.substring(7);
+        }else {
+            //토큰이 없다면 다음 필터로 넘김
             filterChain.doFilter(request, response);
             return;
         }
+
+
 
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음 - dofilter 안함!!!
         try {
