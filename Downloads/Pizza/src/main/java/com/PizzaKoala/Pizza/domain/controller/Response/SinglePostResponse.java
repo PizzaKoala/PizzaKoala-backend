@@ -1,17 +1,15 @@
 package com.PizzaKoala.Pizza.domain.controller.Response;
 
 import com.PizzaKoala.Pizza.domain.model.PostDTO;
-import com.PizzaKoala.Pizza.domain.model.PostListDTO;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class PostResponse {
+public class SinglePostResponse {
     private Long id;
     private UserDTO member;
     private String title;
@@ -24,8 +22,8 @@ public class PostResponse {
     private LocalDateTime modifiedAt;
 
 
-    public static PostResponse fromPostDTO(PostDTO post) {
-        return new PostResponse(
+    public static SinglePostResponse fromPostDTO(PostDTO post) {
+        return new SinglePostResponse(
                 post.getId(),
                 post.getMember(),
                 post.getTitle(),

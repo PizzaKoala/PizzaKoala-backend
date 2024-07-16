@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Builder
@@ -23,12 +26,24 @@ public class Post extends CreatedEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Builder.Default
+    @OneToMany(mappedBy = "postId")
+    private List<Images> images = new ArrayList<>();
+
     private String title;
     private String desc;
 
     private Long likes;
 
     private LocalDateTime deletedAt;
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
+
+
+    // Method to update modifiedAt
+    public void updateModifiedAt() {
+        this.modifiedAt = LocalDateTime.now();
+    }
 
     public static Post of(String title, String desc, Member member) {
 
@@ -43,6 +58,8 @@ public class Post extends CreatedEntity {
     public void update(String title, String desc) {
         this.title = title;
         this.desc = desc;
+        this.modifiedAt = LocalDateTime.now();
+
     }
     public void delete() {
         this.deletedAt = LocalDateTime.now();

@@ -9,11 +9,13 @@ import lombok.Getter;
 public class UserResponse {
     private Long id;
     private String email;
+    private String profileImageUrl;
 
     public static UserResponse fromUser(UserDTO user) {
         return new UserResponse(
                 user.getId(),
-                user.getEmail()
+                user.getEmail(),
+                user.getProfileImageUrl()
         );
     }
 }

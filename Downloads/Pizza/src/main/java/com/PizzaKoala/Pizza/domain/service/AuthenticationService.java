@@ -13,7 +13,7 @@ public class AuthenticationService {
     public void handleSuccessfulAuthentication(String email, String role,HttpServletResponse response) {
         String access = jwtTokenUtils.generatedToken("access",email, role, 600000L);
         String refresh = jwtTokenUtils.generatedToken("refresh",email, role, 86400000L);
-        response.setHeader("access", access);
+        response.setHeader("Authorization", "Bearer " +access);
         response.addCookie(jwtTokenUtils.createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
 

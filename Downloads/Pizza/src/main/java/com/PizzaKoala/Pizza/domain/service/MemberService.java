@@ -75,6 +75,7 @@ public class MemberService {
             memberRepository.delete(member);
             throw new PizzaAppException(ErrorCode.IMAGE_UPLOAD_REQUIRED);
         }
+        //jwt 생성
         authenticationService.handleSuccessfulAuthentication(member.getEmail(),member.getRole().toString(),response);
         return UserDTO.fromMemberEntity(result);
     }

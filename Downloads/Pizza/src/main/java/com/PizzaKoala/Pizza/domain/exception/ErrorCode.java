@@ -11,6 +11,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"The member does not exist."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED,"The password is invalid."),
     IMAGE_UPLOAD_REQUIRED(HttpStatus.BAD_REQUEST,"Photo upload is required"),
+    ONE_TO_FIVE_IMAGES_ARE_REQUIRED(HttpStatus.BAD_REQUEST, "You must upload between 1 and 5 images"),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED,"The token is invalid."),
     POST_NOT_FOUND(HttpStatus.NOT_FOUND,"The Post was not found."),

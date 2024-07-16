@@ -7,21 +7,20 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @SpringBootApplication
 public class PizzaApplication {
-//			1차 배포 계획- 회원가입(사진아직 안널음), 로그인(기본, 구글), crud(post-s3), 피드(좋아요순, 최신순), 알림- 웹소켓, 좋아요, 댓글-1차
+//			1차 배포 계획- 회원가입, 로그인(기본, 구글), crud(post-s3), 피드(좋아요순, 최신순), 알림- 웹소켓, 좋아요, 댓글-1차
 
 	public static void main(String[] args) {
 
 		SpringApplication.run(PizzaApplication.class, args);
-		//TODO fresh랑 acess토큰,  로그아웃 >:(
+		//TODO :logout
 		//redis
 		//프론트엔드측 : 로컬 스토리지에 존재하는 Access 토큰 삭제 및 서버측 로그아웃 경로로 Refresh 토큰 전송
 		//더 보안을 원한다면-->api 바뀌면 새 로그인(웹만) https://www.youtube.com/watch?v=Y__6n73AlJk&list=PLJkjrxxiBSFATow4HY2qr5wLvXM6Rg-BM&index=10
 
 
-		//TODO 월요일까지 구글 로그인! 회원가입떄 사진을 올리는데 구글로그인떄는 구글계정에서 사진을 가져온다.
+		//TODO 구글 로그인! 회원가입떄 사진을 올리는데 구글로그인떄는 구글계정에서 사진을 가져온다.
 		//https://www.youtube.com/watch?v=OddaHR7oIWE 리액트랑 연결하는 방식 참고하기
 		//yml 파일에 oauth2서비스 변수 등록을 하면 됐지만 커스텀하게 정보를 가져오기위해서 클래스를 통해 직접 진행하는 방법인 client registration방식을 사용했다
-		//프로필 사진을 가져와야했다
 		//2개의 토큰(Refresh/Access)을 사용하는 경우 Refresh만 쿠키로 응답 받고 프론트측에서 다시 Refresh로 Access를 받도록 진행하셔도 됩니다.
 		// !, 레포지토리에 올리기
 		//aouth2- 대형서비스 개발 포럼은 보안규격에서 코드나 access토큰을 프론트에서 전송하는걸 지양한다.
@@ -31,12 +30,10 @@ public class PizzaApplication {
 		//https://substantial-park-a17.notion.site/2-acacb442fdce473b91ebdd4e708d5214
 		//https://www.youtube.com/watch?v=9g_iN6rLQcQ 이부분은어떻게 하지.. 안했음 아직
 		//https://www.youtube.com/watch?v=Xiv5KFoEW4w
-		//TODO s3 사진-프로필, 포스트 :(
-		//TODO git 에 올리기
+
 		// TODO 알람도 해야햇!!!!
 		// TODO unlike도 해야함
 
-		//TODO 화요일- 피드- 좋아요순
 		//TODO comment-사진도 가져와야함, 삭제하기
 		// TODO calender도 떠야해 :(
 

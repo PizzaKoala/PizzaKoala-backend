@@ -2,13 +2,10 @@ package com.PizzaKoala.Pizza.domain.service;
 
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
-import com.PizzaKoala.Pizza.domain.model.S3DTO;
-import com.amazonaws.SdkClientException;
-import com.amazonaws.services.s3.AmazonS3;
+
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PublicAccessBlockConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,10 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @Slf4j
@@ -91,17 +89,14 @@ public class S3ImageUploadService {
             throw new PizzaAppException(ErrorCode.S3_UPLOAD_FAILED);
         }
     }
-    private String getKeyFromImageAddress(String fileName){
-        try {
-            // URL 객체 생성
-            URL url = new URL(fileName);
-            // URL 경로 추출
-            String path = url.getPath();
-            // 경로에서 첫 4개 부분 제거
-            return path.substring(path.indexOf('/', 1) + 1);
+    private String getKeyFromImageAddress(String fileName) throws MalformedURLException {
+        //            // URL 객체 생성
+//            URL url = new URL(fileName);
+//            // URL 경로 추출
+//            String path = url.getPath();
+        String path = Paths.get(fileName).toString();
+        // 경로에서 첫 4개 부분 제거
+        return path.substring(path.indexOf('/', 1) + 1);
 
-        } catch (MalformedURLException e) {
-            throw new PizzaAppException(ErrorCode.S3_UPLOAD_FAILED);
-        }
     }
 }
