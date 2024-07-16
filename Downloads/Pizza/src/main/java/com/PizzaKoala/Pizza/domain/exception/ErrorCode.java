@@ -18,7 +18,8 @@ public enum ErrorCode {
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED,"Permission is invalid."),
     ALREADY_LIKED(HttpStatus.CONFLICT,"User has already liked the post."),
     FILE_NAME_NOT_FOUND(HttpStatus.NOT_FOUND,"The file name not found."),
-    S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"Error occurred while uploading to S3.")
+    S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"Error occurred while uploading to S3."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"The comment does not exist.")
     ;
     private final HttpStatus status;
     private final String message;

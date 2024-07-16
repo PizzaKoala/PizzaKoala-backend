@@ -45,9 +45,6 @@ public class Comments extends CreatedEntity {
                 .postId(post)
                 .build();
     }
-    public void delete() {
-        this.deletedAt = LocalDateTime.now();
-    }
 
 
 
