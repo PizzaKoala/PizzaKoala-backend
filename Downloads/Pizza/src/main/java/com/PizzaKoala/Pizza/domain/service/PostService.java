@@ -116,7 +116,7 @@ public class PostService {
         }
         imageRepository.softDeleteByPostId(postId);
         commentRepository.softDeleteByPostId(postId);
-
+        likeRepository.deleteByLikesTypeIdAndLikesType(postId,LikesType.POST);
         post.delete();
        postRepository.saveAndFlush(post);
     }
@@ -192,17 +192,61 @@ public class PostService {
         //post existence
         Post post= getPostOrException(postId);
 
-        //check like existence -> throw
-        if (likeRepository.findByMemberIdAndLikesTypeId(member.getId(), postId).isPresent())
-            throw new PizzaAppException(ErrorCode.ALREADY_LIKED, String.format("%S already liked the post %d", member.getNickName(),postId));
+        Optional<Likes> like=likeRepository.findByMemberIdAndLikesTypeIdAndLikesType(member.getId(), postId,LikesType.POST);
 
+        if (like.isEmpty()) {
+            //like save
+            Likes newLike = Likes.of(member.getId(), LikesType.POST, postId);
+            likeRepository.save(newLike);
+        }else {
+            Likes existingLike = like.get();
+            if (existingLike.getDeletedAt() == null) {
+                //삭제 안된 좋아요 엔티티
+                throw new PizzaAppException(ErrorCode.ALREADY_LIKED, String.format("%S already liked the post %d", member.getNickName(), postId));
 
-        //like save
-        likeRepository.save(Likes.of(member.getId(), LikesType.POST, postId));
-        post.likes();
+            } else {
+                likeRepository.updateDeletedAtToNull(existingLike.getId());
+            }
+        }
+
+            post.likes();
         postRepository.saveAndFlush(post);
 
         alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
+
+    }
+
+    /**
+     * 좋아요 취소 기능
+     */
+    @Transactional
+    public void unlikes(Long postId, String email) {
+
+        //find user
+        Member member = getMemberByEmailOrException(email);
+        //post existence
+        Post post= getPostOrException(postId);
+
+
+        Optional<Likes> like=likeRepository.findByMemberIdAndLikesTypeIdAndLikesType(member.getId(), postId,LikesType.POST);
+        if (like.isEmpty()) {
+            //삭제 안된 좋아요 엔티티
+            throw new PizzaAppException(ErrorCode.LIKE_NOT_FOUND, String.format("%S hasn't liked the post %d", member.getNickName(), postId));
+        }else {
+            Likes existingLike = like.get();
+            if (existingLike.getDeletedAt() != null) {
+                throw new PizzaAppException(ErrorCode.ALREADY_UNLIKED, String.format("%S already unliked the post %d", member.getNickName(), postId));
+
+            } else {
+                likeRepository.softDeleteById(like.get().getId());
+            }
+        }
+
+        post.unlikes();
+        postRepository.saveAndFlush(post);
+
+        //좋아요 취소는 알람 가지않고 조용히 취소됨 ^^;;
+//        alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
 
     }
     /**

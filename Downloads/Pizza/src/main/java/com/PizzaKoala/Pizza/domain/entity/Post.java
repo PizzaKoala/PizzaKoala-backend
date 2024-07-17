@@ -71,6 +71,9 @@ public class Post extends CreatedEntity {
         }
         this.likes+=1L;
     }
+    public void unlikes() {
+        this.likes-=1L;
+    }
 
 
 }
