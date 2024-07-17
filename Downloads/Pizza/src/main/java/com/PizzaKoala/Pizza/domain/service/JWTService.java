@@ -91,7 +91,8 @@ public class JWTService {
     }
 
     private void updateNewRefreshToDbAndDeleteOldRefresh(String refresh,String email, String newRefresh, Long expiredTimeMs) {
-        refreshRepository.deleteByRefresh(refresh);
+        refreshRepository.clearRefreshTokenByRefresh(refresh);
+
         jwtTokenUtils.addRefreshEntity(email,newRefresh, expiredTimeMs);
     }
 
