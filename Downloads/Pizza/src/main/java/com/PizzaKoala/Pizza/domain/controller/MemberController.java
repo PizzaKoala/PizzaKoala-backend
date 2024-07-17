@@ -22,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
@@ -37,37 +38,25 @@ public class MemberController {
     private final MemberService memberService;
 
     private final JWTTokenUtils jwtTokenUtils;
-//    @RequestPart("request") UserJoinRequest request, Response<UserJoinResponse>
 
-//    return UserJoinResponse
     // TODO: implement
     @PostMapping("/join")
     public Response<UserJoinResponse> join(@RequestPart(value = "file") MultipartFile file,@RequestPart ("request") UserJoinRequest request, HttpServletResponse response) throws IOException {
-//        log.debug(request.getEmail());
 
             UserDTO joinUserDTO = memberService.join(file, request.getNickName(), request.getEmail(), request.getPassword(),response);
             return Response.success(UserJoinResponse.fromJoinUserDTO(joinUserDTO));
 
     }
 
-//    @PostMapping("/login")
-//    public Response<Void> login(@RequestBody UserLoginRequest request) {
-//        log.debug("Received login request: {}", request);
-//        return Response.success(memberService.login(request.getEmail(), request.getPassword()));
-//    }
+
     @PostMapping("/login")
     public Response<Void> login(@RequestBody UserLoginRequest request) {
-        log.debug("Received login request: {}", request);
+
         memberService.login(request.getEmail(), request.getPassword());
 
         return Response.success();
     }
-//    @PostMapping("/login")
-//    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
-//        String token = memberService.login(request.getEmail(), request.getPassword());
-//
-//        return Response.success(new UserLoginResponse(token));
-//    }
+
 
 
     @GetMapping("/alarm")

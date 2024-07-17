@@ -19,6 +19,7 @@ public enum ErrorCode {
     ALREADY_LIKED(HttpStatus.CONFLICT,"User has already liked the post."),
     FILE_NAME_NOT_FOUND(HttpStatus.NOT_FOUND,"The file name not found."),
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"Error occurred while uploading to S3."),
+//    ALREADY_LOGGED_OUT(HttpStatus.CONFLICT,"It is already logged out."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"The comment does not exist.")
     ;
     private final HttpStatus status;

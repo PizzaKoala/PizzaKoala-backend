@@ -123,11 +123,6 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
         return http.build();
     }
-//                    .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration),jwtUtil), UsernamePasswordAuthenticationFilter.class) //UsernamePasswordAuthenticationFilter 를 대신하는 필터라서 addfilterat을 사용한다
-
-    //                .sessionManagement(sessionManagementCustomizer -> sessionManagementCustomizer
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
 
     //이거 모든 api에 Error occurs while getting header. header is null or invalid 이거 안뜨게 해준다고 했는데 원래도 안뜸.
     // 로그인&회원가입 할떄만 뜬다.

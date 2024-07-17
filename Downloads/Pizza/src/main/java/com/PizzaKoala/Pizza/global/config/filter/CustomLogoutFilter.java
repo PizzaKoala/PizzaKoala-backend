@@ -2,6 +2,8 @@ package com.PizzaKoala.Pizza.global.config.filter;
 
 import com.PizzaKoala.Pizza.domain.Repository.RefreshRepository;
 import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
+import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
+import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Slf4j
 public class CustomLogoutFilter extends GenericFilterBean {
@@ -32,16 +35,21 @@ public class CustomLogoutFilter extends GenericFilterBean {
     }
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+
+
+
         //path and method verify
         String requestUri = request.getRequestURI();
-        if (!requestUri.matches("^/logout$")) {
+        String requestMethod = request.getMethod();
+        log.debug("Incoming request URI: {}, Method: {}", requestUri, requestMethod);
 
+        if (!requestUri.matches("^/api/v1/logout$")) {
             filterChain.doFilter(request, response);
             return;
         }
-        String requestMethod = request.getMethod();
-        if (!requestMethod.equals("POST")) {
 
+        if (!requestMethod.equals("POST")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -50,6 +58,9 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //get refresh token
         String refresh = null;
         Cookie[] cookies = request.getCookies();
+        System.out.println("cookie = " + Arrays.toString(request.getCookies()));
+        log.trace("cookie = " + Arrays.toString(request.getCookies()));
+
         if (cookies == null) {
             log.error("empty cookie");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -62,6 +73,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
                 refresh = cookie.getValue();
             }
         }
+
 
 
         //refresh null check
@@ -93,15 +105,17 @@ public class CustomLogoutFilter extends GenericFilterBean {
         //DB에 저장되어 있는지 확인
         Boolean isExist = refreshRepository.existsByRefresh(refresh);
         if (!isExist) {
-            log.error("dosent exist in DB");
+
+            log.error("Already logged out");
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        //로그아웃 진행
+        //로그아웃 진행- token id와 같은것만 지우는게 아니라 이메일 같은걸 지워서 같은 이메일 중복 막음
         //Refresh 토큰 DB에서 제거
-        refreshRepository.deleteByRefresh(refresh);
+//        refreshRepository.deleteByRefresh(refresh);
+        refreshRepository.clearRefreshTokenByRefresh(refresh);
 
         //Refresh 토큰 Cookie 값 0
         Cookie cookie = new Cookie("refresh", null);
