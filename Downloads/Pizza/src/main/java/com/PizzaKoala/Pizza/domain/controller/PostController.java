@@ -119,11 +119,20 @@ public class PostController {
      * like function- 좋아요
      */
 
-    @PostMapping("/{postId}/likes")
+    @PostMapping("/{postId}/like")
     public Response<Void> like(@PathVariable Long postId, Authentication authentication) {
         postService.likes(postId, authentication.getName());
         return Response.success();
     }
+
+
+    @PostMapping("/{postId}/unlike")
+    public Response<Void> unlike(@PathVariable Long postId, Authentication authentication) {
+        postService.unlikes(postId, authentication.getName());
+        return Response.success();
+    }
+
+
     /**
      * like- 포스트의 like 수 가져오기- 이건 어캐 사용하지
      */

@@ -13,7 +13,7 @@ public class PizzaApplication {
 
 		SpringApplication.run(PizzaApplication.class, args);
 
-		// TODO unlike도 해야함(포스트 안에 라이크도 -1 줄여야함), 포스트 삭제시 like 엔티티 완전 삭제하기.
+		// TODO unlike도 해야함(포스트 안에 라이크도 -1 줄여야함), 포스트 삭제시 like 엔티티 완전 삭제하기-삭제할떄 포스트에 있는 like count 는 삭제하지 말자.
 
 		// TODO 알람도 해야햇!!!!
 		// TODO 검색 가져오기
