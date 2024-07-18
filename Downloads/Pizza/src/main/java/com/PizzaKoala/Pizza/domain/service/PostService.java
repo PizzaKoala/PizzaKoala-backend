@@ -1,7 +1,6 @@
 package com.PizzaKoala.Pizza.domain.service;
 
 import com.PizzaKoala.Pizza.domain.Repository.*;
-import com.PizzaKoala.Pizza.domain.controller.Response.PostListResponse;
 import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
@@ -9,12 +8,6 @@ import com.PizzaKoala.Pizza.domain.model.*;
 
 import com.PizzaKoala.Pizza.global.entity.AlarmType;
 import com.PizzaKoala.Pizza.global.entity.LikesType;
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Tuple;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,13 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -43,6 +33,7 @@ public class PostService {
     private final S3ImageUploadService s3ImageUploadService;
     private final ImageRepository imageRepository;
     private final CustomPostRepository customPostRepository;
+    private final AlarmService alarmService;
 
     /**
      * Create a post 게시글 쓰기
@@ -160,7 +151,7 @@ public class PostService {
     /**
      * 좋아요순 피드
      */
-    public Page<PostSummaryDTO> Likedlist(Pageable pageable) {
+    public Page<PostSummaryDTO> LikedList(Pageable pageable) {
         return customPostRepository.likedPosts(pageable);
 
     }
@@ -212,8 +203,8 @@ public class PostService {
             post.likes();
         postRepository.saveAndFlush(post);
 
-        alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
-
+        Alarm alarm=alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
+        alarmService.send(alarm.getId(), post.getMember().getId());
     }
 
     /**
@@ -250,7 +241,7 @@ public class PostService {
 
     }
     /**
-     * 좋아요 기능
+     * 한 게시글의 좋아요 총 갯수 기능
      */
     public Long likeCount(Long postId) {
         Post post= getPostOrException(postId);
@@ -268,8 +259,9 @@ public class PostService {
         Member member = getMemberByEmailOrException(email);
 
 
-        commentRepository.save(Comments.of(member, post, comment));
+        Comments comments=commentRepository.save(Comments.of(member, post, comment));
         alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(member.getId(), postId)));
+        alarmService.send(comments.getId(), post.getMember().getId());
     }
     /**
      * 포스트에 달린 댓글 보기 - member- id, nickname, profileUrl comment- 시간,커멘트

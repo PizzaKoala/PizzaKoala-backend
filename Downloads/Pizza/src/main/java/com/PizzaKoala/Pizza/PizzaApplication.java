@@ -13,9 +13,12 @@ public class PizzaApplication {
 
 		SpringApplication.run(PizzaApplication.class, args);
 
-		// TODO unlike도 해야함(포스트 안에 라이크도 -1 줄여야함), 포스트 삭제시 like 엔티티 완전 삭제하기-삭제할떄 포스트에 있는 like count 는 삭제하지 말자.
+		//포스트 삭제시 like 엔티티 완전 삭제하기-삭제할떄 포스트에 있는 like count 는 삭제하지 말자.
 
 		// TODO 알람도 해야햇!!!!
+		//프론트 세팅, src-> layouts -> alarm -> index.js
+		// https://github.com/KimHyoJin/Simple-SNS/commit/f926f868b4a9f1461440159034bf0815307c4ba9
+
 		// TODO 검색 가져오기
 
 		// TODO calender도 떠야해 :(

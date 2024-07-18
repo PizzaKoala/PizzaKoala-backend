@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Getter
 public class AlarmDTO {
     private Long id;
-    private UserDTO memberId;
     private AlarmType alarmType;
     private AlarmArgs args;
 
@@ -22,10 +21,9 @@ public class AlarmDTO {
     private LocalDateTime deletedAt;
     private LocalDateTime modifiedAt;
 
-    public static AlarmDTO fromAlarmEntity(Alarm alarm, Member member) {
+    public static AlarmDTO fromAlarmEntity(Alarm alarm) {
         return new AlarmDTO(
                 alarm.getId(),
-                UserDTO.fromMemberEntity(member),
                 alarm.getAlarmType(),
                 alarm.getArgs(),
                 alarm.getCreatedAt(),

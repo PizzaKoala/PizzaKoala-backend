@@ -17,7 +17,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,13 +37,6 @@ public class MemberService {
     private final ProfileImageRepository profileImageRepository;
     private final AuthenticationService authenticationService;
 
-//    @Value("${jwt.secret-key}")
-//    private String secretKey;
-//
-//    @Value("${jwt.token.expired-time-ms}")
-//    private Long expiredTimeMs;
-
-//    return UserDTO
     @Transactional //exception     발생할 경우 롤백되어서 저장되지 않는다
     public UserDTO join(MultipartFile file,String nickName, String email, String password, HttpServletResponse response) throws IOException { //email, nickname, password, profile-photo
 
@@ -102,10 +97,10 @@ public class MemberService {
     }
 
     public Page<AlarmDTO> alarmList(String email, Pageable pageable) {
-        //회원가입 이메일인지 체크
+//        //회원가입 이메일인지 체크
         Member member=memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not founded ",email)));
-
-        return alarmRepository.findAllByMemberId(member.getId(),pageable).map(alarm -> AlarmDTO.fromAlarmEntity(alarm,member));
+        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "createdAt"));
+        return alarmRepository.findAllByMemberId(pageable1,member.getId()).map(AlarmDTO::fromAlarmEntity);
 
     }
 }
