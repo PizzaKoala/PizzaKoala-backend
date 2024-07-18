@@ -34,6 +34,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
 
     private final JWTTokenUtils jwtTokenUtils;
+    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/v1/alarm/subscribe");
 
 
     @Override
@@ -45,13 +46,9 @@ public class JWTTokenFilter extends OncePerRequestFilter {
             log.error("Request, Response, or FilterChain is null");
             return;
         }
+        String accessToken = null;
         String requestUri = request.getRequestURI();
 
-//        if (requestUri.matches("^\\/login(?:\\/.*)?$")) {
-//
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
         if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
 
             filterChain.doFilter(request, response);
@@ -59,14 +56,25 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         }
 
         String header = request.getHeader("Authorization");
-        String accessToken = null;
-        if (header != null && header.startsWith("Bearer ")) {
+
+        //header가 아니라 request param안에 있을 경우
+        if(TOKEN_IN_PARAM_URLS.contains(requestUri)){
+            log.info("Request with {} check the query param", request.getRequestURI());
+            accessToken= request.getQueryString().split("=")[1].trim();
+        } else if (header != null && header.startsWith("Bearer ")) {
+            //header에 access token 이 있을 경우
             accessToken = header.substring(7);
         }else {
             //토큰이 없다면 다음 필터로 넘김
             filterChain.doFilter(request, response);
             return;
         }
+
+//        if (requestUri.matches("^\\/login(?:\\/.*)?$")) {
+//
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
 
 

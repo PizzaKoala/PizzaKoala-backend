@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AlarmResponse {
     private Long id;
-    private UserResponse member;
     private AlarmType alarmType;
     private AlarmArgs args;
     private String text;
@@ -25,7 +24,6 @@ public class AlarmResponse {
     public static AlarmResponse fromAlarmDTO(AlarmDTO alarm) {
         return new AlarmResponse(
                 alarm.getId(),
-                UserResponse.fromUser(alarm.getMemberId()),
                 alarm.getAlarmType(),
                 alarm.getArgs(),
                 alarm.getAlarmType().getAlarmText(),

@@ -31,6 +31,7 @@ public class Alarm extends CreatedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     //alram 받는 사람
     private Long memberId;
 

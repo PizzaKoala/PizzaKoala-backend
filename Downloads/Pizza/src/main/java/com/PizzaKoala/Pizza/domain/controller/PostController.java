@@ -15,7 +15,6 @@ import com.PizzaKoala.Pizza.domain.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,7 +92,7 @@ public class PostController {
 
     @GetMapping("/liked")
     public Response<Page<PostListResponse>> LikedList(Pageable pageable) {
-        return Response.success(postService.Likedlist(pageable).map(PostListResponse::fromPostImageDTO));
+        return Response.success(postService.LikedList(pageable).map(PostListResponse::fromPostImageDTO));
     }
 
 
@@ -124,7 +123,9 @@ public class PostController {
         postService.likes(postId, authentication.getName());
         return Response.success();
     }
-
+    /**
+     * unlike function- 좋아요 취소
+     */
 
     @PostMapping("/{postId}/unlike")
     public Response<Void> unlike(@PathVariable Long postId, Authentication authentication) {

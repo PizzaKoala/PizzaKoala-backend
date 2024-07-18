@@ -1,6 +1,7 @@
 package com.PizzaKoala.Pizza.domain.model;
 
 import com.PizzaKoala.Pizza.domain.entity.Member;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,13 +9,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+@Getter
 public class CustomUserDetailsDTO implements UserDetails {
     private final Member member;
 
     public CustomUserDetailsDTO(Member member) {
         this.member = member;
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
