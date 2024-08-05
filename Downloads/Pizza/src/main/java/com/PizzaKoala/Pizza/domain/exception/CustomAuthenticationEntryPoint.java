@@ -1,6 +1,6 @@
 package com.PizzaKoala.Pizza.domain.exception;
 
-import com.PizzaKoala.Pizza.domain.controller.Response.Response;
+import com.PizzaKoala.Pizza.domain.controller.response.Response;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

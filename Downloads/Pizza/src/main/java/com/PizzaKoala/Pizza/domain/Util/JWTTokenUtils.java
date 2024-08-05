@@ -41,14 +41,6 @@ public class JWTTokenUtils {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new java.util.Date());
 
     }
-//TODO: ?
-//    private Claims extractClaims(String token) {
-//        return Jwts.parser()
-//                .verifyWith(secretKey)
-//                .build()
-//                .parseSignedClaims(token)
-//                .getPayload();
-//    }
 
     public Cookie createCookie(String key, String jwtValue) {
         Cookie cookie = new Cookie(key, jwtValue);

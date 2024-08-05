@@ -15,18 +15,20 @@ public class PizzaApplication {
 
 		//포스트 삭제시 like 엔티티 완전 삭제하기-삭제할떄 포스트에 있는 like count 는 삭제하지 말자.
 
-		// TODO 알람도 해야햇!!!!
+		// 알람
+		//지금은 서버 하나에 인스턴스 하나로 구현되었지만 서버가 여러개일 경우 맴버와 연결되 인스컨스를 찾아서 알람을 보내는 방식으로 구현해야한다.
 		//프론트 세팅, src-> layouts -> alarm -> index.js
 		// https://github.com/KimHyoJin/Simple-SNS/commit/f926f868b4a9f1461440159034bf0815307c4ba9
 
-		// TODO 검색 가져오기
+		// 검색 가져오기- react 에서 하는 방법은 밑에 주소 참고하기
+		//https://chatgpt.com/share/ba2c52fc-b4a6-491e-afeb-712a1aa7c3f5
 
 		// TODO calender도 떠야해 :(
+
 		//TODO refactoring, 빠트린거 있나 살펴 보기
-		
-		//redis
+
 		//프론트엔드측 : 로컬 스토리지에 존재하는 Access 토큰 삭제 및 서버측 로그아웃 경로로 Refresh 토큰 전송
-		//더 보안을 원한다면-->api 바뀌면 새 로그인(웹만) https://www.youtube.com/watch?v=Y__6n73AlJk&list=PLJkjrxxiBSFATow4HY2qr5wLvXM6Rg-BM&index=10
+		//더 보안을 원한다면-->api 바뀌면 새 로그인(웹만) https://www.y//outube.com/watch?v=Y__6n73AlJk&list=PLJkjrxxiBSFATow4HY2qr5wLvXM6Rg-BM&index=10
 
 /**
  * 구글 로그인! 회원가입떄 사진을 올리는데 구글로그인떄는 구글계정에서 사진을 가져온다.

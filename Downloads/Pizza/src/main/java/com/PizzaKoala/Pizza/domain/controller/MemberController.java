@@ -1,20 +1,11 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
-import com.PizzaKoala.Pizza.domain.Util.ClassUtil;
-import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
-import com.PizzaKoala.Pizza.domain.controller.Response.AlarmResponse;
-import com.PizzaKoala.Pizza.domain.controller.Response.Response;
-import com.PizzaKoala.Pizza.domain.controller.Response.UserJoinResponse;
-import com.PizzaKoala.Pizza.domain.controller.Response.UserLoginResponse;
+import com.PizzaKoala.Pizza.domain.controller.response.AlarmResponse;
+import com.PizzaKoala.Pizza.domain.controller.response.Response;
+import com.PizzaKoala.Pizza.domain.controller.response.UserJoinResponse;
 import com.PizzaKoala.Pizza.domain.controller.request.UserJoinRequest;
 import com.PizzaKoala.Pizza.domain.controller.request.UserLoginRequest;
 
-import com.PizzaKoala.Pizza.domain.entity.Member;
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
-import com.PizzaKoala.Pizza.domain.model.AlarmDTO;
-import com.PizzaKoala.Pizza.domain.model.CustomUserDetailsDTO;
-import com.PizzaKoala.Pizza.domain.model.MemberRole;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;
 import com.PizzaKoala.Pizza.domain.service.AlarmService;
 import com.PizzaKoala.Pizza.domain.service.MemberService;

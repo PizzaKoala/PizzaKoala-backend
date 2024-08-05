@@ -1,10 +1,7 @@
-package com.PizzaKoala.Pizza.domain.controller.Response;
+package com.PizzaKoala.Pizza.domain.controller.response;
 
-import com.PizzaKoala.Pizza.domain.entity.Alarm;
 import com.PizzaKoala.Pizza.domain.entity.AlarmArgs;
-import com.PizzaKoala.Pizza.domain.entity.Member;
 import com.PizzaKoala.Pizza.domain.model.AlarmDTO;
-import com.PizzaKoala.Pizza.domain.model.UserDTO;
 import com.PizzaKoala.Pizza.global.entity.AlarmType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

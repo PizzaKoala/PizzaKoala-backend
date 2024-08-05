@@ -1,14 +1,15 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
-import com.PizzaKoala.Pizza.domain.controller.Response.CommentResponse;
-import com.PizzaKoala.Pizza.domain.controller.Response.PostListResponse;
-import com.PizzaKoala.Pizza.domain.controller.Response.PostResponse;
-import com.PizzaKoala.Pizza.domain.controller.Response.Response;
+import com.PizzaKoala.Pizza.domain.controller.response.CommentResponse;
+import com.PizzaKoala.Pizza.domain.controller.response.PostListResponse;
+import com.PizzaKoala.Pizza.domain.controller.response.PostResponse;
+import com.PizzaKoala.Pizza.domain.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.controller.request.PostCommentRequest;
 import com.PizzaKoala.Pizza.domain.controller.request.PostCreateRequest;
 import com.PizzaKoala.Pizza.domain.controller.request.PostModifyRequest;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
+import com.PizzaKoala.Pizza.domain.model.CustomUserDetailsDTO;
 import com.PizzaKoala.Pizza.domain.model.PostDTO;
 import com.PizzaKoala.Pizza.domain.model.PostWithCommentsDTO;
 import com.PizzaKoala.Pizza.domain.service.PostService;
@@ -38,6 +39,8 @@ public class PostController {
         if (files.isEmpty() ||files.size() > 5) {
             throw new PizzaAppException(ErrorCode.ONE_TO_FIVE_IMAGES_ARE_REQUIRED);
         }
+        CustomUserDetailsDTO member = (CustomUserDetailsDTO) authentication.getPrincipal();
+        System.out.println("authentication = " + member.getUsername());
         postService.create(files,authentication.getName(), request.getTitle(), request.getDesc());
         return Response.success();
     }

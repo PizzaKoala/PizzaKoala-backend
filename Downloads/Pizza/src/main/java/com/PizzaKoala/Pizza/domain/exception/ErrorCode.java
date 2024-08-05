@@ -23,7 +23,9 @@ public enum ErrorCode {
     S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"Error occurred while uploading to S3."),
 //    ALREADY_LOGGED_OUT(HttpStatus.CONFLICT,"It is already logged out."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"The comment does not exist."),
-    ALARM_CONNECT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"Connecting alarm occurs error.")
+    ALARM_CONNECT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"Connecting alarm occurs error."),
+    INVALID_YEAR(HttpStatus.BAD_REQUEST,"Invalid year provided"),
+    INVALID_MONTH(HttpStatus.BAD_REQUEST,"Invalid month provided")
     ;
     private final HttpStatus status;
     private final String message;

@@ -27,7 +27,6 @@ public class NewLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     public NewLoginFilter(AuthenticationManager authenticationManager, AuthenticationService authenticationService) {
         this.authenticationManager = authenticationManager;
-//        this.jwtTokenUtils = jwtTokenUtils;
         this.authenticationService = authenticationService;
         setFilterProcessesUrl("/api/v1/login");
     }
@@ -39,9 +38,6 @@ public class NewLoginFilter extends UsernamePasswordAuthenticationFilter {
         if (email == null || password == null) {
             throw new AuthenticationServiceException("Email or Password not provided");
         }
-        logger.info("username= " + email);
-
-
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
         return authenticationManager.authenticate(authToken);

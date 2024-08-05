@@ -13,6 +13,7 @@ import java.util.List;
 public class CustomUserDetailsDTO implements UserDetails {
     private final Member member;
 
+
     public CustomUserDetailsDTO(Member member) {
         this.member = member;
     }
@@ -21,18 +22,8 @@ public class CustomUserDetailsDTO implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return  List.of(new SimpleGrantedAuthority(member.getRole().toString()));
-
-
-//        Collection<GrantedAuthority> collection = new ArrayList<>();
-//        collection.add(new GrantedAuthority() {
-//            @Override
-//            public String getAuthority() {
-//                return member.getRole().toString();
-//            }
-//        });
+        return List.of(new SimpleGrantedAuthority(member.getRole().toString()));
     }
-
 
     @Override
     public String getPassword() {
@@ -44,6 +35,9 @@ public class CustomUserDetailsDTO implements UserDetails {
         return member.getEmail();
     }
 
+    public Long getId() {
+        return member.getId();
+    }
     @Override
     public boolean isAccountNonExpired() {
         return member.getDeletedAt() == null;

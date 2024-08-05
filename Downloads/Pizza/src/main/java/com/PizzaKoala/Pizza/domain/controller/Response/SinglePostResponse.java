@@ -1,4 +1,4 @@
-package com.PizzaKoala.Pizza.domain.controller.Response;
+package com.PizzaKoala.Pizza.domain.controller.response;
 
 import com.PizzaKoala.Pizza.domain.model.PostDTO;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;

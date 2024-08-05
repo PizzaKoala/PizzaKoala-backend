@@ -1,6 +1,5 @@
-package com.PizzaKoala.Pizza.domain.controller.Response;
+package com.PizzaKoala.Pizza.domain.controller.response;
 
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
