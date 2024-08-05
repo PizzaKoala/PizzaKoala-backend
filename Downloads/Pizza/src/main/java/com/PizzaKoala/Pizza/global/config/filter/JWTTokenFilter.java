@@ -32,9 +32,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JWTTokenFilter extends OncePerRequestFilter {
 
-
     private final JWTTokenUtils jwtTokenUtils;
-    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/v1/alarm/subscribe");
+    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/*/alarm/subscribe");
 
 
     @Override
@@ -66,6 +65,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
             accessToken = header.substring(7);
         }else {
             //토큰이 없다면 다음 필터로 넘김
+            log.error("Error occurs while getting header, header is null or invalid {}", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
@@ -109,11 +109,11 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         //get email & role from token
         String email = jwtTokenUtils.getUsername(accessToken);
         String role = jwtTokenUtils.getRole(accessToken);
+
         Member member = Member.builder()
                 .email(email)
                 .role(MemberRole.valueOf(role))
                 .build();
-
         CustomUserDetailsDTO customUserDetailsDTO = new CustomUserDetailsDTO(member);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(

@@ -1,13 +1,11 @@
-package com.PizzaKoala.Pizza.domain.controller.Response;
+package com.PizzaKoala.Pizza.domain.controller.response;
 
 import com.PizzaKoala.Pizza.domain.model.PostDTO;
-import com.PizzaKoala.Pizza.domain.model.PostListDTO;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @Getter

@@ -84,17 +84,10 @@ public class MemberService {
         if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new PizzaAppException(ErrorCode.INVALID_PASSWORD);
         }
-
-
-        //토큰생성
-//        return JWTTokenUtils.generatedToken(email, secretKey, expiredTimeMs);
         return null;
     }
 
-    public Member loadMemberByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(()->
-                new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s nt found", email)));
-    }
+
 
     public Page<AlarmDTO> alarmList(String email, Pageable pageable) {
 //        //회원가입 이메일인지 체크

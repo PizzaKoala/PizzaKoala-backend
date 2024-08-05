@@ -1,6 +1,5 @@
 package com.PizzaKoala.Pizza.global.config;
 
-import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
 import com.PizzaKoala.Pizza.domain.Repository.RefreshRepository;
 import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
 import com.PizzaKoala.Pizza.domain.exception.CustomAuthenticationEntryPoint;
@@ -8,7 +7,6 @@ import com.PizzaKoala.Pizza.domain.oauth2.CustomClientRegistrationRepo;
 import com.PizzaKoala.Pizza.domain.oauth2.CustomOAuth2UserService;
 import com.PizzaKoala.Pizza.domain.oauth2.Handler.CustomOAuth2SuccessHandler;
 import com.PizzaKoala.Pizza.domain.service.AuthenticationService;
-import com.PizzaKoala.Pizza.domain.service.MemberService;
 import com.PizzaKoala.Pizza.global.config.filter.CustomLogoutFilter;
 import com.PizzaKoala.Pizza.global.config.filter.JWTTokenFilter;
 import com.PizzaKoala.Pizza.global.config.filter.NewLoginFilter;
@@ -26,7 +24,6 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
