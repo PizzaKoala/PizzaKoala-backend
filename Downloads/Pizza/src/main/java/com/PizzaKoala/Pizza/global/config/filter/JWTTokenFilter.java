@@ -47,6 +47,10 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         }
         String accessToken = null;
         String requestUri = request.getRequestURI();
+        if(requestUri.startsWith("/swagger-ui")|| requestUri.startsWith("/v3/spi-docs")){
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
 

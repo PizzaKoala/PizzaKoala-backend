@@ -23,7 +23,6 @@ public class PizzaApplication {
 		// 검색 가져오기- react 에서 하는 방법은 밑에 주소 참고하기
 		//https://chatgpt.com/share/ba2c52fc-b4a6-491e-afeb-712a1aa7c3f5
 
-		// TODO calender도 떠야해 :(
 
 		//TODO refactoring, 빠트린거 있나 살펴 보기
 
