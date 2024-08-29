@@ -64,3 +64,4 @@ $RECYCLE.BIN/
 
 # Ignore other specific directories
 Library/
+backend/
