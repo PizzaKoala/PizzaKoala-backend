@@ -64,4 +64,4 @@ $RECYCLE.BIN/
 
 # Ignore other specific directories
 Library/
-Koala/
+koala/
