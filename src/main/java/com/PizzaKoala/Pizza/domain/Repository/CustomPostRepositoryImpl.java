@@ -158,10 +158,10 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
     }
     /**
      *
-     * 키워드가 들어간 포스트들 가져오기(제복,설명란)
+     * 키워드가 들어간 최신순 포스트들 가져오기(제복,설명란)
      *
      */
-    public Page<PostSummaryDTO> searchPosts(String keyword, Pageable pageable) {
+    public Page<PostSummaryDTO> searchRecentPosts(String keyword, Pageable pageable) {
         QPost qPost = QPost.post;
         QImages qImages = QImages.images;
         BooleanBuilder builder = new BooleanBuilder();
@@ -179,6 +179,58 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 .where(builder.and(qPost.deletedAt.isNull()))
                 .groupBy(qPost.id, qPost.title)
                 .orderBy(qPost.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // Transform the results into DTOs
+        List<PostSummaryDTO> finalResults = rawResults.stream().map(tuple -> {
+            Long postId = tuple.get(qPost.id);
+            String title = tuple.get(qPost.title);
+            String imageUrl = tuple.get(qImages.url.min());
+            Long imageCount = tuple.get(qImages.id.countDistinct());
+            return new PostSummaryDTO(postId, title, imageUrl, imageCount);
+        }).collect(Collectors.toList());
+
+
+
+        // Fetch the total count of posts
+        Long totalCount = queryFactory
+                .select(qPost.id.count())
+                .from(qPost)
+                .where(builder
+                        .and(qPost.deletedAt.isNull()))
+                .fetchOne();
+
+        // Check for null totalCount
+        long total = (totalCount!=null) ? totalCount : 0L;
+
+        return new PageImpl<>(finalResults, pageable, total);
+    }
+
+    /**
+     *
+     * 키워드가 들어간 포스트들 좋아요순으로 가져오기(제복,설명란)
+     *
+     */
+    public Page<PostSummaryDTO> searchLikedPosts(String keyword, Pageable pageable) {
+        QPost qPost = QPost.post;
+        QImages qImages = QImages.images;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (keyword != null && !keyword.isEmpty()) {
+            builder.or(qPost.desc.containsIgnoreCase(keyword));
+            builder.or(qPost.title.containsIgnoreCase(keyword));
+        }
+
+        // Fetch the post data with one image URL
+        List<Tuple> rawResults = queryFactory
+                .select(qPost.id, qPost.title, qImages.url.min(), qImages.id.countDistinct())
+                .from(qPost)
+                .leftJoin(qPost.images, qImages)
+                .where(builder.and(qPost.deletedAt.isNull()))
+                .groupBy(qPost.id, qPost.title)
+                .orderBy(qPost.likes.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

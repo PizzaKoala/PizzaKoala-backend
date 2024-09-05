@@ -7,7 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CustomMemberRepository {
-    public Page<SearchMemberNicknameDTO> searchKeywordByNickname(String keyword, Pageable pageable);
+    public Page<SearchMemberNicknameDTO> searchRecentKeywordByNickname(String keyword, Pageable pageable);
+    public Page<SearchMemberNicknameDTO> searchNicknameByFollowers(String keyword, Pageable pageable);
 
 
 }

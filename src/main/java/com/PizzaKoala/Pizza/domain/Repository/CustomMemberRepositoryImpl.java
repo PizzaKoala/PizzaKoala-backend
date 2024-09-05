@@ -36,7 +36,49 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
      */
 //    @Query("SELECT m.id,m.nickName,m.profileImageUrl FROM Member m WHERE m.nickName like %:keyword% AND m.deletedAt=null")
 //    Member searchKeywordByNickname(String keyword);
-    public Page<SearchMemberNicknameDTO> searchKeywordByNickname(@Param("keyword") String keyword, Pageable pageable) {
+    public Page<SearchMemberNicknameDTO> searchRecentKeywordByNickname(@Param("keyword") String keyword, Pageable pageable) {
+        QMember qMember = QMember.member;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (keyword != null && !keyword.isEmpty()) {
+            builder.or(qMember.nickName.containsIgnoreCase(keyword));
+        }
+
+        // Fetch the post data with one image URL
+        List<Tuple> rawResults = queryFactory
+                .select(qMember.id, qMember.nickName,qMember.profileImageUrl)
+                .from(qMember)
+                .where(builder.and(qMember.deletedAt.isNull()))
+                .orderBy(qMember.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        // Transform the results into DTOs
+        List<SearchMemberNicknameDTO> finalResults = rawResults.stream().map(tuple -> {
+            Long id = tuple.get(qMember.id);
+            String nickname = tuple.get(qMember.nickName);
+            String profileImageUrl = tuple.get(qMember.profileImageUrl);
+            return new SearchMemberNicknameDTO(id,nickname,profileImageUrl);
+        }).collect(Collectors.toList());
+
+
+
+        // Fetch the total count of posts
+        Long totalCount = queryFactory
+                .select(qMember.id.count())
+                .from(qMember)
+                .where(builder
+                        .and(qMember.deletedAt.isNull()))
+                .fetchOne();
+
+        // Check for null totalCount
+        long total = (totalCount!=null) ? totalCount : 0L;
+
+        return new PageImpl<>(finalResults, pageable, total);
+    }
+    public Page<SearchMemberNicknameDTO> searchNicknameByFollowers(@Param("keyword") String keyword, Pageable pageable) {
         QMember qMember = QMember.member;
 
         BooleanBuilder builder = new BooleanBuilder();

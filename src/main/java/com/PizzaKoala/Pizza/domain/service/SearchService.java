@@ -16,11 +16,19 @@ import org.springframework.stereotype.Service;
 public class SearchService {
     private final CustomPostRepository customPostRepository;
     private final CustomMemberRepository customMemberRepository;
-    public Page<PostSummaryDTO> SearchPostTitleAndDesc(Pageable pageable, String keyword) {
-        return customPostRepository.searchPosts(keyword, pageable);
+    public Page<PostSummaryDTO> SearchRecentPostTitleAndDesc(Pageable pageable, String keyword) {
+        return customPostRepository.searchRecentPosts(keyword, pageable);
     }
-    public Page<SearchMemberNicknameDTO> SearchMemberNickname(Pageable pageable, String keyword) {
-        return customMemberRepository.searchKeywordByNickname(keyword, pageable);
+    public Page<SearchMemberNicknameDTO> SearchRecentMemberNickname(Pageable pageable, String keyword) {
+        return customMemberRepository.searchRecentKeywordByNickname(keyword, pageable);
+
+    }
+    public Page<PostSummaryDTO> SearchLikedPostTitleAndDesc(Pageable pageable, String keyword) {
+        return customPostRepository.searchLikedPosts(keyword, pageable);
+    }
+
+    public Page<SearchMemberNicknameDTO> SearchNicknameByFollowers(Pageable pageable, String keyword) {
+        return customMemberRepository.searchNicknameByFollowers(keyword, pageable);
 
     }
 }
