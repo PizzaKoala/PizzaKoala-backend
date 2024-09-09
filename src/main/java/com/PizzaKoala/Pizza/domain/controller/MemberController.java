@@ -48,16 +48,6 @@ public class MemberController {
         return Response.success();
     }
 
-    @PostMapping("/follow/{follower}/{following}")
-    public Response<Void> followAMember(Authentication authentication,@PathVariable Long follower, @PathVariable Long following){
-        System.out.println(authentication.getName());
-        System.out.println(authentication.getAuthorities());
-        System.out.println(authentication.getCredentials());
-        System.out.println(authentication.getPrincipal());
-
-        return Response.success(memberService.follow(authentication.getName(),follower,following));
-    }
-
 
     @GetMapping("/alarm")
     public Response<Page<AlarmResponse>> alarm(Pageable pageable, Authentication authentication) {
