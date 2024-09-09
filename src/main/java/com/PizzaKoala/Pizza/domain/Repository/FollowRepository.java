@@ -2,8 +2,12 @@ package com.PizzaKoala.Pizza.domain.Repository;
 
 import com.PizzaKoala.Pizza.domain.entity.Follow;
 import com.PizzaKoala.Pizza.domain.entity.Likes;
+import com.PizzaKoala.Pizza.domain.entity.Member;
+import com.PizzaKoala.Pizza.domain.entity.Post;
 import com.PizzaKoala.Pizza.global.entity.LikesType;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +18,8 @@ import java.util.Optional;
 
 @Repository
 public interface FollowRepository extends JpaRepository<Follow,Long> {
+
+    Optional<Follow> findByFollowerIdAndFollowingId(Long id, Long followingId);
 //    Optional<Likes> findByMemberIdAndLikesTypeIdAndLikesType(Long memberId, Long postId,LikesType likesType);
 //    @Modifying
 //    @Transactional

@@ -92,31 +92,6 @@ public class MemberService {
         return null;
     }
 
-    public Void follow(String email,Long follower, Long following) {
-        //following이 존재하는지 확인!
-        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not founded", email)));
-        if (!member.getId().equals(follower)) {
-            throw new PizzaAppException(ErrorCode.INVALID_PERMISSION);
-        }
-        if (follower.equals(following)) {
-            throw new PizzaAppException(ErrorCode.INVALID_PERMISSION, String.format("You cannot follow your own account."));
-        }
-
-        Optional<Member> followingMember = memberRepository.findById(following);
-        if (followingMember.isEmpty()) {
-            throw new PizzaAppException(ErrorCode.FOLLOWING_NOT_FOUND);
-        }
-        try {
-            Follow follow = Follow.of(follower, following);
-            followRepository.save(follow);
-        } catch (DataIntegrityViolationException exception) {
-            throw new PizzaAppException(ErrorCode.ALREADY_FOLLOWED, String.format("You are already following %s",followingMember.get().getNickName()));
-        }
-
-        return null;
-
-    }
-
 
     public Page<AlarmDTO> alarmList(String email, Pageable pageable) {
 //        //회원가입 이메일인지 체크
