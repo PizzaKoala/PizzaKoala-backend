@@ -18,7 +18,7 @@ public enum ErrorCode {
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED,"Permission is invalid."),
     ALREADY_LIKED(HttpStatus.CONFLICT,"User has already liked the post."),
     ALREADY_FOLLOWED(HttpStatus.CONFLICT,"User has already followed the account."),
-    FOLLOWING_NOT_FOUND(HttpStatus.UNAUTHORIZED, "You are not following this user."),
+    FOLLOW_NOT_FOUND(HttpStatus.UNAUTHORIZED, "This follow relationship does not exist."),
     FOLLOWING_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "The user you are trying to follow does not exist"),
     ALREADY_UNLIKED(HttpStatus.CONFLICT,"User has already unliked the post."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND,"User hasn't liked the post."),
