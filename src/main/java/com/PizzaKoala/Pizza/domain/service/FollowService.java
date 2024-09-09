@@ -60,7 +60,19 @@ public class FollowService {
         if (member.getId().equals(followingId)) {
             throw new PizzaAppException(ErrorCode.INVALID_PERMISSION, "You cannot unfollow yourself");
         }
-        Follow follow = followRepository.findByFollowerIdAndFollowingId(member.getId(), followingId).orElseThrow(() -> new PizzaAppException(ErrorCode.FOLLOWING_NOT_FOUND, "You are not following this user."));
+        Follow follow = followRepository.findByFollowerIdAndFollowingId(member.getId(), followingId).orElseThrow(() -> new PizzaAppException(ErrorCode.FOLLOW_NOT_FOUND, "You are not following this user."));
+        try {
+            followRepository.delete(follow);
+        } catch (Exception exception) {
+            throw new PizzaAppException(ErrorCode.INVALID_PERMISSION,"Failed to delete.");
+        }
+        return null;
+    }
+
+    public Void deleteAFollower(String email, Long followerId) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not founded", email)));
+
+        Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId,member.getId()).orElseThrow(() -> new PizzaAppException(ErrorCode.FOLLOW_NOT_FOUND, "This user is not following you."));
         try {
             followRepository.delete(follow);
         } catch (Exception exception) {

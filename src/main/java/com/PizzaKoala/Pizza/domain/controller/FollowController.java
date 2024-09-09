@@ -36,6 +36,10 @@ public class FollowController {
     public Response<Void> unfollowAMember(Authentication authentication, @PathVariable Long followingId){
         return Response.success(followService.unfollow(authentication.getName(),followingId));
     }
+    @DeleteMapping("/follow/follower/{followerId}")
+    public Response<Void> deleteAFollower(Authentication authentication, @PathVariable Long followerId){
+        return Response.success(followService.deleteAFollower(authentication.getName(),followerId));
+    }
 
 
 }
