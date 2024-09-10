@@ -1,15 +1,13 @@
 package com.PizzaKoala.Pizza.domain.service;
 
-import com.PizzaKoala.Pizza.domain.Repository.AlarmRepository;
-import com.PizzaKoala.Pizza.domain.Repository.FollowRepository;
-import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
-import com.PizzaKoala.Pizza.domain.Repository.ProfileImageRepository;
+import com.PizzaKoala.Pizza.domain.Repository.*;
 import com.PizzaKoala.Pizza.domain.entity.Follow;
 import com.PizzaKoala.Pizza.domain.entity.Member;
 import com.PizzaKoala.Pizza.domain.entity.ProfileImage;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import com.PizzaKoala.Pizza.domain.model.AlarmDTO;
+import com.PizzaKoala.Pizza.domain.model.FollowListDTO;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -31,6 +29,7 @@ import java.util.Optional;
 public class FollowService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
+    private final CustomFollowRepository customFollowRepository;
 
 
     public Void follow(String email, Long following) {
@@ -80,4 +79,16 @@ public class FollowService {
         }
         return null;
     }
+
+    public Page<FollowListDTO> myFollowList(String email, Pageable pageable, int or) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND));
+        switch (or) {
+            case 1:
+                return customFollowRepository.myFollowerList(member.getId(), pageable);
+            case 2:
+                return customFollowRepository.myFollowingList(member.getId(),pageable);
+            default: throw new PizzaAppException(ErrorCode.INVALID_PERMISSION,"follower list-1, following list-2");
+        }
+    }
+
 }
