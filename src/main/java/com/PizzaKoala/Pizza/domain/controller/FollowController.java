@@ -3,8 +3,12 @@ package com.PizzaKoala.Pizza.domain.controller;
 import com.PizzaKoala.Pizza.domain.controller.request.UserJoinRequest;
 import com.PizzaKoala.Pizza.domain.controller.request.UserLoginRequest;
 import com.PizzaKoala.Pizza.domain.controller.response.AlarmResponse;
+import com.PizzaKoala.Pizza.domain.controller.response.FollowListResponse;
 import com.PizzaKoala.Pizza.domain.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.controller.response.UserJoinResponse;
+import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
+import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
+import com.PizzaKoala.Pizza.domain.model.FollowListDTO;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;
 import com.PizzaKoala.Pizza.domain.service.AlarmService;
 import com.PizzaKoala.Pizza.domain.service.FollowService;
@@ -40,6 +44,18 @@ public class FollowController {
     public Response<Void> deleteAFollower(Authentication authentication, @PathVariable Long followerId){
         return Response.success(followService.deleteAFollower(authentication.getName(),followerId));
     }
+    @GetMapping("/follow/my/{or}") //{or} -1 for my followers -2 for users I am following
+    public Response<Page<FollowListResponse>> followList(Authentication authentication, Pageable pageable, @PathVariable int or){
+        if (or>2||or<1) {
+            throw new PizzaAppException(ErrorCode.INVALID_PERMISSION,"follower list-1, following list-2");
+        }
+        return Response.success(followService.myFollowList(authentication.getName(), pageable, or).map(FollowListResponse::fromFollowListDTO));
+
+
+
+    }
+
+
 
 
 }
