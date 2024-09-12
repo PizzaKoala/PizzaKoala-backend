@@ -1,9 +1,6 @@
 package com.PizzaKoala.Pizza.domain.Repository;
 
-import com.PizzaKoala.Pizza.domain.entity.Member;
-import com.PizzaKoala.Pizza.domain.entity.QImages;
-import com.PizzaKoala.Pizza.domain.entity.QMember;
-import com.PizzaKoala.Pizza.domain.entity.QPost;
+import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.model.PostSummaryDTO;
 import com.PizzaKoala.Pizza.domain.model.SearchMemberNicknameDTO;
 import com.querydsl.core.BooleanBuilder;
@@ -80,6 +77,7 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
     }
     public Page<SearchMemberNicknameDTO> searchNicknameByFollowers(@Param("keyword") String keyword, Pageable pageable) {
         QMember qMember = QMember.member;
+        QFollow qFollow = QFollow.follow;
 
         BooleanBuilder builder = new BooleanBuilder();
 
@@ -91,8 +89,10 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
         List<Tuple> rawResults = queryFactory
                 .select(qMember.id, qMember.nickName,qMember.profileImageUrl)
                 .from(qMember)
+                .leftJoin(qFollow).on(qFollow.followingId.eq(qMember.id))
                 .where(builder.and(qMember.deletedAt.isNull()))
-                .orderBy(qMember.createdAt.desc())
+                .groupBy(qMember.id,qMember.nickName,qMember.profileImageUrl)
+                .orderBy(qFollow.followerId.count().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -111,8 +111,9 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
         Long totalCount = queryFactory
                 .select(qMember.id.count())
                 .from(qMember)
-                .where(builder
-                        .and(qMember.deletedAt.isNull()))
+                .leftJoin(qFollow).on(qFollow.followingId.eq(qMember.id))
+                .where(builder.and(qMember.deletedAt.isNull()))
+                .orderBy(qFollow.followerId.count().desc())
                 .fetchOne();
 
         // Check for null totalCount

@@ -48,10 +48,10 @@ public class SearchController {
 //     * 팔로워순 - 닉네임
 //     */
 //
-//    @GetMapping("/search/nicknames/{keyword}/followers")
-//    public Response<Page<SearchNicknamesResponse>> searchNicknamesByFollowers(@PathVariable String keyword, Pageable pageable) {
-//        return Response.success(searchService.SearchNicknameByFollowers(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
-//    }
+    @GetMapping("/search/nicknames/{keyword}/followers")
+    public Response<Page<SearchNicknamesResponse>> searchNicknamesByFollowers(@PathVariable String keyword, Pageable pageable) {
+        return Response.success(searchService.SearchNicknameByFollowers(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
+    }
 
 
 }
