@@ -27,12 +27,12 @@ public class SearchController {
     }
 
     /**
-     * 최신순 - 닉네임 검색
+     * 최신포스트순 - 닉네임 검색
      */
 
     @GetMapping("/search/nicknames/{keyword}/recent")
     public Response<Page<SearchNicknamesResponse>> searchNicknamesByRecent(@PathVariable String keyword, Pageable pageable) {
-        return Response.success(searchService.SearchRecentMemberNickname(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
+        return Response.success(searchService.SearchMemberByPosts(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
     }
 
 
@@ -44,10 +44,10 @@ public class SearchController {
         return Response.success(searchService.SearchLikedPostTitleAndDesc(pageable, keyword).map(PostListResponse::fromPostImageDTO));
     }
 
-//    /**
-//     * 팔로워순 - 닉네임
-//     */
-//
+    /**
+     * 팔로워순 - 닉네임
+     */
+
     @GetMapping("/search/nicknames/{keyword}/followers")
     public Response<Page<SearchNicknamesResponse>> searchNicknamesByFollowers(@PathVariable String keyword, Pageable pageable) {
         return Response.success(searchService.SearchNicknameByFollowers(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
