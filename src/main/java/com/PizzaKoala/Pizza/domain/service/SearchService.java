@@ -19,8 +19,8 @@ public class SearchService {
     public Page<PostSummaryDTO> SearchRecentPostTitleAndDesc(Pageable pageable, String keyword) {
         return customPostRepository.searchRecentPosts(keyword, pageable);
     }
-    public Page<SearchMemberNicknameDTO> SearchRecentMemberNickname(Pageable pageable, String keyword) {
-        return customMemberRepository.searchRecentKeywordByNickname(keyword, pageable);
+    public Page<SearchMemberNicknameDTO> SearchMemberByPosts(Pageable pageable, String keyword) {
+        return customMemberRepository.searchMemberByRecentPosts(keyword, pageable);
 
     }
     public Page<PostSummaryDTO> SearchLikedPostTitleAndDesc(Pageable pageable, String keyword) {
@@ -28,7 +28,7 @@ public class SearchService {
     }
 
     public Page<SearchMemberNicknameDTO> SearchNicknameByFollowers(Pageable pageable, String keyword) {
-        return customMemberRepository.searchNicknameByFollowers(keyword, pageable);
+        return customMemberRepository.searchMemberByMostFollowers(keyword, pageable);
 
     }
 }
