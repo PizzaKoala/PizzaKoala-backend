@@ -162,5 +162,13 @@ public class PostController {
         return Response.success(postService.commentDelete(postId,commentId,authentication.getName()));
     }
 
+    /**
+     *  edit a comment - 댓글 수정
+     */
+    @PutMapping("/{postId}/comments/{commentId}")
+    public Response<Boolean> editComment(@PathVariable Long postId , @RequestBody PostCommentRequest editedComment, Authentication authentication) {
+        return Response.success(postService.editComment(postId,editedComment,authentication.getName()));
+    }
+
 
 }
