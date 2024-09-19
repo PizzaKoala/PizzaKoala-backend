@@ -80,17 +80,26 @@ public class PostController {
         return Response.success( postService.getComments(postId, pageable).map(CommentResponse::fromCommentDTO));
     }
 
+//    /**
+//     * recent posts 최신 포스트들
+//     */
+//
+//    @GetMapping
+//    public Response<Page<PostListResponse>> recentList(Pageable pageable) {
+//        return Response.success(postService.list(pageable).map(PostListResponse::fromPostImageDTO));
+//    }
+
     /**
-     * recent posts 최신 포스트들
+     * 메인 - 팔로잉 맴버들의  포스트들
      */
 
     @GetMapping
-    public Response<Page<PostListResponse>> recentList(Pageable pageable) {
-        return Response.success(postService.list(pageable).map(PostListResponse::fromPostImageDTO));
+    public Response<Page<PostListResponse>> FollowingList(Pageable pageable,Authentication authentication) {
+        return Response.success(postService.followingPosts(pageable,authentication.getName()).map(PostListResponse::fromPostImageDTO));
     }
 
     /**
-     * 좋아요 순 포스트들
+     * 메인 - 좋아요 순 포스트들
      */
 
     @GetMapping("/liked")

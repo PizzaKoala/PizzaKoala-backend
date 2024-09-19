@@ -1,11 +1,13 @@
 package com.PizzaKoala.Pizza.domain.Repository;
 
 import com.PizzaKoala.Pizza.domain.entity.Member;
+import com.PizzaKoala.Pizza.domain.entity.QFollow;
 import com.PizzaKoala.Pizza.domain.entity.QImages;
 import com.PizzaKoala.Pizza.domain.entity.QPost;
 import com.PizzaKoala.Pizza.domain.model.PostSummaryDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
@@ -74,21 +76,65 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return new PageImpl<>(finalResults, pageable, total);
     }
 
+//    /**
+//     *
+//     * 최근에 올라온 포스트들 가져오기 (public)
+//     *
+//     */
+//    public Page<PostSummaryDTO> recentPosts(Pageable pageable) {
+//        QPost qPost = QPost.post;
+//        QImages qImages = QImages.images;
+//
+//        // Fetch the post data with one image URL
+//        List<Tuple> rawResults = queryFactory
+//                .select(qPost.id, qPost.title, qImages.url.min(), qImages.id.countDistinct())
+//                .from(qPost)
+//                .leftJoin(qPost.images, qImages)
+//                .where(qPost.deletedAt.isNull())
+//                .groupBy(qPost.id, qPost.title)
+//                .orderBy(qPost.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        // Transform the results into DTOs
+//        List<PostSummaryDTO> finalResults = rawResults.stream().map(tuple -> {
+//            Long postId = tuple.get(qPost.id);
+//            String title = tuple.get(qPost.title);
+//            String imageUrl = tuple.get(qImages.url.min());
+//            Long imageCount = tuple.get(qImages.id.countDistinct());
+//            return new PostSummaryDTO(postId, title, imageUrl, imageCount);
+//        }).toList();
+//        // Fetch the total count of posts
+//        Long totalCount = queryFactory
+//                .select(qPost.id.count())
+//                .from(qPost)
+//                .where(qPost.deletedAt.isNull())
+//                .fetchOne();
+//
+//        // Check for null totalCount
+//        long total = (totalCount!=null) ? totalCount : 0L;
+//
+//        return new PageImpl<>(finalResults, pageable, total);
+//    }
     /**
      *
-     * 최근에 올라온 포스트들 가져오기 (public)
+     * 메인- 팔로잉한 맴버들의 포스트들 가져오기
      *
      */
-    public Page<PostSummaryDTO> recentPosts(Pageable pageable) {
+    public Page<PostSummaryDTO> followingPosts(Pageable pageable,Long id) {
         QPost qPost = QPost.post;
         QImages qImages = QImages.images;
+        QFollow qFollow = QFollow.follow;
 
         // Fetch the post data with one image URL
         List<Tuple> rawResults = queryFactory
                 .select(qPost.id, qPost.title, qImages.url.min(), qImages.id.countDistinct())
                 .from(qPost)
                 .leftJoin(qPost.images, qImages)
-                .where(qPost.deletedAt.isNull())
+                .where(qPost.deletedAt.isNull().and(qPost.member.id.in(
+                        JPAExpressions.select(qFollow.followingId).from(qFollow)
+                                .where(qFollow.followerId.eq(id)))))
                 .groupBy(qPost.id, qPost.title)
                 .orderBy(qPost.createdAt.desc())
                 .offset(pageable.getOffset())
@@ -107,7 +153,10 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         Long totalCount = queryFactory
                 .select(qPost.id.count())
                 .from(qPost)
-                .where(qPost.deletedAt.isNull())
+                .where(qPost.deletedAt.isNull()
+                        .and(qPost.member.id.in(
+                                JPAExpressions.select(qFollow.followingId).from(qFollow)
+                                        .where(qFollow.followerId.eq(id)))))
                 .fetchOne();
 
         // Check for null totalCount
