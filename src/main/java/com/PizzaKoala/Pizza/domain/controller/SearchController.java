@@ -37,7 +37,7 @@ public class SearchController {
 
 
     /**
-     * 좋아요- 포스트 검색
+     * 좋아요순/추천순- 포스트 검색
      */
     @GetMapping("/search/posts/{keyword}/likes")
     public Response<Page<PostListResponse>> searchPostByLikes(@PathVariable String keyword , Pageable pageable) {
