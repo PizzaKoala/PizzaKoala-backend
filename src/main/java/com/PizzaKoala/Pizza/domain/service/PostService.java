@@ -142,15 +142,24 @@ public class PostService {
         return new PageImpl<>(List.of(postWithCommentsDTO), pageable, 1);
     }
 
+//    /**
+//     * 최신 피드
+//     */
+//    public Page<PostSummaryDTO> list(Pageable pageable) {
+//       return customPostRepository.recentPosts(pageable);
+//
+//    }
     /**
-     * 최신 피드
+     * 메인- 팔로잉 맴버들의 피드
      */
-    public Page<PostSummaryDTO> list(Pageable pageable) {
-       return customPostRepository.recentPosts(pageable);
+    public Page<PostSummaryDTO> followingPosts(Pageable pageable,String email) {
+        //find user
+        Member member = getMemberByEmailOrException(email);
+       return customPostRepository.followingPosts(pageable,member.getId());
 
     }
     /**
-     * 좋아요순 피드
+     * 메인 - 좋아요순 피드
      */
     public Page<PostSummaryDTO> LikedList(Pageable pageable) {
         return customPostRepository.likedPosts(pageable);

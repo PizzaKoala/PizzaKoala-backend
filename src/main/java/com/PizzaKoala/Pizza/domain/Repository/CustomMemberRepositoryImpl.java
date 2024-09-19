@@ -60,6 +60,7 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
                 .groupBy(qMember.id,qMember.nickName,qMember.profileImageUrl)
                 .orderBy(qPost.createdAt.max().desc())
                 .offset(pageable.getOffset())
+                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
