@@ -22,7 +22,7 @@ public class SocialClientRegistration {
                 .clientSecret(clientSecret)
                 .redirectUri("http://localhost:8080/login/oauth2/code/google")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("email","profile")
+                .scope("email","picture")
                 .authorizationUri("https://accounts.google.com/o/oauth2/v2/auth")
                 .tokenUri("https://www.googleapis.com/oauth2/v4/token")
                 .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")

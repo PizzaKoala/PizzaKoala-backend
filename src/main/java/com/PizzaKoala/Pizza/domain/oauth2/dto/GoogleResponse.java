@@ -2,12 +2,16 @@ package com.PizzaKoala.Pizza.domain.oauth2.dto;
 
 import java.util.Map;
 
+
 public class GoogleResponse implements OAuth2Response {
     private final Map<String, Object> attribute;
 
     public GoogleResponse(Map<String, Object> attribute) {
         this.attribute = attribute;
     }
+
+
+
     @Override
     public String getProvider() {
         return "google";
@@ -24,12 +28,19 @@ public class GoogleResponse implements OAuth2Response {
     }
 
     @Override
-    public String getName() {
-        return attribute.get("name").toString();
+    public String getPicture() {
+        return attribute.get("picture").toString();
     }
 
-    @Override
-    public String getProfileImg() {
-        return null;
-    }
+//    @Override
+//    public String getName() {
+//        return attribute.get("name").toString();
+//    }
+//   @Override
+//    public String getUserName() {
+//        return attribute.get("userName").toString();
+
+
+
+
 }

@@ -8,9 +8,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class UserOAuth2Dto {
-    private String name;
     private MemberRole role;
     private String email;
-    private String username;
-    private String profileImg;
+    private String picture;
 }

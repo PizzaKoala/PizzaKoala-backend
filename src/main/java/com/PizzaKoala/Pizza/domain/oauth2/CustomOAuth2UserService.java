@@ -10,6 +10,7 @@ import com.PizzaKoala.Pizza.domain.oauth2.dto.CustomOAuth2User;
 import com.PizzaKoala.Pizza.domain.oauth2.dto.GoogleResponse;
 import com.PizzaKoala.Pizza.domain.oauth2.dto.OAuth2Response;
 import com.PizzaKoala.Pizza.domain.oauth2.dto.UserOAuth2Dto;
+import com.PizzaKoala.Pizza.domain.service.MemberService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -19,11 +20,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
-    private final ProfileImageRepository profileImageRepository;
+    private final MemberService memberService;
 
-    public CustomOAuth2UserService(MemberRepository memberRepository, ProfileImageRepository profileImageRepository) {
+
+    public CustomOAuth2UserService(MemberRepository memberRepository,MemberService memberService) {
         this.memberRepository = memberRepository;
-        this.profileImageRepository = profileImageRepository;
+        this.memberService = memberService;
     }
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -44,16 +46,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String username = oAuth2Response.getProvider() +" "+oAuth2Response.getProviderId();
 
         Member existData = memberRepository.findByMyEmail(oAuth2Response.getEmail());
-       //회원가입
+        /**
+         *
+         * nickname은 일단 이메일에 @ 앞부분을 따고 이미 존재하면 뒤에 숫자를 붙이장!! 케르륵
+         *
+         */
+
+        String nickname = memberService.generateUniqueNickname(oAuth2Response.getEmail());
+        //회원가입
         if (existData == null) {
             Member member= Member.builder()
                     .email(oAuth2Response.getEmail())
-                    .nickName(oAuth2Response.getName())
-                    .profileImageUrl(oAuth2Response.getProfileImg())
+                    .nickName(nickname)
+                    .profileImageUrl(oAuth2Response.getPicture())
                     .role(MemberRole.USER)
                     .build();
             memberRepository.save(member);
-            //TODO 사진은 저장하지 말까남..
+
+            // 사진은 저장하지 말까남.. 하지말자! 낭비당 저기 있는거 사용하면 되지!!
 //            ProfileImage profileImage= ProfileImage.builder()
 //                    .url(oAuth2Response.getProfileImg())
 //                    .build();
@@ -62,8 +72,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             UserOAuth2Dto userOAuth2Dto= UserOAuth2Dto.builder()
                     .email(oAuth2Response.getEmail())
-                    .profileImg(oAuth2Response.getProfileImg())
-                    .username(oAuth2Response.getName())
+                    .picture(oAuth2Response.getPicture())
                     .role(MemberRole.USER)
                     .build();
             return new CustomOAuth2User(userOAuth2Dto);
@@ -76,8 +85,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
             UserOAuth2Dto userOAuth2Dto= UserOAuth2Dto.builder()
-                    .username(oAuth2Response.getName())
-                    .profileImg(oAuth2Response.getProfileImg())
+                    .email(oAuth2Response.getEmail())
+                    .picture(oAuth2Response.getPicture())
                     .role(existData.getRole())
                     .build();
 

@@ -67,7 +67,7 @@ public class PostController {
     /**
      * get a post- 포스트 단건 조회
      */
-    @GetMapping("/with_comments/{postId}")
+    @GetMapping("/{postId}")
     public Response<Page<PostWithCommentsDTO>> getAPost(@PathVariable Long postId,Pageable pageable) {
         Page<PostWithCommentsDTO> postWithCommentsDTOS = postService.getAPost(postId, pageable);
         return Response.success(postWithCommentsDTOS);
@@ -102,8 +102,8 @@ public class PostController {
      * 메인 - 좋아요 순 포스트들
      */
 
-    @GetMapping("/liked")
-    public Response<Page<PostListResponse>> LikedList(Pageable pageable) {
+    @GetMapping("/list/liked")
+    public Response<Page<PostListResponse>> LikedPostLists(Pageable pageable) {
         return Response.success(postService.LikedList(pageable).map(PostListResponse::fromPostImageDTO));
     }
 
@@ -120,7 +120,7 @@ public class PostController {
      * member posts-특정 맴버 포스트들 리스트로 끌고 오기
      */
 
-    @GetMapping("/{postId}")
+    @GetMapping("/list/{postId}")
     public Response<Page<PostListResponse>> memberPosts(@PathVariable Long postId, Pageable pageable) {
                 return Response.success(postService.memberPosts(postId, pageable).map(PostListResponse::fromPostImageDTO));
     }
