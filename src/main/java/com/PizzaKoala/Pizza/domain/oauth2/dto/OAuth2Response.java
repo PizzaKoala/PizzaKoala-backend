@@ -8,8 +8,5 @@ public interface OAuth2Response {
     //이메일
     String getEmail();
 
-    //사용자 실명(설정한 이름) 닉네임으로 등록해야겠당.
-    String getName();
-
-    String getProfileImg();
+    String getPicutre();
 }
