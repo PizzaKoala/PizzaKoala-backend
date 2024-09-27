@@ -24,12 +24,9 @@ public class GoogleResponse implements OAuth2Response {
     }
 
     @Override
-    public String getName() {
-        return attribute.get("name").toString();
+    public String getPicutre() {
+        return attribute.get("picture").toString();
     }
 
-    @Override
-    public String getProfileImg() {
-        return null;
-    }
+
 }
