@@ -1,6 +1,7 @@
 package com.PizzaKoala.Pizza.domain.service;
 
 import com.PizzaKoala.Pizza.domain.Repository.*;
+import com.PizzaKoala.Pizza.domain.controller.request.PostCommentRequest;
 import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
@@ -141,15 +142,24 @@ public class PostService {
         return new PageImpl<>(List.of(postWithCommentsDTO), pageable, 1);
     }
 
+//    /**
+//     * 최신 피드
+//     */
+//    public Page<PostSummaryDTO> list(Pageable pageable) {
+//       return customPostRepository.recentPosts(pageable);
+//
+//    }
     /**
-     * 최신 피드
+     * 메인- 팔로잉 맴버들의 피드
      */
-    public Page<PostSummaryDTO> list(Pageable pageable) {
-       return customPostRepository.recentPosts(pageable);
+    public Page<PostSummaryDTO> followingPosts(Pageable pageable,String email) {
+        //find user
+        Member member = getMemberByEmailOrException(email);
+       return customPostRepository.followingPosts(pageable,member.getId());
 
     }
     /**
-     * 좋아요순 피드
+     * 메인 - 좋아요순 피드
      */
     public Page<PostSummaryDTO> LikedList(Pageable pageable) {
         return customPostRepository.likedPosts(pageable);
@@ -274,22 +284,34 @@ public class PostService {
      * 포스트에 쓴 댓글 삭제 -
      */
     public Boolean commentDelete(Long postId, Long commentId, String email) {
-        Optional<Comments> comments= commentRepository.findById(commentId);
+        Comments comment= commentRepository.findById(commentId).orElseThrow(()->new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND));
+        VerifyComment(comment,postId, email);
+        commentRepository.deleteById(commentId);
+        return true;
+    }
+    /**
+     * 포스트에 쓴 댓글 수정 -
+     */
+    @Transactional
+    public Boolean editComment(Long postId,PostCommentRequest editedComment, String email) {
+        Comments comment= commentRepository.findById(editedComment.getCommentId()).orElseThrow(()->new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND));
+        VerifyComment(comment,postId,email);
+        comment.update(editedComment.getComment());
+        return true;
+    }
 
-        if (comments.isEmpty()) {
-            throw new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND);
-        }
-            Comments comment=comments.get();
+    //comment delete&edit 을 위한 verification
 
+    private void VerifyComment(Comments comment,Long postId, String email) {
         if (!comment.getPostId().getId().equals(postId)) {
             throw new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND);
         }
         if (!comment.getMember().getEmail().equals(email)) {
             throw new PizzaAppException(ErrorCode.INVALID_PERMISSION);
         }
-        commentRepository.deleteById(commentId);
-        return true;
     }
+
+
 
 
 

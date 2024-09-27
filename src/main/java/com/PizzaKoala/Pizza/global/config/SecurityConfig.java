@@ -73,7 +73,9 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable);// jwt를 발급해서 stateless방식으로 세션을 관리해서 안해도 된다.
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/*/login","/oauth2/**", "/api/*/join","/api/*/reissue").permitAll()
+
+                        .requestMatchers("/api/*/login","/oauth2/**", "/api/*/join","/api/*/reissue","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
+
                         .requestMatchers("/api/*/admin").hasRole("ADMIN")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()

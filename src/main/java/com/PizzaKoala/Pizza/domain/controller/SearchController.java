@@ -17,12 +17,41 @@ public class SearchController {
     @Autowired
     private final SearchService searchService;
     // 닉네임, 제목, 내용
-    @GetMapping("/search/{keyword}/posts")
-    public Response<Page<PostListResponse>> searchKeywordInPosts(@PathVariable String keyword , Pageable pageable) {
-        return Response.success(searchService.SearchPostTitleAndDesc(pageable, keyword).map(PostListResponse::fromPostImageDTO));
+
+    /**
+     * 최신순- 포스트 검색
+     */
+    @GetMapping("/search/posts/{keyword}/recent")
+    public Response<Page<PostListResponse>> searchPostByRecent(@PathVariable String keyword , Pageable pageable) {
+        return Response.success(searchService.SearchRecentPostTitleAndDesc(pageable, keyword).map(PostListResponse::fromPostImageDTO));
     }
-    @GetMapping("/search/{keyword}/nicknames")
-    public Response<Page<SearchNicknamesResponse>> searchKeywordInMemberNicknames(@PathVariable String keyword, Pageable pageable) {
-        return Response.success(searchService.SearchMemberNickname(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
+
+    /**
+     * 최신포스트순 - 닉네임 검색
+     */
+
+    @GetMapping("/search/nicknames/{keyword}/recent")
+    public Response<Page<SearchNicknamesResponse>> searchNicknamesByRecent(@PathVariable String keyword, Pageable pageable) {
+        return Response.success(searchService.SearchMemberByPosts(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
     }
+
+
+    /**
+     * 좋아요순/추천순- 포스트 검색
+     */
+    @GetMapping("/search/posts/{keyword}/likes")
+    public Response<Page<PostListResponse>> searchPostByLikes(@PathVariable String keyword , Pageable pageable) {
+        return Response.success(searchService.SearchLikedPostTitleAndDesc(pageable, keyword).map(PostListResponse::fromPostImageDTO));
+    }
+
+    /**
+     * 팔로워순 - 닉네임
+     */
+
+    @GetMapping("/search/nicknames/{keyword}/followers")
+    public Response<Page<SearchNicknamesResponse>> searchNicknamesByFollowers(@PathVariable String keyword, Pageable pageable) {
+        return Response.success(searchService.SearchNicknameByFollowers(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
+    }
+
+
 }
