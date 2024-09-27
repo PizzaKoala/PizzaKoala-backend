@@ -67,7 +67,7 @@ public class PostController {
     /**
      * get a post- 포스트 단건 조회
      */
-    @GetMapping("/with_comments/{postId}")
+    @GetMapping("/{postId}")
     public Response<Page<PostWithCommentsDTO>> getAPost(@PathVariable Long postId,Pageable pageable) {
         Page<PostWithCommentsDTO> postWithCommentsDTOS = postService.getAPost(postId, pageable);
         return Response.success(postWithCommentsDTOS);
@@ -111,9 +111,9 @@ public class PostController {
      * member posts-특정 맴버 포스트들 리스트로 끌고 오기
      */
 
-    @GetMapping("/{postId}")
-    public Response<Page<PostListResponse>> memberPosts(@PathVariable Long postId, Pageable pageable) {
-                return Response.success(postService.memberPosts(postId, pageable).map(PostListResponse::fromPostImageDTO));
+    @GetMapping("/user/{memberId}")
+    public Response<Page<PostListResponse>> memberPosts(@PathVariable Long memberId, Pageable pageable) {
+                return Response.success(postService.memberPosts(memberId, pageable).map(PostListResponse::fromPostImageDTO));
     }
 
 
