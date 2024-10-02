@@ -7,5 +7,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 public class PostCommentRequest {
+    private Long commentId;
     private String comment;
 }

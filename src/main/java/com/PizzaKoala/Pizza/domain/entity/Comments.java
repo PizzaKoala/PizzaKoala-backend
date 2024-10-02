@@ -46,7 +46,9 @@ public class Comments extends CreatedEntity {
                 .build();
     }
 
-
+    public void update(String comment) {
+        this.comment = comment;
+    }
 
 
 

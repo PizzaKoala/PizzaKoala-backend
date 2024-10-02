@@ -1,9 +1,11 @@
 package com.PizzaKoala.Pizza.domain.service;
 
 import com.PizzaKoala.Pizza.domain.Repository.AlarmRepository;
+import com.PizzaKoala.Pizza.domain.Repository.FollowRepository;
 import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
 import com.PizzaKoala.Pizza.domain.Repository.ProfileImageRepository;
 import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
+import com.PizzaKoala.Pizza.domain.entity.Follow;
 import com.PizzaKoala.Pizza.domain.entity.Member;
 import com.PizzaKoala.Pizza.domain.entity.ProfileImage;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
@@ -16,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +39,7 @@ public class MemberService {
     private final S3ImageUploadService s3ImageUploadService;
     private final ProfileImageRepository profileImageRepository;
     private final AuthenticationService authenticationService;
+    private final FollowRepository followRepository;
 
     @Transactional //exception     발생할 경우 롤백되어서 저장되지 않는다
     public UserDTO join(MultipartFile file,String nickName, String email, String password, HttpServletResponse response) throws IOException { //email, nickname, password, profile-photo

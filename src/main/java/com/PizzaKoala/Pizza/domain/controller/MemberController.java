@@ -28,7 +28,6 @@ import java.io.IOException;
 public class MemberController {
     private final MemberService memberService;
     private final AlarmService alarmService;
-//    private final JWTTokenUtils jwtTokenUtils;
 
     // TODO: implement
     @PostMapping("/join")
@@ -47,6 +46,8 @@ public class MemberController {
 
         return Response.success();
     }
+
+
 
 
     @GetMapping("/alarm")
