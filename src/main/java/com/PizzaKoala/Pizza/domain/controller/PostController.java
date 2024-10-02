@@ -35,7 +35,6 @@ public class PostController {
     @PostMapping
     public Response<Void> create(@RequestPart PostCreateRequest request, @RequestPart(required = false) List<MultipartFile> files, Authentication authentication) throws IOException {
         //        image's quantity check
-        //TODO: 5이상은 막는데 0개일떄는 못막음 도와줘 :(
         if (files.isEmpty() ||files.size() > 5) {
             throw new PizzaAppException(ErrorCode.ONE_TO_FIVE_IMAGES_ARE_REQUIRED);
         }
@@ -46,13 +45,12 @@ public class PostController {
     }
     /**
      * update a post - TODO: 이건 리턴 아무것도 안하고 그냥 프론트측에서 단건 포스트 조회 하는게 좋을까..?! 받아오는김에 다 전해줄지..
+     * -그냥 아무것도 리턴 안하기로 함.
      */
     @PutMapping("/{postId}")
-    public Response<PostResponse> Modify(@PathVariable Long postId, @RequestPart List<MultipartFile> files, @RequestPart PostModifyRequest request, Authentication authentication) throws IOException {
-
-        PostDTO postDTO = postService.modify(authentication.getName(),files, request.getTitle(), request.getDesc(), postId);
-//        request.getFile()
-        return Response.success(PostResponse.fromPostDTO(postDTO));
+    public Response<Void> Modify(@PathVariable Long postId, @RequestPart List<MultipartFile> files, @RequestPart PostModifyRequest request, Authentication authentication) throws IOException {
+        postService.modify(authentication.getName(),files, request.getTitle(), request.getDesc(), postId);
+        return Response.success();
     }
 
     /**
@@ -72,13 +70,59 @@ public class PostController {
         Page<PostWithCommentsDTO> postWithCommentsDTOS = postService.getAPost(postId, pageable);
         return Response.success(postWithCommentsDTOS);
     }
+
+
+
     /**
-     * get post comments - 특정 포스트의 달린 댓글 가져오기
+     * 메인 패이지- 팔로잉 맴버들의 포스트들
      */
-    @GetMapping("/{postId}/comments")
-    public Response<Page<CommentResponse>> getComments(@PathVariable Long postId, Pageable pageable, Authentication authentication) {
-        return Response.success( postService.getComments(postId, pageable).map(CommentResponse::fromCommentDTO));
+    @GetMapping("/main/following")
+    public Response<Page<PostListResponse>> FollowingList(Pageable pageable,Authentication authentication) {
+        return Response.success(postService.followingPosts(pageable,authentication.getName()).map(PostListResponse::fromPostImageDTO));
     }
+
+    /**
+     * 메인 패이지- 좋아요 순 포스트들
+     */
+
+    @GetMapping("/main/likes")
+    public Response<Page<PostListResponse>> LikedList(Pageable pageable) {
+        return Response.success(postService.LikedList(pageable).map(PostListResponse::fromPostImageDTO));
+    }
+
+
+
+
+
+    /**
+     * my posts- 내 포스트들 리스트로 끌고 오기/ 메인 게시물
+     */
+
+    @GetMapping("/myList")
+    public Response<Page<PostListResponse>> myPosts(Authentication authentication, Pageable pageable) {
+                return Response.success(postService.my(authentication.getName(), pageable).map(PostListResponse::fromPostImageDTO));
+    }
+
+    /**
+     * member posts-특정 맴버 포스트들 리스트로 끌고 오기
+     */
+    @GetMapping("/user/{memberId}")
+    public Response<Page<PostListResponse>> memberPosts(@PathVariable Long memberId, Pageable pageable) {
+                return Response.success(postService.memberPosts(memberId, pageable).map(PostListResponse::fromPostImageDTO));
+    }
+
+
+
+
+
+
+//    /**
+//     * get post comments - 특정 포스트의 달린 댓글 가져오기
+//     */
+//    @GetMapping("/{postId}/comments")
+//    public Response<Page<CommentResponse>> getComments(@PathVariable Long postId, Pageable pageable) {
+//        return Response.success( postService.getComments(postId, pageable).map(CommentResponse::fromCommentDTO));
+//    }
 
 //    /**
 //     * recent posts 최신 포스트들
@@ -89,95 +133,16 @@ public class PostController {
 //        return Response.success(postService.list(pageable).map(PostListResponse::fromPostImageDTO));
 //    }
 
-    /**
-     * 메인 패이지- 팔로잉 맴버들의 포스트들
-     */
-
-    @GetMapping
-    public Response<Page<PostListResponse>> FollowingList(Pageable pageable,Authentication authentication) {
-        return Response.success(postService.followingPosts(pageable,authentication.getName()).map(PostListResponse::fromPostImageDTO));
-    }
-
-    /**
-     * 메인 패이지- 좋아요 순 포스트들
-     */
-
-    @GetMapping("/liked")
-    public Response<Page<PostListResponse>> LikedList(Pageable pageable) {
-        return Response.success(postService.LikedList(pageable).map(PostListResponse::fromPostImageDTO));
-    }
-
-
-    /**
-     * my posts- 내 포스트들 리스트로 끌고 오기/ 메인 게시물
-     */
-
-    @GetMapping("/my")
-    public Response<Page<PostListResponse>> my(Authentication authentication, Pageable pageable) {
-                return Response.success(postService.my(authentication.getName(), pageable).map(PostListResponse::fromPostImageDTO));
-    }
-    /**
-     * member posts-특정 맴버 포스트들 리스트로 끌고 오기
-     */
-
-    @GetMapping("/user/{memberId}")
-    public Response<Page<PostListResponse>> memberPosts(@PathVariable Long memberId, Pageable pageable) {
-                return Response.success(postService.memberPosts(memberId, pageable).map(PostListResponse::fromPostImageDTO));
-    }
-
-
-    /**
-     * like function- 좋아요
-     */
-
-    @PostMapping("/{postId}/like")
-    public Response<Void> like(@PathVariable Long postId, Authentication authentication) {
-        postService.likes(postId, authentication.getName());
-        return Response.success();
-    }
-    /**
-     * unlike function- 좋아요 취소
-     */
-
-    @PostMapping("/{postId}/unlike")
-    public Response<Void> unlike(@PathVariable Long postId, Authentication authentication) {
-        postService.unlikes(postId, authentication.getName());
-        return Response.success();
-    }
-
-
-    /**
-     * like- 포스트의 like 수 가져오기- 이건 어캐 사용하지
-     */
-    @GetMapping("/{postId}/likes")
-    public Response<Long> likeCount(@PathVariable Long postId, Authentication authentication) {
-        return Response.success(postService.likeCount(postId));
-    }
-
-    /**
-     * leave a comment - 댓글 달기
-     */
-    @PostMapping("/{postId}/comments")
-    public Response<Void> comment(@PathVariable Long postId, @RequestBody PostCommentRequest comment, Authentication authentication) {
-        postService.comment(postId,authentication.getName(),comment.getComment());
-        return Response.success();
-    }
-
-    /**
-     *  delete a comment - 댓글 삭제
-     */
-    @DeleteMapping("/{postId}/{commentId}")
-    public Response<Boolean> deleteComment(@PathVariable Long postId, @PathVariable Long commentId, Authentication authentication) {
-        return Response.success(postService.commentDelete(postId,commentId,authentication.getName()));
-    }
-
-    /**
-     *  edit a comment - 댓글 수정
-     */
-    @PutMapping("/{postId}/comments/{commentId}")
-    public Response<Boolean> editComment(@PathVariable Long postId , @RequestBody PostCommentRequest editedComment, Authentication authentication) {
-        return Response.success(postService.editComment(postId,editedComment,authentication.getName()));
-    }
+//    /**
+//     * update a post -
+//     */
+//    @PutMapping("/{postId}")
+//    public Response<PostResponse> Modify(@PathVariable Long postId, @RequestPart List<MultipartFile> files, @RequestPart PostModifyRequest request, Authentication authentication) throws IOException {
+//
+//        PostDTO postDTO = postService.modify(authentication.getName(),files, request.getTitle(), request.getDesc(), postId);
+////        request.getFile()
+//        return Response.success(PostResponse.fromPostDTO(postDTO));
+//    }
 
 
 }

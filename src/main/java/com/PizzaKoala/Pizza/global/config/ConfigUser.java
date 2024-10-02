@@ -174,7 +174,7 @@ public class ConfigUser {
             /**
              * comments
              */
-            postService.comment(post.getId(),"111@kakao.com","내가 쓴 나의 게시글이당");
+            postService.comment(post.getId(),"Meep@kakao.com","내가 쓴 나의 게시글이당");
             postService.comment(post.getId(),"222@kakao.com","코알라당!!");
             postService.comment(post.getId(),"333@kakao.com","이게 뭐얌!");
             postService.comment(post.getId(),"444@kakao.com",">_<");
