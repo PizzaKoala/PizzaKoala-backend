@@ -1,7 +1,6 @@
 package com.PizzaKoala.Pizza.domain.entity;
 
 import com.PizzaKoala.Pizza.global.entity.CreatedEntity;
-import com.PizzaKoala.Pizza.global.entity.LikesType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,17 +25,15 @@ public class Follow extends CreatedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long followerId;
     private Long followingId;
-
     private LocalDateTime deletedAt;
-
     public static Follow of(Long followerId, Long followingId) {
 
         return new FollowBuilder()
                 .followerId(followerId)
                 .followingId(followingId)
                 .build();
+
     }
 }

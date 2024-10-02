@@ -1,7 +1,7 @@
 package com.PizzaKoala.Pizza.domain.Repository;
 
+
 import com.PizzaKoala.Pizza.domain.entity.*;
-import com.PizzaKoala.Pizza.domain.model.PostSummaryDTO;
 import com.PizzaKoala.Pizza.domain.model.SearchMemberNicknameDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
@@ -11,10 +11,8 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -30,21 +28,22 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
     }
 
     /**
-     *
      * search all the members whose nickname contains the keyword.
      * ORDER THE RESULT BY THE MOST RECENT POSTS MADE BY THE MEMBERS.
-     *
      */
+
     public Page<SearchMemberNicknameDTO> searchMemberByRecentPosts(@Param("keyword") String keyword, Pageable pageable) {
         QMember qMember = QMember.member;
         QPost qPost = QPost.post;
+
         BooleanBuilder builder = new BooleanBuilder();
 
         if (keyword != null && !keyword.isEmpty()) {
             builder.or(qMember.nickName.containsIgnoreCase(keyword));
         }
 
-//        //Subquery to get the most recent post date for each member
+        //Subquery to get the most recent post date for each member
+
 //        QPost usbQPost = new QPost("subQPost");
 //        JPQLQuery<LocalDateTime> subQuery = queryFactory
 //                .select(usbQPost.createdAt.max().as("recent"))
@@ -54,16 +53,14 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
         // Fetch the post data with one image URL
         List<Tuple> rawResults = queryFactory
                 .select(qMember.id, qMember.nickName,qMember.profileImageUrl)
-                .from(qMember)
                 .leftJoin(qPost).on(qPost.member.eq(qMember))
                 .where(builder.and(qMember.deletedAt.isNull()))
                 .groupBy(qMember.id,qMember.nickName,qMember.profileImageUrl)
                 .orderBy(qPost.createdAt.max().desc())
                 .offset(pageable.getOffset())
-                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
+  
         // Transform the results into DTOs
         List<SearchMemberNicknameDTO> finalResults = rawResults.stream().map(tuple -> {
             Long id = tuple.get(qMember.id);
@@ -71,8 +68,6 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
             String profileImageUrl = tuple.get(qMember.profileImageUrl);
             return new SearchMemberNicknameDTO(id,nickname,profileImageUrl);
         }).collect(Collectors.toList());
-
-
 
         // Fetch the total count of posts
         Long totalCount = queryFactory
@@ -83,16 +78,15 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
 
         // Check for null totalCount
         long total = (totalCount!=null) ? totalCount : 0L;
-
         return new PageImpl<>(finalResults, pageable, total);
+
     }
 
 
 
+//     public Page<SearchMemberNicknameDTO> searchMemberByMostFollowers(@Param("keyword") String keyword, Pageable pageable) {
+    public Page<SearchMemberNicknameDTO> searchMemberByMostFollowers(String keyword, Pageable pageable) {
 
-
-
-    public Page<SearchMemberNicknameDTO> searchMemberByMostFollowers(@Param("keyword") String keyword, Pageable pageable) {
         QMember qMember = QMember.member;
         QFollow qFollow = QFollow.follow;
 
@@ -129,7 +123,8 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
                 .select(qMember.id.count())
                 .from(qMember)
                 .leftJoin(qFollow).on(qFollow.followingId.eq(qMember.id))
-                .where(builder.and(qMember.deletedAt.isNull()))
+                .where(builder
+                        .and(qMember.deletedAt.isNull()))
                 .orderBy(qFollow.followerId.count().desc())
                 .fetchOne();
 
@@ -138,6 +133,4 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
 
         return new PageImpl<>(finalResults, pageable, total);
     }
-
-
 }

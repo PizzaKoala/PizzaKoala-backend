@@ -90,7 +90,7 @@ public class PostController {
 //    }
 
     /**
-     * 메인 - 팔로잉 맴버들의  포스트들
+     * 메인 패이지- 팔로잉 맴버들의 포스트들
      */
 
     @GetMapping
@@ -99,7 +99,7 @@ public class PostController {
     }
 
     /**
-     * 메인 - 좋아요 순 포스트들
+     * 메인 패이지- 좋아요 순 포스트들
      */
 
     @GetMapping("/liked")

@@ -2,25 +2,20 @@ package com.PizzaKoala.Pizza.domain.Repository;
 
 import com.PizzaKoala.Pizza.domain.entity.QFollow;
 import com.PizzaKoala.Pizza.domain.entity.QMember;
-import com.PizzaKoala.Pizza.domain.model.FollowListDTO;
-import com.PizzaKoala.Pizza.domain.model.SearchMemberNicknameDTO;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
-public class CustomFollowRepositoryImpl implements CustomFollowRepository {
+public class CustomFollowRepositoryImpl implements CustomFollowRepository{
     private final JPAQueryFactory queryFactory;
-
     public CustomFollowRepositoryImpl(EntityManager entityManager) {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
@@ -30,13 +25,15 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
      * List of users following the user.
      *
      */
-    public Page<FollowListDTO> myFollowerList(Long id, Pageable pageable){
+
+    public Page<FollowListDTO> myFollowerList(Long id, Pageable pageable) {
         QFollow qFollow = QFollow.follow;
+
         QMember qMember = QMember.member;
 //        // Fetch profile image, nickname and id from member and joing follow-follower.
-
         List<Tuple> rawResults = queryFactory
-                .select(qMember.id,qMember.nickName,qMember.profileImageUrl)
+                .select(qMember.id, qMember.nickName, qMember.profileImageUrl)
+
                 .from(qMember)
                 .join(qFollow).on(qFollow.followerId.eq(qMember.id))
                 .where(qFollow.followingId.eq(id).and(qMember.deletedAt.isNull()))
@@ -50,7 +47,8 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
             Long is = tuple.get(qMember.id);
             String nickname = tuple.get(qMember.nickName);
             String profileImageUrl = tuple.get(qMember.profileImageUrl);
-            return new FollowListDTO(is,nickname,profileImageUrl);
+
+            return new FollowListDTO(is, nickname, profileImageUrl);
         }).toList();
         // Fetch the total count of posts
         Long totalCount = queryFactory
@@ -60,8 +58,8 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
                 .where(qFollow.followingId.eq(id).and(qMember.deletedAt.isNull()))
                 .fetchOne();
 
-//        // Check for null totalCount
-        long total = (totalCount!=null) ? totalCount : 0L;
+        // Check for null totalCount
+        long total = (totalCount != null) ? totalCount : 0L;
 
         return new PageImpl<>(finalResults, pageable, total);
     }
@@ -77,7 +75,7 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
 //        // Fetch profile image, nickname and id from member and joing follow-follower.
 
         List<Tuple> rawResults = queryFactory
-                .select(qMember.id,qMember.nickName,qMember.profileImageUrl)
+                .select(qMember.id, qMember.nickName, qMember.profileImageUrl)
                 .from(qMember)
                 .join(qFollow).on(qFollow.followingId.eq(qMember.id))
                 .where(qFollow.followerId.eq(id).and(qMember.deletedAt.isNull()))
@@ -91,7 +89,9 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
             Long is = tuple.get(qMember.id);
             String nickname = tuple.get(qMember.nickName);
             String profileImageUrl = tuple.get(qMember.profileImageUrl);
+          
             return new FollowListDTO(is,nickname,profileImageUrl);
+
         }).toList();
         // Fetch the total count of posts
         Long totalCount = queryFactory
@@ -101,7 +101,7 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
                 .where(qFollow.followerId.eq(id).and(qMember.deletedAt.isNull()))
                 .fetchOne();
 
-//        // Check for null totalCount
+        // Check for null totalCount
         long total = (totalCount!=null) ? totalCount : 0L;
 
         return new PageImpl<>(finalResults, pageable, total);
@@ -112,3 +112,4 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository {
 
 
 }
+

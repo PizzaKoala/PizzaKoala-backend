@@ -27,8 +27,8 @@ public class SearchService {
         return customPostRepository.searchLikedPosts(keyword, pageable);
     }
 
+
     public Page<SearchMemberNicknameDTO> SearchNicknameByFollowers(Pageable pageable, String keyword) {
         return customMemberRepository.searchMemberByMostFollowers(keyword, pageable);
-
     }
 }

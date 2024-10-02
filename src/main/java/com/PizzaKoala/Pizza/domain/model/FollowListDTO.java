@@ -10,7 +10,6 @@ public class FollowListDTO {
     private String nickName;
     private String profileImageUrl;
 
-
     public FollowListDTO(Long id, String nickName, String profileImageUrl) {
         this.id=id;
         this.nickName = nickName;

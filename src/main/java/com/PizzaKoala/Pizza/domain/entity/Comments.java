@@ -49,8 +49,10 @@ public class Comments extends CreatedEntity {
         this.comment = comment;
 //        this.modifiedAt = LocalDateTime.now();
 
-    }
 
+    public void update(String comment) {
+        this.comment = comment;
+    }
 
 
 

@@ -147,19 +147,22 @@ public class PostService {
 //     */
 //    public Page<PostSummaryDTO> list(Pageable pageable) {
 //       return customPostRepository.recentPosts(pageable);
-//
 //    }
+
+
     /**
-     * 메인- 팔로잉 맴버들의 피드
+     * 메인 페이지- 팔로잉하고 있는 유저들의 포스트 피드
      */
     public Page<PostSummaryDTO> followingPosts(Pageable pageable,String email) {
         //find user
         Member member = getMemberByEmailOrException(email);
-       return customPostRepository.followingPosts(pageable,member.getId());
 
+        return customPostRepository.followingPosts(pageable, member.getId());
     }
+
+
     /**
-     * 메인 - 좋아요순 피드
+     * 메인 페이지- 좋아요순 피드
      */
     public Page<PostSummaryDTO> LikedList(Pageable pageable) {
         return customPostRepository.likedPosts(pageable);
@@ -289,11 +292,12 @@ public class PostService {
         commentRepository.deleteById(commentId);
         return true;
     }
+
     /**
      * 포스트에 쓴 댓글 수정 -
      */
     @Transactional
-    public Boolean editComment(Long postId,PostCommentRequest editedComment, String email) {
+    public Boolean editComment(Long postId, PostCommentRequest editedComment, String email) {
         Comments comment= commentRepository.findById(editedComment.getCommentId()).orElseThrow(()->new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND));
         VerifyComment(comment,postId,email);
         comment.update(editedComment.getComment());
@@ -310,14 +314,6 @@ public class PostService {
             throw new PizzaAppException(ErrorCode.INVALID_PERMISSION);
         }
     }
-
-
-
-
-
-
-
-
 
 
     private Post getPostOrException(Long postId) {
