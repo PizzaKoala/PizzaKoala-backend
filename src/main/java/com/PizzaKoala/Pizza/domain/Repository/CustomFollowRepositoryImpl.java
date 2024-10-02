@@ -1,7 +1,7 @@
 package com.PizzaKoala.Pizza.domain.Repository;
 
-import com.PizzaKoala.Pizza.domain.entity.QFollow;
-import com.PizzaKoala.Pizza.domain.entity.QMember;
+import com.PizzaKoala.Pizza.domain.entity.*;
+import com.PizzaKoala.Pizza.domain.model.FollowListDTO;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -28,12 +28,10 @@ public class CustomFollowRepositoryImpl implements CustomFollowRepository{
 
     public Page<FollowListDTO> myFollowerList(Long id, Pageable pageable) {
         QFollow qFollow = QFollow.follow;
-
         QMember qMember = QMember.member;
 //        // Fetch profile image, nickname and id from member and joing follow-follower.
         List<Tuple> rawResults = queryFactory
                 .select(qMember.id, qMember.nickName, qMember.profileImageUrl)
-
                 .from(qMember)
                 .join(qFollow).on(qFollow.followerId.eq(qMember.id))
                 .where(qFollow.followingId.eq(id).and(qMember.deletedAt.isNull()))

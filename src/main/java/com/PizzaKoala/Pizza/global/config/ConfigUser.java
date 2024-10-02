@@ -28,8 +28,6 @@ public class ConfigUser {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final PostRepository postRepository;
-    private final PostService postService;
-    private final PostRepository postRepository;
     private final ImageRepository imageRepository;
 
     @PostConstruct

@@ -4,6 +4,7 @@ import com.PizzaKoala.Pizza.domain.controller.response.FollowListResponse;
 import com.PizzaKoala.Pizza.domain.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
+import com.PizzaKoala.Pizza.domain.service.FollowService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

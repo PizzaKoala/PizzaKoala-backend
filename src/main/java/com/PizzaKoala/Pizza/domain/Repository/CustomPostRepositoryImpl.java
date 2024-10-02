@@ -1,9 +1,7 @@
 package com.PizzaKoala.Pizza.domain.Repository;
 
 import com.PizzaKoala.Pizza.domain.entity.Member;
-import com.PizzaKoala.Pizza.domain.entity.QFollow;
-import com.PizzaKoala.Pizza.domain.entity.QImages;
-import com.PizzaKoala.Pizza.domain.entity.QPost;
+import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.model.PostSummaryDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
