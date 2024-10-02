@@ -11,6 +11,7 @@ public class FollowListResponse {
     private Long id;
     private String nickName;
     private String profileImageUrl;
+
     public static FollowListResponse fromFollowListDTO(FollowListDTO member) {
         return new FollowListResponse(
                 member.getId(),

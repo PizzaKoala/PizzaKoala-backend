@@ -17,10 +17,12 @@ public class SearchController {
     @Autowired
     private final SearchService searchService;
 
+
     /**
      * 최신순- 포스트 검색
      */
     @GetMapping("/search/posts/{keyword}/recent")
+
     public Response<Page<PostListResponse>> searchPostByRecent(@PathVariable String keyword, Pageable pageable) {
         return Response.success(searchService.SearchRecentPostTitleAndDesc(pageable, keyword).map(PostListResponse::fromPostImageDTO));
     }
@@ -51,3 +53,4 @@ public class SearchController {
         return Response.success(searchService.SearchMemberByFollowers(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
     }
 }
+

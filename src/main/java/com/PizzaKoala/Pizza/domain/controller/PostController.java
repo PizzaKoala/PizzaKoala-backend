@@ -92,6 +92,8 @@ public class PostController {
     /**
      * 메인 패이지- 팔로잉 맴버들의 포스트들
      */
+
+    @GetMapping
     public Response<Page<PostListResponse>> FollowingList(Pageable pageable,Authentication authentication) {
         return Response.success(postService.followingPosts(pageable,authentication.getName()).map(PostListResponse::fromPostImageDTO));
     }

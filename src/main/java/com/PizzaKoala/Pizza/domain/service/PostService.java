@@ -156,6 +156,7 @@ public class PostService {
     public Page<PostSummaryDTO> followingPosts(Pageable pageable,String email) {
         //find user
         Member member = getMemberByEmailOrException(email);
+
         return customPostRepository.followingPosts(pageable, member.getId());
     }
 

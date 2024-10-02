@@ -9,4 +9,5 @@ import lombok.*;
 public class PostCommentRequest {
     private Long commentId;
     private String comment;
+
 }

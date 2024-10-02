@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -36,5 +37,7 @@ public class FollowController {
             throw new PizzaAppException(ErrorCode.INVALID_PERMISSION,"follower list-1, following list-2");
         }
         return Response.success(followService.myFollowList(authentication.getName(), pageable, or).map(FollowListResponse::fromFollowListDTO));
+
     }
+
 }

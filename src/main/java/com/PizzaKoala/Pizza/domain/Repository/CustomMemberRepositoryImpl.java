@@ -1,11 +1,11 @@
 package com.PizzaKoala.Pizza.domain.Repository;
 
-import com.PizzaKoala.Pizza.domain.entity.QFollow;
-import com.PizzaKoala.Pizza.domain.entity.QMember;
-import com.PizzaKoala.Pizza.domain.entity.QPost;
+
+import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.model.SearchMemberNicknameDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,11 +37,13 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
         QPost qPost = QPost.post;
 
         BooleanBuilder builder = new BooleanBuilder();
+
         if (keyword != null && !keyword.isEmpty()) {
             builder.or(qMember.nickName.containsIgnoreCase(keyword));
         }
 
         //Subquery to get the most recent post date for each member
+
 //        QPost usbQPost = new QPost("subQPost");
 //        JPQLQuery<LocalDateTime> subQuery = queryFactory
 //                .select(usbQPost.createdAt.max().as("recent"))
@@ -50,13 +54,13 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
         List<Tuple> rawResults = queryFactory
                 .select(qMember.id, qMember.nickName,qMember.profileImageUrl)
                 .leftJoin(qPost).on(qPost.member.eq(qMember))
-                .from(qMember)
                 .where(builder.and(qMember.deletedAt.isNull()))
                 .groupBy(qMember.id,qMember.nickName,qMember.profileImageUrl)
                 .orderBy(qPost.createdAt.max().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+  
         // Transform the results into DTOs
         List<SearchMemberNicknameDTO> finalResults = rawResults.stream().map(tuple -> {
             Long id = tuple.get(qMember.id);
@@ -64,12 +68,14 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
             String profileImageUrl = tuple.get(qMember.profileImageUrl);
             return new SearchMemberNicknameDTO(id,nickname,profileImageUrl);
         }).collect(Collectors.toList());
+
         // Fetch the total count of posts
         Long totalCount = queryFactory
                 .select(qMember.id.count())
                 .from(qMember)
                 .where(builder.and(qMember.deletedAt.isNull()))
                 .fetchOne();
+
         // Check for null totalCount
         long total = (totalCount!=null) ? totalCount : 0L;
         return new PageImpl<>(finalResults, pageable, total);
@@ -78,8 +84,9 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
 
 
 
-
+//     public Page<SearchMemberNicknameDTO> searchMemberByMostFollowers(@Param("keyword") String keyword, Pageable pageable) {
     public Page<SearchMemberNicknameDTO> searchMemberByMostFollowers(String keyword, Pageable pageable) {
+
         QMember qMember = QMember.member;
         QFollow qFollow = QFollow.follow;
 

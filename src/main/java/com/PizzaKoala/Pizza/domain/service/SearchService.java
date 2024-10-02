@@ -21,11 +21,14 @@ public class SearchService {
     }
     public Page<SearchMemberNicknameDTO> SearchMemberByPosts(Pageable pageable, String keyword) {
         return customMemberRepository.searchMemberByRecentPosts(keyword, pageable);
+
     }
     public Page<PostSummaryDTO> SearchLikedPostTitleAndDesc(Pageable pageable, String keyword) {
         return customPostRepository.searchLikedPosts(keyword, pageable);
     }
-    public Page<SearchMemberNicknameDTO> SearchMemberByFollowers(Pageable pageable, String keyword) {
+
+
+    public Page<SearchMemberNicknameDTO> SearchNicknameByFollowers(Pageable pageable, String keyword) {
         return customMemberRepository.searchMemberByMostFollowers(keyword, pageable);
     }
 }

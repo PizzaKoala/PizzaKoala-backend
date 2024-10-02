@@ -29,6 +29,7 @@ public class Follow extends CreatedEntity {
     private Long followingId;
     private LocalDateTime deletedAt;
     public static Follow of(Long followerId, Long followingId) {
+
         return new FollowBuilder()
                 .followerId(followerId)
                 .followingId(followingId)

@@ -11,9 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+
 @Repository
 public interface LikeRepository extends JpaRepository<Likes,Long> {
-    Optional<Likes> findByMemberIdAndLikesTypeIdAndLikesType(Long memberId, Long postId,LikesType likesType);
+    Optional<Likes> findByMemberIdAndLikesTypeIdAndLikesType(Long memberId, Long postId, LikesType likesType);
     @Modifying
     @Transactional
     @Query("update Likes l set l.deletedAt = null where l.id=:id")

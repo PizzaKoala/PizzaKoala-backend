@@ -76,6 +76,47 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return new PageImpl<>(finalResults, pageable, total);
     }
 
+//    /**
+//     *
+//     * 최근에 올라온 포스트들 가져오기 (public)
+//     *
+//     */
+//    public Page<PostSummaryDTO> recentPosts(Pageable pageable) {
+//        QPost qPost = QPost.post;
+//        QImages qImages = QImages.images;
+//
+//        // Fetch the post data with one image URL
+//        List<Tuple> rawResults = queryFactory
+//                .select(qPost.id, qPost.title, qImages.url.min(), qImages.id.countDistinct())
+//                .from(qPost)
+//                .leftJoin(qPost.images, qImages)
+//                .where(qPost.deletedAt.isNull())
+//                .groupBy(qPost.id, qPost.title)
+//                .orderBy(qPost.createdAt.desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//
+//        // Transform the results into DTOs
+//        List<PostSummaryDTO> finalResults = rawResults.stream().map(tuple -> {
+//            Long postId = tuple.get(qPost.id);
+//            String title = tuple.get(qPost.title);
+//            String imageUrl = tuple.get(qImages.url.min());
+//            Long imageCount = tuple.get(qImages.id.countDistinct());
+//            return new PostSummaryDTO(postId, title, imageUrl, imageCount);
+//        }).toList();
+//        // Fetch the total count of posts
+//        Long totalCount = queryFactory
+//                .select(qPost.id.count())
+//                .from(qPost)
+//                .where(qPost.deletedAt.isNull())
+//                .fetchOne();
+//
+//        // Check for null totalCount
+//        long total = (totalCount!=null) ? totalCount : 0L;
+//
+//        return new PageImpl<>(finalResults, pageable, total);
+//    }
     /**
      *
      * 메인페이지- 팔로잉한 맴버들의 포스트들 가져오기
@@ -267,10 +308,12 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         QPost qPost = QPost.post;
         QImages qImages = QImages.images;
         BooleanBuilder builder = new BooleanBuilder();
+
         if (keyword != null && !keyword.isEmpty()) {
             builder.or(qPost.desc.containsIgnoreCase(keyword));
             builder.or(qPost.title.containsIgnoreCase(keyword));
         }
+
         // Fetch the post data with one image URL
         List<Tuple> rawResults = queryFactory
                 .select(qPost.id, qPost.title, qImages.url.min(), qImages.id.countDistinct())
@@ -282,6 +325,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
         // Transform the results into DTOs
         List<PostSummaryDTO> finalResults = rawResults.stream().map(tuple -> {
             Long postId = tuple.get(qPost.id);
@@ -290,6 +334,7 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
             Long imageCount = tuple.get(qImages.id.countDistinct());
             return new PostSummaryDTO(postId, title, imageUrl, imageCount);
         }).collect(Collectors.toList());
+
         // Fetch the total count of posts
         Long totalCount = queryFactory
                 .select(qPost.id.count())
