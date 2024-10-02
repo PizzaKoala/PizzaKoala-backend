@@ -10,6 +10,7 @@ import com.PizzaKoala.Pizza.domain.entity.Post;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import com.PizzaKoala.Pizza.domain.model.MemberRole;
+import com.PizzaKoala.Pizza.domain.service.FollowService;
 import com.PizzaKoala.Pizza.domain.service.PostService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +30,18 @@ public class ConfigUser {
     private final PasswordEncoder passwordEncoder;
     private final PostRepository postRepository;
     private final ImageRepository imageRepository;
+    private final FollowService followService;
+    private final PostService postService;
 
     @PostConstruct
     public void init() {
         if (memberRepository.count() == 0) { // 이미 데이터가 있는지 확인
             //member1
+
+            /**
+             * email- Meep@kakao.com
+             * password- 123
+             */
             Member member = Member.builder()
                     .email("Meep@kakao.com")
                     .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-11-12-21-27-13-2.jpeg")
@@ -41,7 +49,8 @@ public class ConfigUser {
                     .password(passwordEncoder.encode("123"))
                     .role(MemberRole.ADMIN)
                     .build();
-            memberRepository.save(member);
+            Member member_1=memberRepository.save(member);
+
             //member1의 포스트1
             String title = "What a meepy day.";
             String desc = "피곤하고 정신없는 하루였다. ";
@@ -71,20 +80,20 @@ public class ConfigUser {
                     "image/jpeg", 137000L,"KakaoTalk_Photo_2024-06" );
             imageRepository.save(image1_3);
 
-
-
-
-
-
+/**
+ * member- 222
+ * email- 222@Kakao.com
+ * password- 222
+ */
             //member2
             Member member2 = Member.builder()
-                    .email("123@kakao.com")
-                    .nickName("one")
-                    .password(passwordEncoder.encode("123"))
+                    .email("222@kakao.com")
+                    .nickName("222")
+                    .password(passwordEncoder.encode("222"))
                     .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-09-03-14-38-37.jpeg")
                     .role(MemberRole.ADMIN)
                     .build();
-            memberRepository.save(member2);
+            Member member_2= memberRepository.save(member2);
           
             //member2의 포스트1
             String title2 = "점심";
@@ -96,16 +105,21 @@ public class ConfigUser {
             imageRepository.save(image2_1);
 
 
+/**
+ * member- 333
+ * email- 333@Kakao.com
+ * password- 333
+ */
 
             //member3
             Member member3 = Member.builder()
                     .email("333@kakao.com")
-                    .nickName("three")
+                    .nickName("333")
                     .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-11-05-00-46-13.jpeg")
                     .password(passwordEncoder.encode("333"))
                     .role(MemberRole.ADMIN)
                     .build();
-            memberRepository.save(member3);
+            Member member_3=memberRepository.save(member3);
             //member2의 포스트1
             String title3 = "파스스";
             String desc3 = "오늘도 불태웠다.. 인증 완료....";
@@ -115,46 +129,57 @@ public class ConfigUser {
                     "image/jpeg", 278600L,"KakaoTalk.png" );
             imageRepository.save(image3);
 
+
+/**
+ * member- 444
+ * email- 444@Kakao.com
+ * password- 444
+ */
+
             Member member4 = Member.builder()
-                    .email("four@kakao.com")
-                    .nickName("four")
+                    .email("444@kakao.com")
+                    .nickName("444")
                     .password(passwordEncoder.encode("444"))
                     .role(MemberRole.USER)
                     .build();
-            memberRepository.save(member4);
+            Member member_4=memberRepository.save(member4);
+/**
+ * Follow
+ */
+            followService.follow("Meep@kakao.com", member_2.getId());
+            followService.follow("Meep@kakao.com", member_3.getId());
+            followService.follow("Meep@kakao.com", member_4.getId());
+
+            followService.follow("222@kakao.com", member_1.getId());
+            followService.follow("222@kakao.com", member_3.getId());
+
+            followService.follow("333@kakao.com", member_1.getId());
+            followService.follow("333@kakao.com", member_2.getId());
+
+            followService.follow("444@kakao.com", member_1.getId());
+
+/**
+ * likes
+ */
+            postService.likes(post.getId(),"222@kakao.com");
+            postService.likes(post.getId(),"333@kakao.com");
+            postService.likes(post.getId(),"444@kakao.com");
 
 
+            postService.likes(post1_2.getId(),"222@kakao.com");
+            postService.likes(post1_2.getId(),"333@kakao.com");
 
-//            Images images1_1 = Images.builder()
-//                    .url("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/02391593-cc16-470f-bd20-c354f2f17be6.jpeg")
-//                    .memberId(member.getId())
-//                    .postId(post)
-//                    .build();
-//            imageRepository.save(images1_1);
-//            Images images1_2 = Images.builder()
-//                    .url("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/02bdfda9-708c-4064-bd9e-a6c325fd8d3d.jpeg")
-//                    .memberId(member.getId())
-//                    .postId(post)
-//                    .build();
-//            imageRepository.save(images1_2);
-//            //meep@kakao.com 의 두번쨰 포스트+ 이미지
-//            Post post1_2 = Post.builder()
-//                    .id(member.getId())
-//                    .likes(1L)
-//                    .title("Phew")
-//                    .desc("I dont like humans tsk tsk")
-//                    .build();
-//            Images images2_1 = Images.builder()
-//                    .url("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/15ad67e8-61c4-4bd2-9813-1560b1346431.jpeg")
-//                    .memberId(member.getId())
-//                    .postId(post1_1)
-//                    .build();
-//            postRepository.save(post1_2);
-//            imageRepository.save(images2_1);
+            postService.likes(post1_3.getId(),"444@kakao.com");
+
+            /**
+             * comments
+             */
+            postService.comment(post.getId(),"111@kakao.com","내가 쓴 나의 게시글이당");
+            postService.comment(post.getId(),"222@kakao.com","코알라당!!");
+            postService.comment(post.getId(),"333@kakao.com","이게 뭐얌!");
+            postService.comment(post.getId(),"444@kakao.com",">_<");
         }
 
-
-//        postService.create();
     }
 }
 
