@@ -12,6 +12,7 @@ import com.PizzaKoala.Pizza.global.config.filter.JWTTokenFilter;
 import com.PizzaKoala.Pizza.global.config.filter.NewLoginFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,7 @@ import java.util.Collections;
 //extends WebSecurityConfiguration
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration; //authenticationManager에서 필요한 인자라서 존재한다. :(
     private final JWTTokenUtils jwtUtil;
@@ -46,16 +48,12 @@ public class SecurityConfig {
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final AuthenticationService authenticationService;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTTokenUtils jwtUtil, RefreshRepository refreshRepository, CustomClientRegistrationRepo customClientRegistrationRepo, CustomOAuth2UserService customOAuth2UserService,CustomOAuth2SuccessHandler customOAuth2SuccessHandler, AuthenticationService authenticationService) {
-        this.customClientRegistrationRepo = customClientRegistrationRepo;
-        this.authenticationConfiguration = authenticationConfiguration;
-        this.jwtUtil = jwtUtil;
-        this.refreshRepository = refreshRepository;
-        this.customOAuth2UserService = customOAuth2UserService;
-        this.customOAuth2SuccessHandler = customOAuth2SuccessHandler;
-        this.authenticationService = authenticationService;
+//    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTTokenUtils jwtUtil, RefreshRepository refreshRepository, CustomClientRegistrationRepo customClientRegistrationRepo, CustomOAuth2UserService customOAuth2UserService,CustomOAuth2SuccessHandler customOAuth2SuccessHandler, AuthenticationService authenticationService) {
+//        this.customClientRegistrationRepo = customClientRegistrationRepo;
+//        this.authenticationConfiguration = authenticationConfiguration;
+//        this.jwtUtil = jwtUtil;
+//        this.refreshRepository = refreshRepository;
 
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {

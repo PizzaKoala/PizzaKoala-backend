@@ -24,7 +24,7 @@ public class GoogleResponse implements OAuth2Response {
     }
 
     @Override
-    public String getPicutre() {
+    public String getPicture() {
         return attribute.get("picture").toString();
     }
 

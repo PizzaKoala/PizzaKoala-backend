@@ -101,15 +101,5 @@ public class MemberService {
 
     }
 
-    @Transactional
-    public String generateUniqueNickname(String email) {
-        String nickname = email.split("@")[0];
-        String uniqueNickname = nickname;
-        int count=1;
-        while (memberRepository.existsByNickName(nickname)) {
-            uniqueNickname = nickname+count;
-            count++;
-        }
-        return uniqueNickname;
-    }
+
 }
