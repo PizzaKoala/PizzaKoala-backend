@@ -28,7 +28,7 @@ public class SearchService {
     }
 
 
-    public Page<SearchMemberNicknameDTO> SearchNicknameByFollowers(Pageable pageable, String keyword) {
+    public Page<SearchMemberNicknameDTO> SearchMemberByFollowers(Pageable pageable, String keyword) {
         return customMemberRepository.searchMemberByMostFollowers(keyword, pageable);
     }
 }
