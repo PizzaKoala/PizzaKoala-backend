@@ -23,6 +23,7 @@ public class CalenderController {
     /**
      * Calendar - 캘린더 가져오기
      */
+
     //yearly calender
     @GetMapping("/{year}/{memberId}")
     public Response<List<LocalDate>> getYearlyCalendar(@PathVariable int year, @PathVariable Long memberId) {

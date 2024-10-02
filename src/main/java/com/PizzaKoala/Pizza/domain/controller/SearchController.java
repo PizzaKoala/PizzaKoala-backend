@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/search")
 @RestController
 @AllArgsConstructor
 public class SearchController {
@@ -21,7 +21,7 @@ public class SearchController {
     /**
      * 최신순- 포스트 검색
      */
-    @GetMapping("/search/posts/{keyword}/recent")
+    @GetMapping("/posts/{keyword}/recent")
 
     public Response<Page<PostListResponse>> searchPostByRecent(@PathVariable String keyword, Pageable pageable) {
         return Response.success(searchService.SearchRecentPostTitleAndDesc(pageable, keyword).map(PostListResponse::fromPostImageDTO));
@@ -30,7 +30,7 @@ public class SearchController {
     /**
      * 좋아요순/추천순 포스트 검색
      */
-    @GetMapping("/search/posts/{keyword}/likes")
+    @GetMapping("/posts/{keyword}/likes")
     public Response<Page<PostListResponse>> searchPostByLikes(@PathVariable String keyword, Pageable pageable) {
         return Response.success(searchService.SearchLikedPostTitleAndDesc(pageable, keyword).map(PostListResponse::fromPostImageDTO));
     }
@@ -39,7 +39,7 @@ public class SearchController {
     /**
      * 최신포스트 순 - 닉네임 검색
      */
-    @GetMapping("/search/nicknames/{keyword}/recent")
+    @GetMapping("/member/{keyword}/recent")
     public Response<Page<SearchNicknamesResponse>> searchNicknamesByRecent(@PathVariable String keyword, Pageable pageable) {
         return Response.success(searchService.SearchMemberByPosts(pageable, keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
 
@@ -48,7 +48,7 @@ public class SearchController {
     /**
      * 팔로우 순- 닉네임 검색
      */
-    @GetMapping("/search/nicknames/{keyword}/followers")
+    @GetMapping("/member/{keyword}/followers")
     public Response<Page<SearchNicknamesResponse>> searchNicknamesByFollowers(@PathVariable String keyword, Pageable pageable) {
         return Response.success(searchService.SearchMemberByFollowers(pageable,keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
     }

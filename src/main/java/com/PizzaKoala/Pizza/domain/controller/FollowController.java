@@ -16,23 +16,38 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/follow")
 public class FollowController {
     private final FollowService followService;
-    @PostMapping("/follow/{following}")
+
+    /**
+     * 유저 팔로우 하기
+     */
+    @PostMapping("/{following}")
     public Response<Void> followAMember(Authentication authentication, @PathVariable Long following){
         return Response.success(followService.follow(authentication.getName(),following));
     }
-    @DeleteMapping("/follow/unfollow/{followingId}")
+
+    /**
+     * 언팔로우 하기
+     */
+    @DeleteMapping("/{followingId}")
     public Response<Void> unfollowAMember(Authentication authentication, @PathVariable Long followingId){
         return Response.success(followService.unfollow(authentication.getName(),followingId));
     }
-
-    @DeleteMapping("/follow/follower/{followerId}")
+    /**
+     * 나의 팔로워의 팔로우 끊기
+     */
+    @DeleteMapping("/follower/{followerId}")
     public Response<Void> deleteAFollower(Authentication authentication, @PathVariable Long followerId){
         return Response.success(followService.deleteAFollower(authentication.getName(),followerId));
     }
-    @GetMapping("/follow/my/{or}") //{or} -1 for my followers -2 for users I am following
+
+    /**
+     * 나의 팔로워 & 팔로우 리스트
+     * {or} -1 for my followers -2 for users I am following
+     */
+    @GetMapping("/myList/{or}")
     public Response<Page<FollowListResponse>> followList(Authentication authentication, Pageable pageable, @PathVariable int or){
         if (or>2||or<1) {
             throw new PizzaAppException(ErrorCode.INVALID_PERMISSION,"follower list-1, following list-2");
