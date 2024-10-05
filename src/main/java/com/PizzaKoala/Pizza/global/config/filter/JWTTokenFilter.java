@@ -31,7 +31,9 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class JWTTokenFilter extends OncePerRequestFilter {
-
+    /**
+     * 소셜로그인에는 쿠키에 넣었는데 괜찮은강?
+     */
     private final JWTTokenUtils jwtTokenUtils;
     private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/*/alarm/subscribe");
 
@@ -52,8 +54,8 @@ public class JWTTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
-
+//        if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
+        if (requestUri.matches("^/oauth2(?:/.*)?$")) {
             filterChain.doFilter(request, response);
             return; //재로그인 무한로프 방지.
         }

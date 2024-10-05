@@ -48,12 +48,6 @@ public class SecurityConfig {
     private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
     private final AuthenticationService authenticationService;
 
-//    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTTokenUtils jwtUtil, RefreshRepository refreshRepository, CustomClientRegistrationRepo customClientRegistrationRepo, CustomOAuth2UserService customOAuth2UserService,CustomOAuth2SuccessHandler customOAuth2SuccessHandler, AuthenticationService authenticationService) {
-//        this.customClientRegistrationRepo = customClientRegistrationRepo;
-//        this.authenticationConfiguration = authenticationConfiguration;
-//        this.jwtUtil = jwtUtil;
-//        this.refreshRepository = refreshRepository;
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 
@@ -70,7 +64,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable);// jwt를 발급해서 stateless방식으로 세션을 관리해서 안해도 된다.
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/*/login","/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
+                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
                         .requestMatchers("/api/*/admin").hasRole("ADMIN")
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
@@ -81,7 +75,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));//jwt는 항상 세션을 stateless상태로 해야한다.
         http
                 .oauth2Login((oauth2) -> oauth2
-                        .loginPage("/login")
+                        .loginPage("/login/oauth2/*")
                         .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
                         .userInfoEndpoint((userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuth2UserService)))
@@ -90,24 +84,20 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new JWTTokenFilter(jwtUtil), NewLoginFilter.class);
         http
-                .cors(corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+                .cors(corsCustomizer -> corsCustomizer.configurationSource( request -> {
 
-                    @Override
-                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+                    CorsConfiguration configuration = new CorsConfiguration();
 
-                        CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); //프론트단
+                    configuration.setAllowedMethods(Collections.singletonList("*"));
+                    configuration.setAllowCredentials(true);
+                    configuration.setAllowedHeaders(Collections.singletonList("*"));
+                    configuration.setMaxAge(3600L);
 
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); //프론트단
-                        configuration.setAllowedMethods(Collections.singletonList("*"));
-                        configuration.setAllowCredentials(true);
-                        configuration.setAllowedHeaders(Collections.singletonList("*"));
-                        configuration.setMaxAge(3600L);
+                    configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+                    configuration.setExposedHeaders(Collections.singletonList("Authorization")); //refresh, access해야하나..
 
-                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization")); //refresh, access해야하나..
-
-                        return configuration;
-                    }
+                    return configuration;
                 }));
         http
                 .addFilterAt(new NewLoginFilter(authenticationManager(authenticationConfiguration), authenticationService), UsernamePasswordAuthenticationFilter.class);

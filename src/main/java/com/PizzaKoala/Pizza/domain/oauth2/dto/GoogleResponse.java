@@ -6,6 +6,7 @@ public class GoogleResponse implements OAuth2Response {
     private final Map<String, Object> attribute;
 
     public GoogleResponse(Map<String, Object> attribute) {
+
         this.attribute = attribute;
     }
     @Override
@@ -26,6 +27,16 @@ public class GoogleResponse implements OAuth2Response {
     @Override
     public String getPicture() {
         return attribute.get("picture").toString();
+    }
+
+    @Override
+    public String getName() {
+        return attribute.get("name").toString();
+    }
+
+    @Override
+    public String getUsername() {
+        return attribute.get("username").toString();
     }
 
 

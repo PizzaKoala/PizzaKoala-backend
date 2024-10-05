@@ -9,4 +9,7 @@ public interface OAuth2Response {
     String getEmail();
 
     String getPicture();
+
+    String getName();
+    String getUsername();
 }

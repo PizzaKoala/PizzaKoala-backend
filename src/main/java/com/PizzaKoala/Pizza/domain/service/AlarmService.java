@@ -5,6 +5,7 @@ import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
 import com.PizzaKoala.Pizza.domain.entity.Member;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,17 @@ import java.io.IOException;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class AlarmService {
     private final MemberRepository memberRepository;
     private final EmitterRepository emitterRepository;
     private final static Long DEFAULT_TIMEOUT=60L * 1000 *60;
     private final static String ALARM_NAME = "alarm";
 
-    public AlarmService(MemberRepository memberRepository, EmitterRepository emitterRepository) {
-        this.memberRepository = memberRepository;
-        this.emitterRepository = emitterRepository;
-    }
+//    public AlarmService(MemberRepository memberRepository, EmitterRepository emitterRepository) {
+//        this.memberRepository = memberRepository;
+//        this.emitterRepository = emitterRepository;
+//    }
 //    public void send(AlarmType type, AlarmArgs args, Integer receiverId) {
 //        UserEntity userEntity = userEntityRepository.findById(receiverId).orElseThrow(() -> new SimpleSnsApplicationException(ErrorCode.USER_NOT_FOUND));
 //        AlarmEntity entity = AlarmEntity.of(type, args, userEntity);

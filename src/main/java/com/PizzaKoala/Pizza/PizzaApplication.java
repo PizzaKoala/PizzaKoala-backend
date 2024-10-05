@@ -44,7 +44,7 @@ public class PizzaApplication {
  * https://www.youtube.com/watch?v=9g_iN6rLQcQ 이부분은어떻게 하지.. 안했음 아직
  * https://www.youtube.com/watch?v=Xiv5KFoEW4w
  *
- *
+ *구글 리디렉션 url-http://localhost:8080/login/oauth2/code/google
  */
 
 
