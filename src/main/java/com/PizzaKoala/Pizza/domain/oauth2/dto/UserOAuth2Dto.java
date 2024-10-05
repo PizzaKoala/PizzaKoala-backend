@@ -11,6 +11,6 @@ public class UserOAuth2Dto {
     private String name;
     private MemberRole role;
     private String email;
-    private String nickname;
+    private String username;
     private String picture;
 }

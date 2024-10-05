@@ -1,5 +1,5 @@
 package com.PizzaKoala.Pizza.domain.entity;
-
+import com.PizzaKoala.Pizza.domain.model.LoginType;
 import com.PizzaKoala.Pizza.domain.model.MemberRole;
 import com.PizzaKoala.Pizza.global.entity.CreatedEntity;
 import jakarta.persistence.*;
@@ -8,13 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
+
 
 @NoArgsConstructor
 @Builder
@@ -26,7 +23,6 @@ public class Member extends CreatedEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String email;
 
     private String nickName;
@@ -35,6 +31,9 @@ public class Member extends CreatedEntity{
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
+    private String socialLoginUsername;
 
     private LocalDateTime registeredAt;
     private LocalDateTime deletedAt;
@@ -52,9 +51,29 @@ public class Member extends CreatedEntity{
                 .nickName(nickName)
                 .password(password)
                 .role(MemberRole.USER)
+                .loginType(LoginType.EMAIL_LOGIN)
                 .profileImageUrl(url)
                 .build();
     }
+    public static Member googleLoginMember(String nickName, String email, String url) {
+        return Member.builder()
+                .email(email)
+                .nickName(nickName)
+                .role(MemberRole.USER)
+                .loginType(LoginType.GOOGLE_LOGIN)
+                .profileImageUrl(url)
+                .build();
+    }
+
+    public void saveSocialUsername(String username) {
+        this.socialLoginUsername = username;
+    }
+
+    public void updateGoogleInfo_email(String email) {
+    }
+
+
+
 
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -47,7 +47,7 @@ public class JWTTokenUtils {
         cookie.setMaxAge(24 * 60 * 60);
         cookie.setHttpOnly(true); // prevent from javascript attack
 //        cookie.setSecure(true); <--https 일 경우
-//        cookie.setPath("/");
+        cookie.setPath("/"); //@.@ ㅇㅣ게 맞남..?
         return cookie;
     }
 
