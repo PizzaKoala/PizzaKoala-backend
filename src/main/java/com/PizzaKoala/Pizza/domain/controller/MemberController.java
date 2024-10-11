@@ -28,6 +28,7 @@ import java.io.IOException;
 public class MemberController {
     private final MemberService memberService;
 
+
     // TODO: implement
     @PostMapping("/join")
     public Response<UserJoinResponse> join(@RequestPart(value = "file") MultipartFile file, @RequestPart("request") UserJoinRequest request, HttpServletResponse response) throws IOException {

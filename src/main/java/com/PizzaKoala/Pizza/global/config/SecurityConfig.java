@@ -21,17 +21,20 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 
@@ -64,9 +67,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable);// jwt를 발급해서 stateless방식으로 세션을 관리해서 안해도 된다.
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
+                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join",
+                                "/api/*/reissue","/h2-console/**","/api/*/posts/liked",
+                                "/api/*/search/posts/{keyword}/likes","/swagger-ui/**", "/v3/api-docs/**",
+                                "/login","/meep","/test","/favicon.ico").permitAll()
                         .requestMatchers("/api/*/admin").hasRole("ADMIN")
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+//                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
+//                        .requestMatchers("/api/*/admin").hasRole("ADMIN")
+//                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/login","/meep","/test","/favicon.ico").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated());
 
@@ -74,31 +82,41 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));//jwt는 항상 세션을 stateless상태로 해야한다.
         http
-                .oauth2Login((oauth2) -> oauth2
-                        .loginPage("/login/oauth2/*")
+                .oauth2Login(oauth2 -> oauth2
                         .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
-                        .userInfoEndpoint((userInfoEndpointConfig ->
-                                userInfoEndpointConfig.userService(customOAuth2UserService)))
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(customOAuth2SuccessHandler)
                 );
+//        http
+//                .oauth2Login((oauth2) -> oauth2
+//                        .loginPage("/login/oauth2/*")
+//                        .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
+//                        .userInfoEndpoint((userInfoEndpointConfig ->
+//                                userInfoEndpointConfig.userService(customOAuth2UserService)))
+//                        .successHandler(customOAuth2SuccessHandler)
+//                );
         http
                 .addFilterBefore(new JWTTokenFilter(jwtUtil), NewLoginFilter.class);
+        http
+                .addFilterAfter(new JWTTokenFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource( request -> {
 
                     CorsConfiguration configuration = new CorsConfiguration();
-
                     configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); //프론트단
-                    configuration.setAllowedMethods(Collections.singletonList("*"));
+//                    configuration.setAllowedMethods(Collections.singletonList("*"));
+                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // 필요한 HTTP 메서드 지정
                     configuration.setAllowCredentials(true);
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
                     configuration.setMaxAge(3600L);
 
-                    configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-                    configuration.setExposedHeaders(Collections.singletonList("Authorization")); //refresh, access해야하나..
-
+                    configuration.setExposedHeaders(Arrays.asList("Set-Cookie","Authorization"));
+//                    configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+//                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
                     return configuration;
                 }));
+        http
+                .addFilterAfter(new JWTTokenFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
         http
                 .addFilterAt(new NewLoginFilter(authenticationManager(authenticationConfiguration), authenticationService), UsernamePasswordAuthenticationFilter.class);
         http
@@ -112,11 +130,7 @@ public class SecurityConfig {
 
     //이거 모든 api에 Error occurs while getting header. header is null or invalid 이거 안뜨게 해준다고 했는데 원래도 안뜸.
     // 로그인&회원가입 할떄만 뜬다.
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        return (web -> web.ignoring().requestMatchers("^(?/api/).*"));
-//
-//    }
+
 
 
     @Bean

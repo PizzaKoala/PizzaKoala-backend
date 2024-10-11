@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+
 @Component
 public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JWTTokenUtils jwtTokenUtils;
@@ -34,9 +35,11 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        String token = jwtTokenUtils.generatedToken("refresh",email, role, 86400000L);
+        String token = jwtTokenUtils.generatedToken("refresh", email, role, 86400000L);
+        jwtTokenUtils.addRefreshEntity(email,token,86400000L);
 
         response.addCookie(jwtTokenUtils.createCookie("refresh", token));
-        response.sendRedirect("http://localhost:8080/"); //    프론트측에서 /api/*/reissue로 가서 access토큰을 발급받게 한다.
+
+        response.sendRedirect("http://localhost:3000/meep"); //    프론트측에서 /api/*/reissue로 가서 access토큰을 발급받게 한다.
     }
 }

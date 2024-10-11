@@ -13,4 +13,5 @@ public class UserOAuth2Dto {
     private String email;
     private String username;
     private String picture;
+    private String socialLoginUsername;
 }

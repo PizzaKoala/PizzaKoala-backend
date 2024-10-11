@@ -12,6 +12,7 @@ import com.PizzaKoala.Pizza.domain.oauth2.dto.OAuth2Response;
 import com.PizzaKoala.Pizza.domain.oauth2.dto.UserOAuth2Dto;
 import com.PizzaKoala.Pizza.domain.service.MemberService;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final MemberRepository memberRepository;
 //마지막 작업- 로그인부분
@@ -49,30 +51,41 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         } else {
             return null;
         }
-        Member existData = memberRepository.findBySocialLoginUsername(oAuth2Response.getUsername());
+//        String username = "";
+//        if (oAuth2Response.getUsername().isEmpty() || oAuth2Response.getUsername() == null) {
+//            username = "";
+//        } else {
+//            username = oAuth2Response.getUsername();
+//        }
+//        Member existData = memberRepository.findBySocialLoginUsername(username);
 
         /**
          * nickname은 일단 이메일에 @ 앞부분을 따고 이미 존재하면 뒤에 숫자를 붙이장!!ㅌ
          */
 
-        String nickname = generateUniqueNickname(oAuth2Response.getEmail());
+//        String nickname = generateUniqueNickname(oAuth2Response.getEmail());
+        String googleUsername = oAuth2Response.getProvider() +" "+oAuth2Response.getProviderId();
+
         //회원가입
+        Member existData = memberRepository.findBySocialLoginUsername(googleUsername);
+//        Member existData = memberRepository.findByMyEmail(oAuth2Response.getEmail());
 
 
        //회원가입
         if (existData == null) {
-            //        //리소스 서버에서 발급 받은 정보로 사용자를 특정한 아이디값을 만듬.
-            Member member = Member.googleLoginMember(nickname, oAuth2Response.getEmail(), oAuth2Response.getPicture());
-           member= memberRepository.save(member);
+            String nickname = generateUniqueNickname(oAuth2Response.getEmail());
+            //        //리소스 서버에서 발급 받은 정보로 사용자를 특정한 아이디값을 만듬.- 이메일로 찾기 때문에 필요없는거 같지만 일단 만들어두자.
+            Member member = Member.googleLoginMember(nickname, oAuth2Response.getEmail(), oAuth2Response.getPicture(),googleUsername);
+
+           memberRepository.save(member);
             /**
              * socialusername이 이미 디비에 존재하는지는 아직 체크 안해줬다.
              */
-            String username = oAuth2Response.getProvider() +" "+oAuth2Response.getProviderId() +" "+member.getId();
-            member.saveSocialUsername(username);
+
             UserOAuth2Dto userOAuth2Dto = UserOAuth2Dto.builder()
                     .name(oAuth2Response.getName())
                     .email(oAuth2Response.getEmail())
-                    .username(username)
+                    .username(nickname)
                     .role(MemberRole.USER)
                     .build();
             return new CustomOAuth2User(userOAuth2Dto);
@@ -80,10 +93,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             //TODO: 구글 로그인떄 이름(nickname), 사진이 바뀌었을떄 업데이트하는 부분 만들어야한다.
 
             existData.updateGoogleInfo_email(oAuth2Response.getEmail());
-            memberRepository.save(existData);
+            Member member=memberRepository.save(existData);
             UserOAuth2Dto userOAuth2Dto = UserOAuth2Dto.builder()
                     .name(oAuth2Response.getName())
-                    .username(existData.getSocialLoginUsername())
+                    .username(member.getNickName())
                     .email(oAuth2Response.getEmail())
                     .role(MemberRole.USER)
                     .build();
@@ -99,6 +112,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             int count=1;
             while (memberRepository.existsByNickName(nickname)) {
                 uniqueNickname = nickname+count;
+                log.info(uniqueNickname);
                 count++;
             }
             return uniqueNickname;
