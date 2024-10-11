@@ -49,16 +49,29 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         }
         String accessToken = null;
         String requestUri = request.getRequestURI();
-        if(requestUri.startsWith("/swagger-ui")|| requestUri.startsWith("/v3/spi-docs")||requestUri.startsWith("/h2-console/")){
+        if(requestUri.startsWith("/swagger-ui")|| requestUri.startsWith("/v3/spi-docs")
+                ||requestUri.startsWith("/h2-console/")||requestUri.startsWith("/favicon.ico")){
+            filterChain.doFilter(request, response);
+            return;
+        }
+        if (requestUri.startsWith("/login") || requestUri.startsWith("/oauth2/")||requestUri.startsWith("/api/v1/reissue")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-//        if (requestUri.matches("^\\/oauth2(?:\\/.*)?$")) {
-        if (requestUri.matches("^/oauth2(?:/.*)?$")) {
+
+        if (requestUri.matches("^/login(?:/.*)?$")) {
+
             filterChain.doFilter(request, response);
-            return; //재로그인 무한로프 방지.
+            return;
         }
+        if (requestUri.matches("^/oauth2(?:/.*)?$")) {
+
+            filterChain.doFilter(request, response);
+            return;//재로그인 무한로프 방지.
+        }
+
+//
 
         String header = request.getHeader("Authorization");
 

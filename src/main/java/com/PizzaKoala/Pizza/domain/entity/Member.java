@@ -55,13 +55,14 @@ public class Member extends CreatedEntity{
                 .profileImageUrl(url)
                 .build();
     }
-    public static Member googleLoginMember(String nickName, String email, String url) {
+    public static Member googleLoginMember(String nickName, String email, String url,String socialLoginUsername) {
         return Member.builder()
                 .email(email)
                 .nickName(nickName)
                 .role(MemberRole.USER)
                 .loginType(LoginType.GOOGLE_LOGIN)
                 .profileImageUrl(url)
+                .socialLoginUsername(socialLoginUsername)
                 .build();
     }
 
