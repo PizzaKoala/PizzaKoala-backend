@@ -67,14 +67,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable);// jwt를 발급해서 stateless방식으로 세션을 관리해서 안해도 된다.
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join",
-                                "/api/*/reissue","/h2-console/**","/api/*/posts/liked",
-                                "/api/*/search/posts/{keyword}/likes","/swagger-ui/**", "/v3/api-docs/**",
-                                "/login","/meep","/test","/favicon.ico").permitAll()
-                        .requestMatchers("/api/*/admin").hasRole("ADMIN")
-//                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
+//                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join",
+//                                "/api/*/reissue","/h2-console/**","/api/*/posts/liked",
+//                                "/api/*/search/posts/{keyword}/likes","/swagger-ui/**", "/v3/api-docs/**",
+//                                "/login","/meep","/test","/favicon.ico").permitAll()
 //                        .requestMatchers("/api/*/admin").hasRole("ADMIN")
-//                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/login","/meep","/test","/favicon.ico").permitAll()
+                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
+                        .requestMatchers("/api/*/admin").hasRole("ADMIN")
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/login","/meep","/favicon.ico").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated());
 
@@ -110,7 +110,7 @@ public class SecurityConfig {
                     configuration.setAllowedHeaders(Collections.singletonList("*"));
                     configuration.setMaxAge(3600L);
 
-                    configuration.setExposedHeaders(Arrays.asList("Set-Cookie","Authorization"));
+                    configuration.setExposedHeaders(Arrays.asList("Set-Cookie","Authorization","Access"));
 //                    configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
 //                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
                     return configuration;
