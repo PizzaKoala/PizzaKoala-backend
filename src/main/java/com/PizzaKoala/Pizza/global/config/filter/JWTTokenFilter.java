@@ -74,7 +74,8 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 //
 
         String header = request.getHeader("Authorization");
-
+//        log.info("Authorization :" , header);
+//        log.info(" access :", request.getHeader("access"));
         //header가 아니라 request param안에 있을 경우
         if(TOKEN_IN_PARAM_URLS.contains(requestUri)){
             log.info("Request with {} check the query param", request.getRequestURI());
@@ -142,72 +143,6 @@ public class JWTTokenFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-//    }        if (request == null || response == null || filterChain == null) {
-//            log.error("Request, Response, or FilterChain is null");
-//            return;
-//        }
-//
-//        //header안에 토큰이 있어서 헤더를 꺼내야 한다.
-//        String jwt = request.getHeader("Authorization");
-//
-//        //만약 헤더가 null일떄
-//        if (jwt == null || !jwt.startsWith("Bearer ")) {
-//            log.error("Error occurs while getting header. header is null or invalid");
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-//        String token = jwt.split(" ")[1];
-//
-//        if (jwtTokenUtils.isExpired(token)) {
-//            log.error("Error: JWT token is expired.");
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
-//
-//        //get email from token
-//        String email = jwtTokenUtils.getUsername(token);
-//        MemberRole role = jwtTokenUtils.getRole(token);
-//        Member member = Member.builder()
-//                .email(email)
-//                .role(role)
-//                .build();
-//
-//        CustomUserDetailsDTO customUserDetailsDTO = new CustomUserDetailsDTO(member);
-//
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(
-//                customUserDetailsDTO, null, customUserDetailsDTO.getAuthorities()
-//        );
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        filterChain.doFilter(request, response);
-//    }
-
-// latest Yumi
-//                CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
-//
-//                Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-//
-//                SecurityContextHolder.getContext().setAuthentication(authToken);
-//
-//                filterChain.doFilter(request, response);
-
-
-    //old version- from fastcampus  TODO: 여기서 이메일 체크 했던건 어디서 하지..?!
-//                // check the email is valid
-//                // Example using MemberRepository to check if member exists
-//                Optional<Member> member = memberRepository.findByEmail(email);
-//
-//                if (member.isEmpty()) {
-//                    log.error("Error: Member with email {} does not exist", email);
-//                    filterChain.doFilter(request, response);
-//                    return;
-//                }
-//
-//                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-//                        member.get().getEmail(), null, member.get().getAuthorities()
-//                );
-//                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
     @Override
