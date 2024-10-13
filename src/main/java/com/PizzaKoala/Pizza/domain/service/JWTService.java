@@ -82,7 +82,8 @@ public class JWTService {
         updateNewRefreshToDbAndDeleteOldRefresh(refresh,username,newRefresh,86400000L);
 
         //response
-        response.setHeader("access", newAccess);
+//        response.setHeader("access", newAccess);
+        response.setHeader("Authorization", "Bearer " + newAccess);
         response.addCookie(jwtTokenUtils.createCookie("refresh",newRefresh));
         return new ResponseEntity<>(HttpStatus.OK);
 //
