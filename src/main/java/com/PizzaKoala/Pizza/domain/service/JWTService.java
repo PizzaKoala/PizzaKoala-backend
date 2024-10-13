@@ -84,10 +84,12 @@ public class JWTService {
         //response
         response.setHeader("access", newAccess);
         response.addCookie(jwtTokenUtils.createCookie("refresh",newRefresh));
-
-
-
         return new ResponseEntity<>(HttpStatus.OK);
+//
+//        String accessToken = newAccess;
+//        response.addCookie(jwtTokenUtils.createCookie("refresh",newRefresh));
+//        return ResponseEntity.ok("Token received: " + accessToken);
+
     }
 
     private void updateNewRefreshToDbAndDeleteOldRefresh(String refresh,String email, String newRefresh, Long expiredTimeMs) {
