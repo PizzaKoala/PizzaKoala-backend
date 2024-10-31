@@ -101,18 +101,13 @@ public class SecurityConfig {
                 .addFilterAfter(new JWTTokenFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
         http
                 .cors(corsCustomizer -> corsCustomizer.configurationSource( request -> {
-
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); //프론트단
-//                    configuration.setAllowedMethods(Collections.singletonList("*"));
-                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // 필요한 HTTP 메서드 지정
-                    configuration.setAllowCredentials(true);
-                    configuration.setAllowedHeaders(Collections.singletonList("*"));
-                    configuration.setMaxAge(3600L);
-
-                    configuration.setExposedHeaders(Arrays.asList("Set-Cookie","Authorization"));
-//                    configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-//                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000")); // 프론트엔드 도메인
+                    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // 허용할 메서드
+                    configuration.setAllowCredentials(true); // 자격 증명 허용
+                    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With")); // 요청 허용 헤더 구체화
+                    configuration.setExposedHeaders(Arrays.asList("Authorization", "Set-Cookie")); // 응답 노출 헤더
+                    configuration.setMaxAge(3600L); // CORS 요청 캐시 지속 시간 (1시간)
                     return configuration;
                 }));
         http

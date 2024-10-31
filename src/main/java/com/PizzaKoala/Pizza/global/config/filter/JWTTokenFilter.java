@@ -10,6 +10,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -35,7 +36,7 @@ public class JWTTokenFilter extends OncePerRequestFilter {
      * 소셜로그인에는 쿠키에 넣었는데 괜찮은강?
      */
     private final JWTTokenUtils jwtTokenUtils;
-    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/*/alarm/subscribe");
+//    private final static List<String> TOKEN_IN_PARAM_URLS = List.of("/api/*/alarm/subscribe");
 
 
     @Override
@@ -71,15 +72,23 @@ public class JWTTokenFilter extends OncePerRequestFilter {
             return;//재로그인 무한로프 방지.
         }
 
-//
 
         String header = request.getHeader("Authorization");
-//        log.info("Authorization :" , header);
-//        log.info(" access :", request.getHeader("access"));
-        //header가 아니라 request param안에 있을 경우
-        if(TOKEN_IN_PARAM_URLS.contains(requestUri)){
-            log.info("Request with {} check the query param", request.getRequestURI());
-            accessToken= request.getQueryString().split("=")[1].trim();
+
+        //알람이 요청될때는 엑세스 토큰을 헤더가 아닌 쿠키에 담아서 보내준다.
+
+        if(requestUri.startsWith("/api/*/alarm/subscribe")){
+            log.info("Request with {} check the cookie _ SSE_ALARM_SUBSCRIBE", request.getRequestURI());
+            for (Cookie cookie : request.getCookies()) {
+                if ("Authorization".equals(cookie.getName())) {
+                    accessToken= cookie.getValue().substring(7);
+                }
+            }
+            if (accessToken == null) {
+                log.error("Error occurs while getting access token from cookie, cookie is null or invalid {}", request.getRequestURI());
+                filterChain.doFilter(request, response);
+                return;
+            }
         } else if (header != null && header.startsWith("Bearer ")) {
             //header에 access token 이 있을 경우
             accessToken = header.substring(7);

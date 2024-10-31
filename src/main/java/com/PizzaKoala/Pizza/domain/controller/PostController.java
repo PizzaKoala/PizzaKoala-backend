@@ -84,7 +84,6 @@ public class PostController {
     /**
      * 메인 패이지- 좋아요 순 포스트들
      */
-
     @GetMapping("/main/likes")
     public Response<Page<PostListResponse>> LikedList(Pageable pageable) {
         return Response.success(postService.LikedList(pageable).map(PostListResponse::fromPostImageDTO));
