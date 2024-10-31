@@ -41,7 +41,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-
+        log.info("CustomOAuth2UserService 여기 들어왔음!");
         //구글에서 온건지 네이버에서 온건지 확인
         String registration = userRequest.getClientRegistration().getRegistrationId();
         OAuth2Response oAuth2Response = null;
@@ -65,11 +65,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 //        String nickname = generateUniqueNickname(oAuth2Response.getEmail());
         String googleUsername = oAuth2Response.getProvider() +" "+oAuth2Response.getProviderId();
-
+        log.info("googleUsername="+ googleUsername);
         //회원가입
         Member existData = memberRepository.findBySocialLoginUsername(googleUsername);
 //        Member existData = memberRepository.findByMyEmail(oAuth2Response.getEmail());
-
 
        //회원가입
         if (existData == null) {

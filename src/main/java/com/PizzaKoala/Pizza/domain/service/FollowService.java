@@ -1,14 +1,13 @@
 package com.PizzaKoala.Pizza.domain.service;
 
 import com.PizzaKoala.Pizza.domain.Repository.*;
-import com.PizzaKoala.Pizza.domain.entity.Follow;
-import com.PizzaKoala.Pizza.domain.entity.Member;
-import com.PizzaKoala.Pizza.domain.entity.ProfileImage;
+import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import com.PizzaKoala.Pizza.domain.model.AlarmDTO;
 import com.PizzaKoala.Pizza.domain.model.FollowListDTO;
 import com.PizzaKoala.Pizza.domain.model.UserDTO;
+import com.PizzaKoala.Pizza.global.entity.AlarmType;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +29,8 @@ public class FollowService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
     private final CustomFollowRepository customFollowRepository;
+    private final AlarmRepository alarmRepository;
+    private final AlarmService alarmService;
 
 
     public Void follow(String email, Long following) {
@@ -48,6 +49,8 @@ public class FollowService {
         } catch (DataIntegrityViolationException exception) {
             throw new PizzaAppException(ErrorCode.ALREADY_FOLLOWED, String.format("You have are already followed %s",followingMember.getNickName()));
         }
+        alarmRepository.save(Alarm.of(following, AlarmType.NEW_FOLLOWER, new AlarmArgs(member.getId(), following)));
+        alarmService.send(member.getId(), following);
 
         return null;
 

@@ -19,7 +19,7 @@ import java.io.IOException;
 public class AlarmService {
     private final MemberRepository memberRepository;
     private final EmitterRepository emitterRepository;
-    private final static Long DEFAULT_TIMEOUT=60L * 1000 *60;
+    private final static Long DEFAULT_TIMEOUT=60L * 1000 *60; //
     private final static String ALARM_NAME = "alarm";
 
 //    public AlarmService(MemberRepository memberRepository, EmitterRepository emitterRepository) {
@@ -65,7 +65,7 @@ public class AlarmService {
         sseEmitter.onTimeout(()->emitterRepository.delete(member.getId()));
 
         try {
-            sseEmitter.send(SseEmitter.event().id("").name(ALARM_NAME).data("connect completed"));
+            sseEmitter.send(SseEmitter.event().id("id").name(ALARM_NAME).data("connect completed"));
         } catch (IOException exception) {
             throw new PizzaAppException(ErrorCode.ALARM_CONNECT_ERROR);
         }

@@ -23,7 +23,6 @@ public class CreatedEntity {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    private String createdBy;
 
 
 }

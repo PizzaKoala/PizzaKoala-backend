@@ -25,12 +25,7 @@ public class AlarmController {
         return alarmService.connectAlarm(authentication.getName());
 
     }
-//    @GetMapping("/alarm")
-//    public Response<Page<AlarmResponse>> alarm(Pageable pageable, Authentication authentication) {
-//
-////         authentication 안에 memberId를 넣으면 조회 한번 하는걸 줄일수있다. 시간날떄 변경하기
-//        return Response.success(memberService.alarmList(authentication.getName(), pageable).map(AlarmResponse::fromAlarmDTO));
-//    }
 
+    //TODO authentication 안에 memberId를 넣으면 조회 한번 하는걸 줄일수있다. 시간날떄 변경하기
 
 }

@@ -3,6 +3,7 @@ package com.PizzaKoala.Pizza.domain.Repository;
 import com.PizzaKoala.Pizza.domain.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -16,5 +17,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     boolean existsByNickName(String nickname);
 
-    Member findBySocialLoginUsername(String email);
+    @Query("SELECT m FROM Member m WHERE m.socialLoginUsername = :socialLoginUsername")
+    Member findBySocialLoginUsername(@Param("socialLoginUsername") String socialLoginUsername);
+
 }
