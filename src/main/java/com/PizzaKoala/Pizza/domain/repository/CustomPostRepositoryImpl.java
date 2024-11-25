@@ -3,6 +3,7 @@ package com.PizzaKoala.Pizza.domain.repository;
 import com.PizzaKoala.Pizza.member.entity.Member;
 import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.dto.PostSummaryDTO;
+import com.PizzaKoala.Pizza.member.entity.QFollow;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.JPAExpressions;

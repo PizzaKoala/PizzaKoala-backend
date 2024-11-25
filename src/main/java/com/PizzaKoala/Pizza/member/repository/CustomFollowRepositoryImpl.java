@@ -1,7 +1,8 @@
 package com.PizzaKoala.Pizza.member.repository;
 
-import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.member.dto.FollowListDTO;
+import com.PizzaKoala.Pizza.member.entity.QFollow;
+import com.PizzaKoala.Pizza.member.entity.QMember;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
