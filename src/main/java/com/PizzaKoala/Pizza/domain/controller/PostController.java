@@ -93,7 +93,7 @@ public class PostController {
      * my posts- 내 포스트들 리스트로 끌고 오기/ 메인 게시물
      */
 
-    @GetMapping("/myList")
+    @GetMapping("/my_list")
     public Response<Page<PostListResponse>> myPosts(Authentication authentication, Pageable pageable) {
                 return Response.success(postService.my(authentication.getName(), pageable).map(PostListResponse::fromPostImageDTO));
     }
