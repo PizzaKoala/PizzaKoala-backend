@@ -5,11 +5,13 @@ import com.PizzaKoala.Pizza.member.controller.response.UserJoinResponse;
 import com.PizzaKoala.Pizza.member.controller.request.UserJoinRequest;
 import com.PizzaKoala.Pizza.member.controller.request.UserLoginRequest;
 
+import com.PizzaKoala.Pizza.member.controller.response.UserResponse;
 import com.PizzaKoala.Pizza.member.dto.UserDTO;
 import com.PizzaKoala.Pizza.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,8 +43,9 @@ public class MemberController {
         return Response.success();
     }
 
-
-
-
-
+    @GetMapping("/me")
+    public Response<UserResponse> mydetail(Authentication authentication) {
+       UserDTO userDTO= memberService.getMyDetail(authentication);
+        return Response.success(UserResponse.fromUser(userDTO));
+    }
 }
