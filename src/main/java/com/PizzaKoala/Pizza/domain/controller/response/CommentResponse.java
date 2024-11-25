@@ -1,6 +1,6 @@
 package com.PizzaKoala.Pizza.domain.controller.response;
 
-import com.PizzaKoala.Pizza.domain.model.CommentDTO;
+import com.PizzaKoala.Pizza.domain.dto.CommentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

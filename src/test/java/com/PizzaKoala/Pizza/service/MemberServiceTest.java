@@ -1,10 +1,10 @@
 //package com.PizzaKoala.Pizza.service;
 //
 //import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
-//import com.PizzaKoala.Pizza.domain.entity.Member;
+//import com.PizzaKoala.Pizza.member.entity.Member;
 //import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 //import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
-//import com.PizzaKoala.Pizza.domain.service.MemberService;
+//import com.PizzaKoala.Pizza.member.service.MemberService;
 //import com.PizzaKoala.Pizza.fixture.MemberEntityFixture;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.Test;

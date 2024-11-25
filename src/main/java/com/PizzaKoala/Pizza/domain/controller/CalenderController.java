@@ -1,8 +1,8 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
-import com.PizzaKoala.Pizza.domain.controller.response.Response;
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
+import com.PizzaKoala.Pizza.global.controller.response.Response;
+import com.PizzaKoala.Pizza.global.exception.ErrorCode;
+import com.PizzaKoala.Pizza.global.exception.PizzaAppException;
 import com.PizzaKoala.Pizza.domain.service.CalendarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

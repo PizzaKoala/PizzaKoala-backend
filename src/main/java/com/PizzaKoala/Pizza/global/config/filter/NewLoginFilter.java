@@ -1,14 +1,10 @@
 package com.PizzaKoala.Pizza.global.config.filter;
 
-import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
-import com.PizzaKoala.Pizza.domain.model.CustomUserDetailsDTO;
-import com.PizzaKoala.Pizza.domain.service.AuthenticationService;
+import com.PizzaKoala.Pizza.global.service.AuthenticationService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

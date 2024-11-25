@@ -1,9 +1,7 @@
 package com.PizzaKoala.Pizza.global.config.filter;
 
-import com.PizzaKoala.Pizza.domain.Repository.RefreshRepository;
-import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
+import com.PizzaKoala.Pizza.global.repository.RefreshRepository;
+import com.PizzaKoala.Pizza.global.util.JWTTokenUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

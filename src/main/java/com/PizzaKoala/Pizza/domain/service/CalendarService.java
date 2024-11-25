@@ -1,17 +1,14 @@
 package com.PizzaKoala.Pizza.domain.service;
 
-import com.PizzaKoala.Pizza.domain.Repository.CustomPostRepositoryImpl;
-import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
-import com.PizzaKoala.Pizza.domain.Repository.PostRepository;
-import com.PizzaKoala.Pizza.domain.entity.Member;
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
-import lombok.NoArgsConstructor;
+import com.PizzaKoala.Pizza.domain.repository.CustomPostRepositoryImpl;
+import com.PizzaKoala.Pizza.member.repository.MemberRepository;
+import com.PizzaKoala.Pizza.member.entity.Member;
+import com.PizzaKoala.Pizza.global.exception.ErrorCode;
+import com.PizzaKoala.Pizza.global.exception.PizzaAppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;

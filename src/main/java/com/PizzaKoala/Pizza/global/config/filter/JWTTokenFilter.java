@@ -1,11 +1,9 @@
 package com.PizzaKoala.Pizza.global.config.filter;
 
-import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
-import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
-import com.PizzaKoala.Pizza.domain.entity.Member;
-import com.PizzaKoala.Pizza.domain.model.CustomUserDetailsDTO;
-import com.PizzaKoala.Pizza.domain.model.MemberRole;
-import com.PizzaKoala.Pizza.domain.service.MemberService;
+import com.PizzaKoala.Pizza.global.util.JWTTokenUtils;
+import com.PizzaKoala.Pizza.member.entity.Member;
+import com.PizzaKoala.Pizza.domain.dto.CustomUserDetailsDTO;
+import com.PizzaKoala.Pizza.member.entity.enums.MemberRole;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.FilterChain;
@@ -13,21 +11,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor

@@ -1,6 +1,7 @@
 package com.PizzaKoala.Pizza.domain.entity;
 
 import com.PizzaKoala.Pizza.global.entity.CreatedEntity;
+import com.PizzaKoala.Pizza.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +38,7 @@ public class Comments extends CreatedEntity {
     private LocalDateTime deletedAt;
     private Long depth;
     // modifier id?!
-    public static Comments of(Member member, Post post,String comment) {
+    public static Comments of(Member member, Post post, String comment) {
 
         return new CommentsBuilder()
                 .comment(comment)

@@ -2,7 +2,7 @@
 //
 //import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
 //import com.PizzaKoala.Pizza.domain.Repository.PostRepository;
-//import com.PizzaKoala.Pizza.domain.entity.Member;
+//import com.PizzaKoala.Pizza.member.entity.Member;
 //import com.PizzaKoala.Pizza.domain.entity.Post;
 //import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 //import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;

@@ -1,14 +1,20 @@
 package com.PizzaKoala.Pizza.domain.service;
 
-import com.PizzaKoala.Pizza.domain.Repository.*;
+import com.PizzaKoala.Pizza.domain.repository.*;
+import com.PizzaKoala.Pizza.global.controller.request.AlarmRequest;
 import com.PizzaKoala.Pizza.domain.controller.request.PostCommentRequest;
 import com.PizzaKoala.Pizza.domain.entity.*;
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
-import com.PizzaKoala.Pizza.domain.model.*;
+import com.PizzaKoala.Pizza.global.exception.ErrorCode;
+import com.PizzaKoala.Pizza.global.exception.PizzaAppException;
+import com.PizzaKoala.Pizza.domain.dto.*;
 
-import com.PizzaKoala.Pizza.global.entity.AlarmType;
-import com.PizzaKoala.Pizza.global.entity.LikesType;
+import com.PizzaKoala.Pizza.global.entity.enums.AlarmType;
+import com.PizzaKoala.Pizza.domain.entity.enums.LikesType;
+import com.PizzaKoala.Pizza.global.repository.AlarmRepository;
+import com.PizzaKoala.Pizza.global.service.AlarmService;
+import com.PizzaKoala.Pizza.global.service.S3ImageUploadService;
+import com.PizzaKoala.Pizza.member.entity.Member;
+import com.PizzaKoala.Pizza.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -215,9 +221,17 @@ public class PostService {
 
             post.likes();
         postRepository.saveAndFlush(post);
-
-        Alarm alarm=alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
-        alarmService.send(alarm.getId(), post.getMember().getId());
+//TODO
+//        Alarm alarm=alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
+//        alarmService.send(alarm.getId(), post.getMember().getId());
+        AlarmRequest request = new AlarmRequest(
+                AlarmType.NEW_Like_ON_POST,
+                post.getMember().getId(),
+                member,
+                postId,
+                null
+        );
+        alarmService.saveAndSend(request);
     }
 
     /**
@@ -273,8 +287,16 @@ public class PostService {
 
 
         Comments comments=commentRepository.save(Comments.of(member, post, comment));
-        alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(member.getId(), postId)));
-        alarmService.send(comments.getId(), post.getMember().getId());
+
+
+        AlarmRequest request = new AlarmRequest(
+                AlarmType.NEW_COMMENT_ON_POST,
+                post.getMember().getId(),
+                member,
+                postId,
+                comments.getId()
+        );
+        alarmService.saveAndSend(request);
     }
     /**
      * 포스트에 달린 댓글 보기 - member- id, nickname, profileUrl comment- 시간,커멘트

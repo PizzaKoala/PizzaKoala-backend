@@ -1,7 +1,7 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
 import com.PizzaKoala.Pizza.domain.controller.request.PostCommentRequest;
-import com.PizzaKoala.Pizza.domain.controller.response.Response;
+import com.PizzaKoala.Pizza.global.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

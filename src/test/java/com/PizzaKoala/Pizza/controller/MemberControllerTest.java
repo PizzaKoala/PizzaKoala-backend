@@ -1,12 +1,12 @@
 //package com.PizzaKoala.Pizza.controller;
 //
 //import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
-//import com.PizzaKoala.Pizza.domain.controller.request.UserJoinRequest;
-//import com.PizzaKoala.Pizza.domain.controller.request.UserLoginRequest;
+//import com.PizzaKoala.Pizza.member.controller.request.UserJoinRequest;
+//import com.PizzaKoala.Pizza.member.controller.request.UserLoginRequest;
 //import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 //import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 //import com.PizzaKoala.Pizza.domain.model.UserDTO;
-//import com.PizzaKoala.Pizza.domain.service.MemberService;
+//import com.PizzaKoala.Pizza.member.service.MemberService;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;

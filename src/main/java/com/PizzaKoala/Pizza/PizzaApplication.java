@@ -15,7 +15,13 @@ public class PizzaApplication {
 
 		//포스트 삭제시 like 엔티티 완전 삭제하기-삭제할떄 포스트에 있는 like count 는 삭제하지 말자.
 
-		// 알람
+		/** 알람
+		 * sse에 요청을 할때 헤더에 있는 정보를 받을수 없다고 한다
+		 * 엑세스토큰을 그래서 이때는 파라미터에 엑세스 토큰을 넣어서 보내준다고 하는데
+		 * 우리 프로젝트는 이미 refresh token을 쿠키에 담아서 사용하기 때문에 보안적인 문제를 생각하면 그냥 프론트에서 쿠키에 엑세스 토큰을 담아서
+		 * sse에 요청을 하면 JWTTokenFilter에서 api/ * / alarm / subscribe 으로 요청이 들어왔을 경우는 엑세스 토큰은
+		 * 쿠키에서 찾아와 인증을 체크하는 방식을 사용했다.
+		 */
 		//지금은 서버 하나에 인스턴스 하나로 구현되었지만 서버가 여러개일 경우 맴버와 연결되 인스컨스를 찾아서 알람을 보내는 방식으로 구현해야한다.
 		//프론트 세팅, src-> layouts -> alarm -> index.js
 		// https://github.com/KimHyoJin/Simple-SNS/commit/f926f868b4a9f1461440159034bf0815307c4ba9
@@ -39,6 +45,8 @@ public class PizzaApplication {
  * 프론트에서 책임을 맡을떄는 구글에서 유저 정보를 받아서 백으로 넘기면 백이 그 정보를 통해 jwt를 만들어서 프론트에 넘겨준다.
  * 모든 책임을 백앤드나 프론트 한쪽에서 다 맡아야한다. 카카오 dev톡에선 네이티브앱일때는 프론트가 웹일떄는 백엔드가 책임을 맡는게 적합하고 한다.
  * 하이퍼링크를 백앤드로 보내서 모든 책임을 백앤드가 맡게하는게 가장 적합한 방식
+ * 하이퍼링크로 보내서 인증 받은후 백앤드에서 프론트로 바로 해더에 토큰을 담아서 보내줄수 없다고 함, 그래서 쿠키에 먼저 refresh토큰만 보내서
+ * 다시 프론트에서 요청이 오면 그때 헤더로 access token을 담아 보내는 방식
  * https://www.youtube.com/watch?v=6XZ8oJOex_U
  * https://substantial-park-a17.notion.site/2-acacb442fdce473b91ebdd4e708d5214
  * https://www.youtube.com/watch?v=9g_iN6rLQcQ 이부분은어떻게 하지.. 안했음 아직

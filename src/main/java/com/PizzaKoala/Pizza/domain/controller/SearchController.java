@@ -1,7 +1,7 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
 import com.PizzaKoala.Pizza.domain.controller.response.PostListResponse;
-import com.PizzaKoala.Pizza.domain.controller.response.Response;
+import com.PizzaKoala.Pizza.global.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.controller.response.SearchNicknamesResponse;
 import com.PizzaKoala.Pizza.domain.service.SearchService;
 import lombok.AllArgsConstructor;

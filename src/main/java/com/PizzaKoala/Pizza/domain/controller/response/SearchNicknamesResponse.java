@@ -1,6 +1,6 @@
 package com.PizzaKoala.Pizza.domain.controller.response;
 
-import com.PizzaKoala.Pizza.domain.model.SearchMemberNicknameDTO;
+import com.PizzaKoala.Pizza.domain.dto.SearchMemberNicknameDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

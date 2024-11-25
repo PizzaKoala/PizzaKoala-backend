@@ -1,6 +1,6 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
-import com.PizzaKoala.Pizza.domain.controller.response.Response;
+import com.PizzaKoala.Pizza.global.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,7 @@ public class LikeController {
         return Response.success();
     }
     /**
-     * unlike function- 좋아요 취소
+     * unlike function- 좋아요 취소-soft delete
      */
 
     @PostMapping("/{postId}/unlike")

@@ -1,27 +1,24 @@
 package com.PizzaKoala.Pizza.global.config;
 
-import com.PizzaKoala.Pizza.domain.Repository.RefreshRepository;
-import com.PizzaKoala.Pizza.domain.Util.JWTTokenUtils;
-import com.PizzaKoala.Pizza.domain.exception.CustomAuthenticationEntryPoint;
-import com.PizzaKoala.Pizza.domain.oauth2.CustomClientRegistrationRepo;
-import com.PizzaKoala.Pizza.domain.oauth2.CustomOAuth2UserService;
-import com.PizzaKoala.Pizza.domain.oauth2.Handler.CustomOAuth2SuccessHandler;
-import com.PizzaKoala.Pizza.domain.service.AuthenticationService;
+import com.PizzaKoala.Pizza.global.repository.RefreshRepository;
+import com.PizzaKoala.Pizza.global.util.JWTTokenUtils;
+import com.PizzaKoala.Pizza.global.exception.CustomAuthenticationEntryPoint;
+import com.PizzaKoala.Pizza.member.oauth2.CustomClientRegistrationRepo;
+import com.PizzaKoala.Pizza.member.oauth2.CustomOAuth2UserService;
+import com.PizzaKoala.Pizza.member.oauth2.handler.CustomOAuth2SuccessHandler;
+import com.PizzaKoala.Pizza.global.service.AuthenticationService;
 import com.PizzaKoala.Pizza.global.config.filter.CustomLogoutFilter;
 import com.PizzaKoala.Pizza.global.config.filter.JWTTokenFilter;
 import com.PizzaKoala.Pizza.global.config.filter.NewLoginFilter;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -32,7 +29,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.Collections;

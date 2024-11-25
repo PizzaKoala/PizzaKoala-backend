@@ -1,17 +1,13 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
-import com.PizzaKoala.Pizza.domain.controller.response.CommentResponse;
 import com.PizzaKoala.Pizza.domain.controller.response.PostListResponse;
-import com.PizzaKoala.Pizza.domain.controller.response.PostResponse;
-import com.PizzaKoala.Pizza.domain.controller.response.Response;
-import com.PizzaKoala.Pizza.domain.controller.request.PostCommentRequest;
+import com.PizzaKoala.Pizza.global.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.controller.request.PostCreateRequest;
 import com.PizzaKoala.Pizza.domain.controller.request.PostModifyRequest;
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
-import com.PizzaKoala.Pizza.domain.model.CustomUserDetailsDTO;
-import com.PizzaKoala.Pizza.domain.model.PostDTO;
-import com.PizzaKoala.Pizza.domain.model.PostWithCommentsDTO;
+import com.PizzaKoala.Pizza.global.exception.ErrorCode;
+import com.PizzaKoala.Pizza.global.exception.PizzaAppException;
+import com.PizzaKoala.Pizza.domain.dto.CustomUserDetailsDTO;
+import com.PizzaKoala.Pizza.domain.dto.PostWithCommentsDTO;
 import com.PizzaKoala.Pizza.domain.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
