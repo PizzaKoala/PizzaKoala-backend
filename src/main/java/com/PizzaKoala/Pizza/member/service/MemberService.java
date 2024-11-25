@@ -15,6 +15,7 @@ import com.PizzaKoala.Pizza.member.dto.UserDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,13 +74,18 @@ public class MemberService {
 
     public Void login(String email, String password) {
         //회원가입 이메일인지 체크
-        Member member=memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not founded ",email)));
+        Member member=memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not found ",email)));
 
         //비밀번호 체크
         if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new PizzaAppException(ErrorCode.INVALID_PASSWORD);
         }
         return null;
+    }
+
+    public UserDTO getMyDetail(Authentication authentication) {
+        Member member=memberRepository.findByEmail(authentication.getName()).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not found ",authentication.getName())));
+        return UserDTO.fromMemberEntity(member);
     }
 
 

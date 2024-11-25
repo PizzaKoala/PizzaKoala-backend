@@ -10,12 +10,14 @@ public class UserResponse {
     private Long id;
     private String email;
     private String profileImageUrl;
+    private String nickname;
 
     public static UserResponse fromUser(UserDTO user) {
         return new UserResponse(
                 user.getId(),
                 user.getEmail(),
-                user.getProfileImageUrl()
+                user.getProfileImageUrl(),
+                user.getNickName()
         );
     }
 }
