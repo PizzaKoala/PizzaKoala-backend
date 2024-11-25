@@ -1,5 +1,6 @@
 package com.PizzaKoala.Pizza.domain.entity;
 import com.PizzaKoala.Pizza.global.entity.CreatedEntity;
+import com.PizzaKoala.Pizza.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

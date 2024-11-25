@@ -1,26 +1,18 @@
 package com.PizzaKoala.Pizza.global.config;
 
-import com.PizzaKoala.Pizza.domain.Repository.ImageRepository;
-import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
-import com.PizzaKoala.Pizza.domain.Repository.PostRepository;
-import com.PizzaKoala.Pizza.domain.controller.PostController;
+import com.PizzaKoala.Pizza.domain.repository.ImageRepository;
+import com.PizzaKoala.Pizza.member.repository.MemberRepository;
+import com.PizzaKoala.Pizza.domain.repository.PostRepository;
 import com.PizzaKoala.Pizza.domain.entity.Images;
-import com.PizzaKoala.Pizza.domain.entity.Member;
+import com.PizzaKoala.Pizza.member.entity.Member;
 import com.PizzaKoala.Pizza.domain.entity.Post;
-import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
-import com.PizzaKoala.Pizza.domain.model.MemberRole;
-import com.PizzaKoala.Pizza.domain.service.FollowService;
+import com.PizzaKoala.Pizza.member.entity.enums.MemberRole;
+import com.PizzaKoala.Pizza.member.service.FollowService;
 import com.PizzaKoala.Pizza.domain.service.PostService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Component

@@ -1,13 +1,13 @@
 package com.PizzaKoala.Pizza.global.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
-public class search {
+@Entity
+@Table(name = "search")
+public class Search {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -2,7 +2,7 @@
 //
 //import com.PizzaKoala.Pizza.domain.controller.request.PostCreateRequest;
 //import com.PizzaKoala.Pizza.domain.controller.request.PostModifyRequest;
-//import com.PizzaKoala.Pizza.domain.controller.request.UserJoinRequest;
+//import com.PizzaKoala.Pizza.member.controller.request.UserJoinRequest;
 //import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 //import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 //import com.PizzaKoala.Pizza.domain.service.PostService;

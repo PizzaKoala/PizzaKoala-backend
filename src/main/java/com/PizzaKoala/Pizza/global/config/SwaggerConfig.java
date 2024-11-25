@@ -14,14 +14,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-//    @Bean
-//    public OpenAPI OpenAPIConfig() {
-//        return new OpenAPI()
-//                .info(new Info()
-//                        .title("PizzaKoala")
-//                        .description("피자코알라 인터페이스 규격서")
-//                        .version("1.0.0"));
-//    }
     @Bean
     public OpenAPI OpenAPIConfig() {
         return new OpenAPI()

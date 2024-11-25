@@ -1,6 +1,6 @@
 package com.PizzaKoala.Pizza.fixture;
 
-import com.PizzaKoala.Pizza.domain.entity.Member;
+import com.PizzaKoala.Pizza.member.entity.Member;
 
 public class MemberEntityFixture {
     public static Member getLogin(String email, String password,Long id) {

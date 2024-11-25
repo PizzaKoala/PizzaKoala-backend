@@ -1,7 +1,7 @@
 //package com.PizzaKoala.Pizza.entity;
 //
 //import com.PizzaKoala.Pizza.domain.Repository.MemberRepository;
-//import com.PizzaKoala.Pizza.domain.entity.Member;
+//import com.PizzaKoala.Pizza.member.entity.Member;
 //import jakarta.persistence.EntityManager;
 //import jakarta.transaction.Transactional;
 //import org.assertj.core.api.Assertions;
