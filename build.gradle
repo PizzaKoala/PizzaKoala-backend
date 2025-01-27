@@ -52,6 +52,9 @@ dependencies {
 
 	//swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
+//	//swagger javadocs
+//	annotationProcessor "com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0"
+//	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 
 //	// Logback for logging
 //	implementation 'ch.qos.logback:logback-classic'

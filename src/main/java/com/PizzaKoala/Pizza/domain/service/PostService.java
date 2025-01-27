@@ -1,7 +1,8 @@
 package com.PizzaKoala.Pizza.domain.service;
 
 import com.PizzaKoala.Pizza.domain.Repository.*;
-import com.PizzaKoala.Pizza.domain.controller.request.PostCommentRequest;
+import com.PizzaKoala.Pizza.domain.controller.request.AlarmRequest;
+import com.PizzaKoala.Pizza.domain.controller.request.PostCommentModifyRequest;
 import com.PizzaKoala.Pizza.domain.entity.*;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -74,6 +76,11 @@ public class PostService {
         }
 
         post.update(title,desc);
+
+        /**
+         * 사진 다 삭제하는것보다 삭제 요청받은 사진들만 삭제하고 추가 요청받은 사진들은 요청하고
+         * 사진은 변경이 없다면 그냥 건들지 않는 로직으로 변경하는게 좋겠다.
+         */
         // 기존 파일들 삭제 로직
         List<Images> existingImages = imageRepository.findByPostId(post);
         imageRepository.deleteAll(existingImages);
@@ -117,16 +124,16 @@ public class PostService {
     /**
      * 게시물 단건 조회- get a post
      */
-    public Page<PostWithCommentsDTO> getAPost(Long postId, Pageable pageable) {
+    public PostWithCommentsDTO getAPost(Long postId) {
         Post post= getPostOrException(postId);
 
         // Fetch the image URLs
         List<String> imageUrls = post.getImages().stream()
                 .map(Images::getUrl)
                 .toList();
-        Page<CommentDTO> commentDTOPage = getComments(postId, pageable);
+        List<CommentDTO> commentDTOPage = getComments(postId);
 
-        PostWithCommentsDTO postWithCommentsDTO= new PostWithCommentsDTO(
+        return new PostWithCommentsDTO(
                 post.getMember().getId(),
                 post.getMember().getProfileImageUrl(),
                 post.getMember().getNickName(),
@@ -139,7 +146,6 @@ public class PostService {
                 post.getModifiedAt(),
                 commentDTOPage
         );
-        return new PageImpl<>(List.of(postWithCommentsDTO), pageable, 1);
     }
 
 //    /**
@@ -216,8 +222,17 @@ public class PostService {
             post.likes();
         postRepository.saveAndFlush(post);
 
-        Alarm alarm=alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
-        alarmService.send(alarm.getId(), post.getMember().getId());
+        AlarmRequest request = new AlarmRequest(
+                AlarmType.NEW_Like_ON_POST,
+                post.getMember().getId(), //나중에 설계를 포스트에 그냥 맴버 아이디만 넣어도 충분할듯..
+                member,
+                postId,
+                null
+        );
+        alarmService.saveAndSend(request);
+
+//        Alarm alarm=alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_Like_ON_POST, new AlarmArgs(member.getId(),postId)));
+//        alarmService.send(alarm.getId(), post.getMember().getId());
     }
 
     /**
@@ -273,15 +288,26 @@ public class PostService {
 
 
         Comments comments=commentRepository.save(Comments.of(member, post, comment));
-        alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(member.getId(), postId)));
-        alarmService.send(comments.getId(), post.getMember().getId());
+        if (!post.getMember().equals(member)) {
+            AlarmRequest request = new AlarmRequest(
+                    AlarmType.NEW_COMMENT_ON_POST,
+                    post.getMember().getId(),
+                    member,
+                    null,
+                    null
+            );
+            alarmService.saveAndSend(request);
+        }
+
+//        alarmRepository.save(Alarm.of(post.getMember().getId(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(member.getId(), postId)));
+//        alarmService.send(comments.getId(), post.getMember().getId());
     }
     /**
      * 포스트에 달린 댓글 보기 - member- id, nickname, profileUrl comment- 시간,커멘트
      */
-    public Page<CommentDTO> getComments(Long postId, Pageable pageable) {
+    public List<CommentDTO> getComments(Long postId) {
         Post post= getPostOrException(postId);
-        return commentRepository.findAllByPostId(post, pageable).map(CommentDTO::fromCommentEntity);
+        return commentRepository.findAllByPostId(post).stream().map(CommentDTO::fromCommentEntity).collect(Collectors.toList());
     }
     /**
      * 포스트에 쓴 댓글 삭제 -
@@ -297,7 +323,7 @@ public class PostService {
      * 포스트에 쓴 댓글 수정 -
      */
     @Transactional
-    public Boolean editComment(Long postId, PostCommentRequest editedComment, String email) {
+    public Boolean editComment(Long postId, PostCommentModifyRequest editedComment, String email) {
         Comments comment= commentRepository.findById(editedComment.getCommentId()).orElseThrow(()->new PizzaAppException(ErrorCode.COMMENT_NOT_FOUND));
         VerifyComment(comment,postId,email);
         comment.update(editedComment.getComment());
@@ -319,9 +345,9 @@ public class PostService {
     private Post getPostOrException(Long postId) {
         //post existence
         Post post=postRepository.findById(postId).orElseThrow(()->
-                new PizzaAppException(ErrorCode.POST_NOT_FOUND, String.format("%S not founded", postId)));
+                new PizzaAppException(ErrorCode.POST_NOT_FOUND, String.format("%S not found", postId)));
         if (post.getDeletedAt() != null) {
-            throw new PizzaAppException(ErrorCode.POST_NOT_FOUND, String.format("%S not founded", postId));
+            throw new PizzaAppException(ErrorCode.POST_NOT_FOUND, String.format("%S not found", postId));
         }
         return post;
     }

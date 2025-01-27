@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @SpringBootApplication
 public class PizzaApplication {
+	//createdBy 삭제하기 운영하는 사람이 여러명일때 유용
 //			1차 배포 계획- 회원가입, 로그인(기본, 구글), crud(post-s3), 피드(좋아요순, 최신순), 알림- 웹소켓, 좋아요, 댓글-1차
 
 	public static void main(String[] args) {
@@ -53,6 +54,9 @@ public class PizzaApplication {
 
 
 /**
+ * 스웨거 http://localhost:8080/swagger-ui/index.html // 3.X버전 이상 주소
+ *
+ *
  * 포스트가 삭제될떄 - 포스트, 커멘트 는 softdelete 포스트의 liked는 그냥 삭제
  * 댓글 단건 삭제는 그냥 삭제.
  *

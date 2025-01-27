@@ -29,7 +29,8 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND,"The comment does not exist."),
     ALARM_CONNECT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"Connecting alarm occurs error."),
     INVALID_YEAR(HttpStatus.BAD_REQUEST,"Invalid year provided"),
-    INVALID_MONTH(HttpStatus.BAD_REQUEST,"Invalid month provided")
+    INVALID_MONTH(HttpStatus.BAD_REQUEST,"Invalid month provided"),
+    ALARM_NOT_FOUND(HttpStatus.NOT_FOUND, "The alarm does not exists.")
     ;
     private final HttpStatus status;
     private final String message;

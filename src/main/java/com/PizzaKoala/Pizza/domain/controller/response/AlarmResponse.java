@@ -15,7 +15,6 @@ public class AlarmResponse {
     private AlarmArgs args;
     private String text;
     private LocalDateTime createdAt;
-    private LocalDateTime deletedAt;
     private LocalDateTime modifiedAt;
 
     public static AlarmResponse fromAlarmDTO(AlarmDTO alarm) {
@@ -25,7 +24,6 @@ public class AlarmResponse {
                 alarm.getArgs(),
                 alarm.getAlarmType().getAlarmText(),
                 alarm.getCreatedAt(),
-                alarm.getDeletedAt(),
                 alarm.getModifiedAt()
         );
     }

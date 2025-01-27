@@ -5,11 +5,13 @@ import com.PizzaKoala.Pizza.domain.entity.Member;
 import com.PizzaKoala.Pizza.domain.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 //member- id, nickname, profileUrl comment- 시간,커멘트
 @AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class CommentDTO {
     private Long memberId;
     private String nickName;

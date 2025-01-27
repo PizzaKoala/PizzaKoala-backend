@@ -2,12 +2,18 @@ package com.PizzaKoala.Pizza.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * 게시글+ 게시글댓글 표준포맷
+ */
+
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class PostWithCommentsDTO {
 
@@ -23,7 +29,7 @@ public class PostWithCommentsDTO {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private Page<CommentDTO> comments;
+    private List<CommentDTO> comments;
 
 
 //    public static PostDTOWithComments fromPostEntity(Post post) {

@@ -3,6 +3,7 @@ package com.PizzaKoala.Pizza.domain.controller;
 import com.PizzaKoala.Pizza.domain.controller.response.PostListResponse;
 import com.PizzaKoala.Pizza.domain.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.controller.response.SearchNicknamesResponse;
+import com.PizzaKoala.Pizza.domain.controller.swagInterface.SearchControllerDoc;
 import com.PizzaKoala.Pizza.domain.service.SearchService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/search")
 @RestController
 @AllArgsConstructor
-public class SearchController {
+public class SearchController implements SearchControllerDoc {
     @Autowired
     private final SearchService searchService;
 
@@ -28,6 +29,7 @@ public class SearchController {
     }
 
     /**
+     * 요건 로그인 없이 검색 가능
      * 좋아요순/추천순 포스트 검색
      */
     @GetMapping("/posts/{keyword}/likes")
@@ -38,12 +40,13 @@ public class SearchController {
 
     /**
      * 최신포스트 순 - 닉네임 검색
+     * 이건 나중에는 그냥 포스트들 최신으로 반납해도 괜찮겠당!!
      */
     @GetMapping("/member/{keyword}/recent")
     public Response<Page<SearchNicknamesResponse>> searchNicknamesByRecent(@PathVariable String keyword, Pageable pageable) {
         return Response.success(searchService.SearchMemberByPosts(pageable, keyword).map(SearchNicknamesResponse::fromSearchMemberNicknameSTO));
 
-    }
+     }
 
     /**
      * 팔로우 순- 닉네임 검색

@@ -81,23 +81,23 @@ public class ConfigUser {
             imageRepository.save(image1_3);
 
 /**
- * member- 222
+ * member- monster
  * email- 222@Kakao.com
  * password- 222
  */
             //member2
             Member member2 = Member.builder()
                     .email("222@kakao.com")
-                    .nickName("222")
+                    .nickName("monster")
                     .password(passwordEncoder.encode("222"))
                     .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-09-03-14-38-37.jpeg")
-                    .role(MemberRole.ADMIN)
+                    .role(MemberRole.USER)
                     .build();
             Member member_2= memberRepository.save(member2);
           
             //member2의 포스트1
             String title2 = "점심";
-            String desc2 = "보쌈 너무 맛있당... 뚜비와 함께..!";
+            String desc2 = "보쌈 너무 맛있당... Monster 뚜비와 함께..!";
             Post post2=postRepository.save(Post.of(title2,desc2,member2));
             Images image2_1 = Images.of(post2, member2.getId(),
                     "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2024-01-20-15-03-43.jpeg",
@@ -106,7 +106,7 @@ public class ConfigUser {
 
 
 /**
- * member- 333
+ * member- meh
  * email- 333@Kakao.com
  * password- 333
  */
@@ -114,15 +114,15 @@ public class ConfigUser {
             //member3
             Member member3 = Member.builder()
                     .email("333@kakao.com")
-                    .nickName("333")
+                    .nickName("meh")
                     .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-11-05-00-46-13.jpeg")
                     .password(passwordEncoder.encode("333"))
-                    .role(MemberRole.ADMIN)
+                    .role(MemberRole.USER)
                     .build();
             Member member_3=memberRepository.save(member3);
             //member2의 포스트1
             String title3 = "파스스";
-            String desc3 = "오늘도 불태웠다.. 인증 완료....";
+            String desc3 = "meh... 오늘도 불태웠다.. 인증 완료....";
             postRepository.save(Post.of(title3,desc3,member3));
             Images image3 = Images.of(post, member3.getId(),
                     "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2024-04-26-16-19-35.jpeg",
@@ -131,14 +131,14 @@ public class ConfigUser {
 
 
 /**
- * member- 444
+ * member- miracle
  * email- 444@Kakao.com
  * password- 444
  */
 
             Member member4 = Member.builder()
                     .email("444@kakao.com")
-                    .nickName("444")
+                    .nickName("miracle")
                     .password(passwordEncoder.encode("444"))
                     .role(MemberRole.USER)
                     .build();
@@ -148,7 +148,6 @@ public class ConfigUser {
  */
             followService.follow("Meep@kakao.com", member_2.getId());
             followService.follow("Meep@kakao.com", member_3.getId());
-            followService.follow("Meep@kakao.com", member_4.getId());
 
             followService.follow("222@kakao.com", member_1.getId());
             followService.follow("222@kakao.com", member_3.getId());
@@ -157,6 +156,7 @@ public class ConfigUser {
             followService.follow("333@kakao.com", member_2.getId());
 
             followService.follow("444@kakao.com", member_1.getId());
+            followService.follow("444@kakao.com", member_3.getId());
 
 /**
  * likes
@@ -171,10 +171,16 @@ public class ConfigUser {
 
             postService.likes(post1_3.getId(),"444@kakao.com");
 
+            postService.likes(5L,"222@kakao.com");
+            postService.likes(5L,"Meep@kakao.com");
+            postService.likes(5L,"444@kakao.com");
+
+
             /**
              * comments
              */
             postService.comment(post.getId(),"Meep@kakao.com","내가 쓴 나의 게시글이당");
+            postService.comment(4L,"Meep@kakao.com","안녕!!!!");
             postService.comment(post.getId(),"222@kakao.com","코알라당!!");
             postService.comment(post.getId(),"333@kakao.com","이게 뭐얌!");
             postService.comment(post.getId(),"444@kakao.com",">_<");

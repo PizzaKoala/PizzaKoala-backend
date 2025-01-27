@@ -40,6 +40,6 @@ public class CustomOAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         response.addCookie(jwtTokenUtils.createCookie("refresh", token));
 
-        response.sendRedirect("http://localhost:3000/meep"); //    프론트측에서 /api/*/reissue로 가서 access토큰을 발급받게 한다.
+//        response.sendRedirect("http://localhost:3000/meep"); //    프론트측에서 /api/*/reissue로 가서 access토큰을 발급받게 한다.
     }
 }

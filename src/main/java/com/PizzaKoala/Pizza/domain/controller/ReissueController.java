@@ -1,5 +1,6 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
+import com.PizzaKoala.Pizza.domain.controller.swagInterface.ReissueControllerDoc;
 import com.PizzaKoala.Pizza.domain.service.JWTService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequestMapping("/api/v1/")
 @RestController
-public class ReissueController {
+public class ReissueController implements ReissueControllerDoc {
     private final JWTService jwtService;
 
 

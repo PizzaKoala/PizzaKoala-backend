@@ -49,12 +49,13 @@ public class JWTTokenFilter extends OncePerRequestFilter {
         }
         String accessToken = null;
         String requestUri = request.getRequestURI();
-        if(requestUri.startsWith("/swagger-ui")|| requestUri.startsWith("/v3/spi-docs")
+        if(requestUri.startsWith("/swagger-ui")|| requestUri.startsWith("/v3/api-docs")
                 ||requestUri.startsWith("/h2-console/")||requestUri.startsWith("/favicon.ico")){
             filterChain.doFilter(request, response);
             return;
         }
-        if (requestUri.startsWith("/login") || requestUri.startsWith("/oauth2/")||requestUri.startsWith("/api/v1/reissue")) {
+
+        if (requestUri.startsWith("/api/v1/join") ||requestUri.startsWith("/login") || requestUri.startsWith("/oauth2/")||requestUri.startsWith("/api/v1/reissue")) {
             filterChain.doFilter(request, response);
             return;
         }

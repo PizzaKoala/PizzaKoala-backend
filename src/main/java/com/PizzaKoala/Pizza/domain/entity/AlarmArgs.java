@@ -13,5 +13,9 @@ import lombok.Getter;
 public class AlarmArgs {
     //알람을 발생시킨사람
     private Long fromMemberId;
-    private Long targetId;
+    private String profilePic;
+    private String nickname;
+
+    private Long postId;
+    private Long commentId;
 }

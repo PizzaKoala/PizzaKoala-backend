@@ -11,12 +11,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comments,Long> {
 
-    Page<Comments> findAllByPostId(Post post, Pageable pageable);
+    List<Comments> findAllByPostId(Post post);
     @Transactional
     @Modifying
     @Query("UPDATE Comments i SET i.deletedAt = CURRENT_TIMESTAMP WHERE i.postId.id = :postId AND i.deletedAt IS NULL")

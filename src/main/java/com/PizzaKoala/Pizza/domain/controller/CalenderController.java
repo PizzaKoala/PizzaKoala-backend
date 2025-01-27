@@ -1,6 +1,7 @@
 package com.PizzaKoala.Pizza.domain.controller;
 
 import com.PizzaKoala.Pizza.domain.controller.response.Response;
+import com.PizzaKoala.Pizza.domain.controller.swagInterface.CalenderControllerDoc;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import com.PizzaKoala.Pizza.domain.service.CalendarService;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/calendar")
-public class CalenderController {
+public class CalenderController implements CalenderControllerDoc {
     private final CalendarService calendarService;
 
     /**

@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface AlarmRepository extends JpaRepository<Alarm,Long> {
+    Page<Alarm> findAllByReceiverId(Pageable pageable, Long memberId);
 
-    Page<Alarm> findAllByMemberId(Pageable pageable, Long memberId);
+    void deleteAllByReceiverId(Long receiverId);
 }

@@ -2,6 +2,7 @@ package com.PizzaKoala.Pizza.domain.controller;
 
 import com.PizzaKoala.Pizza.domain.controller.response.FollowListResponse;
 import com.PizzaKoala.Pizza.domain.controller.response.Response;
+import com.PizzaKoala.Pizza.domain.controller.swagInterface.FollowControllerDoc;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
 import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import com.PizzaKoala.Pizza.domain.service.FollowService;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/follow")
-public class FollowController {
+public class FollowController implements FollowControllerDoc {
     private final FollowService followService;
 
     /**

@@ -18,7 +18,6 @@ public class AlarmDTO {
     private AlarmArgs args;
 
     private LocalDateTime createdAt;
-    private LocalDateTime deletedAt;
     private LocalDateTime modifiedAt;
 
     public static AlarmDTO fromAlarmEntity(Alarm alarm) {
@@ -27,7 +26,6 @@ public class AlarmDTO {
                 alarm.getAlarmType(),
                 alarm.getArgs(),
                 alarm.getCreatedAt(),
-                alarm.getDeletedAt(),
                 alarm.getModifiedAt()
         );
     }

@@ -33,7 +33,7 @@ public class Alarm extends CreatedEntity {
     private Long id;
 
     //alram 받는 사람
-    private Long memberId;
+    private Long receiverId;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
@@ -44,13 +44,10 @@ public class Alarm extends CreatedEntity {
     @Enumerated(EnumType.STRING)
     private AlarmType alarmType;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
     public static Alarm of(Long memberId,AlarmType alarmType, AlarmArgs args) {
 
         return new AlarmBuilder()
-                .memberId(memberId)
+                .receiverId(memberId)
                 .alarmType(alarmType)
                 .args(args)
                 .build();

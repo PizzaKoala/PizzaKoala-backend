@@ -57,9 +57,19 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
+    private static final String[] AUTH_WHITELIST={
+            "/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/main/likes","/api/*/search/posts/{keyword}/likes"
+    };
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .oauth2Login(oauth2 -> oauth2
+                        .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(customOAuth2SuccessHandler)
+                );
         http
                 .formLogin(AbstractHttpConfigurer::disable) //이거 disable하면 시큐리티 필터의 usernamePasswordAUthenticationFilter도 함꼐 disable된다. 그래서 이필터를 강제로 커스텀해서 등록해야한다.
                 .httpBasic(AbstractHttpConfigurer::disable);
@@ -67,26 +77,17 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable);// jwt를 발급해서 stateless방식으로 세션을 관리해서 안해도 된다.
         http
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join",
-//                                "/api/*/reissue","/h2-console/**","/api/*/posts/liked",
-//                                "/api/*/search/posts/{keyword}/likes","/swagger-ui/**", "/v3/api-docs/**",
-//                                "/login","/meep","/test","/favicon.ico").permitAll()
-//                        .requestMatchers("/api/*/admin").hasRole("ADMIN")
-                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/liked","/api/*/search/posts/{keyword}/likes").permitAll()
+//                        .requestMatchers("/api/*/login","/oauth2/**","login/oauth2/**", "/api/*/join","/api/*/reissue","/h2-console/**","/api/*/posts/main/likes","/api/*/search/posts/{keyword}/likes").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/api/v1/login","/favicon.ico").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .requestMatchers("/api/*/admin").hasRole("ADMIN")
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/login","/meep","/favicon.ico").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated());
 
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));//jwt는 항상 세션을 stateless상태로 해야한다.
-        http
-                .oauth2Login(oauth2 -> oauth2
-                        .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .successHandler(customOAuth2SuccessHandler)
-                );
+
 //        http
 //                .oauth2Login((oauth2) -> oauth2
 //                        .loginPage("/login/oauth2/*")
@@ -116,9 +117,9 @@ public class SecurityConfig {
                     return configuration;
                 }));
         http
-                .addFilterAfter(new JWTTokenFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
-        http
                 .addFilterAt(new NewLoginFilter(authenticationManager(authenticationConfiguration), authenticationService), UsernamePasswordAuthenticationFilter.class);
+        http
+                .addFilterAfter(new JWTTokenFilter(jwtUtil), OAuth2LoginAuthenticationFilter.class);
         http
                 .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
         http

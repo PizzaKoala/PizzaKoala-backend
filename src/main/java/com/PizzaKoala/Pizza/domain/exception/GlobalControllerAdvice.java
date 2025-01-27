@@ -14,13 +14,13 @@ public class GlobalControllerAdvice {
     public ResponseEntity<?> applicationHandler(PizzaAppException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(e.getErrorCode().getStatus())
-                .body(Response.error(e.getErrorCode().name()));
+                .body(Response.error(e.getErrorCode().name(), e.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> applicationHandler(RuntimeException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Response.error(ErrorCode.INTERNAL_SERVER_ERROR.name()));
+                .body(Response.error(ErrorCode.INTERNAL_SERVER_ERROR.name(), e.getMessage()));
     }
 }

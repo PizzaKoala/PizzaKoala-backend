@@ -93,13 +93,13 @@ public class MemberService {
     }
 
 
-    public Page<AlarmDTO> alarmList(String email, Pageable pageable) {
-//        //회원가입 이메일인지 체크
-        Member member=memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not founded ",email)));
-        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "createdAt"));
-        return alarmRepository.findAllByMemberId(pageable1,member.getId()).map(AlarmDTO::fromAlarmEntity);
-
-    }
+//    public Page<AlarmDTO> alarmList(String email, Pageable pageable) {
+////        //회원가입 이메일인지 체크
+//        Member member=memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not founded ",email)));
+//        Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "createdAt"));
+//        return alarmRepository.findAllByMemberId(pageable1,member.getId()).map(AlarmDTO::fromAlarmEntity);
+//
+//    }
 
 
 }

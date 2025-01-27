@@ -1,6 +1,7 @@
 package com.PizzaKoala.Pizza.domain.exception;
 
 import com.PizzaKoala.Pizza.domain.controller.response.Response;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,10 +11,12 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import java.io.IOException;
 
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json");
         response.setStatus(ErrorCode.INVALID_TOKEN.getStatus().value());
-        response.getWriter().write(Response.error(ErrorCode.INVALID_TOKEN.name()).toStream());
+        response.getWriter().write(Response.error(ErrorCode.INVALID_TOKEN.name(), authException.getMessage()).toStream());
+    ;
     }
 }

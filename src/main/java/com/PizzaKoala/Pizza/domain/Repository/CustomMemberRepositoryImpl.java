@@ -32,7 +32,7 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
      * ORDER THE RESULT BY THE MOST RECENT POSTS MADE BY THE MEMBERS.
      */
 
-    public Page<SearchMemberNicknameDTO> searchMemberByRecentPosts(@Param("keyword") String keyword, Pageable pageable) {
+    public Page<SearchMemberNicknameDTO> searchMemberByRecentPosts(String keyword, Pageable pageable) {
         QMember qMember = QMember.member;
         QPost qPost = QPost.post;
 
@@ -53,6 +53,7 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
         // Fetch the post data with one image URL
         List<Tuple> rawResults = queryFactory
                 .select(qMember.id, qMember.nickName,qMember.profileImageUrl)
+                .from(qMember)
                 .leftJoin(qPost).on(qPost.member.eq(qMember))
                 .where(builder.and(qMember.deletedAt.isNull()))
                 .groupBy(qMember.id,qMember.nickName,qMember.profileImageUrl)
@@ -60,6 +61,7 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+
   
         // Transform the results into DTOs
         List<SearchMemberNicknameDTO> finalResults = rawResults.stream().map(tuple -> {
