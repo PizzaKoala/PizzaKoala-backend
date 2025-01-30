@@ -19,3 +19,16 @@
 
 Website: <br>
 
+## **🔧 Technical Stack**
+
+- **Backend**: Spring Boot, Spring Security
+- **Database**: MySQL
+- **Authentication**: JWT (Access Token, Refresh Token)
+- **OAuth Login**: Google Login
+- **Frontend**: Swagger API for Backend Interaction
+
+## **🚀 Installation & Setup**
+
+1. 프로젝트를 클론합니다.
+   ```bash
+   git clone [프로젝트 리포지토리 URL]
