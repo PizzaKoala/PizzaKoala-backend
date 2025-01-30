@@ -10,7 +10,8 @@
 - ✅ **Daily Tracking** – 사용자가 올린 게시물이 캘린더에 기록되어 시각적으로 확인 가능  
 - ✅ **Photo & Text Logging** – 사진과 글을 통해 현재 몰입하는 활동 기록  
 - ✅ **Streak System** – 꾸준히 실천할 수 있도록 동기 부여  
-- ✅ **Community & Sharing** – 다른 사용자와 공유하며 서로 응원  
+- ✅ **Community & Sharing** – 다른 사용자와 공유하며 서로 응원
+- ✅ **Real-Time Notifications (SSE)** – 실시간으로 알림을 받을 수 있는 SSE(서버 전송 이벤트) 시스템 제공
 
 ## **🚀 Why PizzaKoala?**
 
@@ -25,6 +26,7 @@ Website: <br>
 - **Database**: MySQL
 - **Authentication**: JWT (Access Token, Refresh Token)
 - **OAuth Login**: Google Login
+- **Real-Time Notifications**: SSE (Server-Sent Events) for real-time alerts
 - **Frontend**: Swagger API for Backend Interaction
 
 ## **🚀 How to Use**
