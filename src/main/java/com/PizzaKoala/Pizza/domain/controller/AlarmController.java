@@ -24,7 +24,6 @@ public class AlarmController implements AlarmControllerDoc {
 
     @GetMapping("/list")
     public Response<Page<AlarmResponse>> alarmLists(Authentication authentication, Pageable pageable) {
-
         return Response.success(alarmService.getAlarmList(authentication.getName(),pageable).map(AlarmResponse::fromAlarmDTO));
     }
     @GetMapping

@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Tag(name = "키워드로 검색 기능 컨트롤러", description = "최근 게시글,유저,내가 팔로잉,좋아요순")
+@Tag(name = "검색APIs")
 public interface SearchControllerDoc {
     /**
      * 최신순- 포스트 검색
@@ -163,7 +163,9 @@ public interface SearchControllerDoc {
                                             }
                                             """
                             )))
-    @Operation(summary = "게시글 검색 기능-좋아요 순", description = "로그인 없이 요청 가능한 기능입니다.")
+    @Operation(summary = "게시글 검색 기능-좋아요 순", description = "로그인 없이 요청 가능한 기능입니다."
+    ,tags = "공개APIs"
+    )
     Response<Page<PostListResponse>> searchPostByLikes(@Parameter(
             description = "게시글 검색을 위한 키워드 입력.",
             examples = {

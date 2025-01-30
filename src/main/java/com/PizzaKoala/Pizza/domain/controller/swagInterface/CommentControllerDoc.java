@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "댓글 컨트롤러", description = "게시글 댓글 기능들")
+@Tag(name = "댓글쓰기APIs")
 public interface CommentControllerDoc {
     /**
      * leave a comment - 댓글 달기

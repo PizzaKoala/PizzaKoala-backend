@@ -44,7 +44,7 @@ public class ConfigUser {
              */
             Member member = Member.builder()
                     .email("Meep@kakao.com")
-                    .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-11-12-21-27-13-2.jpeg")
+                    .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/aca40aa3-c9a0-4679-af0e-8e6fe88f3e17.png")
                     .nickName("MEEP")
                     .password(passwordEncoder.encode("123"))
                     .role(MemberRole.ADMIN)
@@ -56,12 +56,12 @@ public class ConfigUser {
             String desc = "피곤하고 정신없는 하루였다. ";
             Post post=postRepository.save(Post.of(title,desc,member));
             Images image = Images.of(post, member.getId(),
-                    "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/47896696-f511-4697-b3f5-2a7b194a3dbc.png",
+                    "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/%E1%84%91%E1%85%B5%E1%84%80%E1%85%A9%E1%86%AB%E1%84%92%E1%85%A1%E1%86%AB+%E1%84%8B%E1%85%A2%E1%84%8B%E1%85%A9%E1%86%BC.jpeg",
                     "image/jpeg", 322771L,"KakaoTalk_Photo_2024-04-30-16-57-50.png" );
             imageRepository.save(image);
             Images image2 = Images.of(post, member.getId(),
-                    "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/62d9ad5c-6df8-473d-b88f-a923adcade3d.jpeg",
-                    "image/jpeg", 322771L,"KakaoTalk.png" );
+                    "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/843e7eff-64ea-41da-bd1c-881ca2176430.jpeg",
+                    "image/jpeg", 322771L,"KakaoTalk.jpeg" );
             imageRepository.save(image2);
             //member1의 포스트2
             String title1_2 = "애민이";
@@ -90,7 +90,7 @@ public class ConfigUser {
                     .email("222@kakao.com")
                     .nickName("monster")
                     .password(passwordEncoder.encode("222"))
-                    .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-09-03-14-38-37.jpeg")
+                    .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/81407f93-f233-4b17-a32e-7459df7b9a19.jpeg")
                     .role(MemberRole.USER)
                     .build();
             Member member_2= memberRepository.save(member2);
@@ -115,7 +115,7 @@ public class ConfigUser {
             Member member3 = Member.builder()
                     .email("333@kakao.com")
                     .nickName("meh")
-                    .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-11-05-00-46-13.jpeg")
+                    .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2025-01-21-01-37-02+005.jpeg")
                     .password(passwordEncoder.encode("333"))
                     .role(MemberRole.USER)
                     .build();
@@ -125,7 +125,7 @@ public class ConfigUser {
             String desc3 = "meh... 오늘도 불태웠다.. 인증 완료....";
             postRepository.save(Post.of(title3,desc3,member3));
             Images image3 = Images.of(post, member3.getId(),
-                    "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2024-04-26-16-19-35.jpeg",
+                    "https://pizzakoala.s3.ap-northeast-2.amazonaws.com/ba1d831a-a00b-4241-b0fd-5928e41af6a0.jpeg",
                     "image/jpeg", 278600L,"KakaoTalk.png" );
             imageRepository.save(image3);
 
@@ -139,6 +139,7 @@ public class ConfigUser {
             Member member4 = Member.builder()
                     .email("444@kakao.com")
                     .nickName("miracle")
+                    .profileImageUrl("https://pizzakoala.s3.ap-northeast-2.amazonaws.com/KakaoTalk_Photo_2023-11-05-00-46-13.jpeg")
                     .password(passwordEncoder.encode("444"))
                     .role(MemberRole.USER)
                     .build();

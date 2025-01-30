@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Tag(name = "좋아요 컨트롤러", description = "좋아요 기능들")
+@Tag(name = "좋아요APIs")
 public interface LikeControllerDoc {
     /**
      * like function- 좋아요
@@ -102,7 +102,7 @@ public interface LikeControllerDoc {
             @ApiResponse(responseCode = "404", description = "게시글을 좋아한 적 없거나 게시글이 존재 하지 않을 경우",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorCode.class),
                             examples = {@ExampleObject(
-                                    name = "존재하지 않는 게시글입니다.",
+                                    name = "1_존재하지 않는 게시글입니다.",
                                     value = """
                                             {
                                               "resultCode": "POST_NOT_FOUND",
@@ -110,7 +110,7 @@ public interface LikeControllerDoc {
                                             }
                                             """
                             ), @ExampleObject(
-                                    name = "좋아요한적 없는 게시글입니다.",
+                                    name = "2_좋아요한적 없는 게시글입니다.",
                                     value = """
                                             {
                                                "resultCode": "LIKE_NOT_FOUND",

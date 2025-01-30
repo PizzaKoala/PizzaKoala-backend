@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
+    ALARM_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete alarms."),
     DUPLICATED_EMAIL_ADDRESS(HttpStatus.CONFLICT,"The email already exists."),
     DUPLICATED_NICKNAME(HttpStatus.CONFLICT,"The nickname already exists."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND,"The user does not exist."),

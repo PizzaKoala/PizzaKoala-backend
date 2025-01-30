@@ -42,7 +42,7 @@ public class PostService {
      * Create a post 게시글 쓰기
      */
     @Transactional
-    public void create(List<MultipartFile> files,String email, String title, String desc) throws IOException {
+    public void create(List<MultipartFile> files,String email, String title, String desc){
 
         //find user
         Member member = getMemberByEmailOrException(email);
@@ -52,9 +52,9 @@ public class PostService {
 
         try {
             List<Images> createdImages = uploadImages(files, post, member);
-        } catch (PizzaAppException e) {
+        } catch (IOException e) {
             postRepository.delete(post);
-            throw e;  // Re-throw the exception to maintain original behavior
+            throw new PizzaAppException(ErrorCode.S3_UPLOAD_FAILED, e.getMessage());  // Re-throw the exception to maintain original behavior
         }
 
         }

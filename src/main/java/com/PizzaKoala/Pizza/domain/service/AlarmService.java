@@ -107,8 +107,14 @@ public class AlarmService {
             throw new PizzaAppException(ErrorCode.INVALID_PERMISSION, "You are not accessible for this action");
         }
         //delete alarm.
-        alarmRepository.deleteById(alarmId);
-        return null;
+        try {
+            alarmRepository.deleteById(alarmId);
+        } catch (Exception e) {
+            throw new PizzaAppException(
+                    ErrorCode.ALARM_DELETE_FAILED, "Failed to delete alarm."
+            );
+        }
+        return Response.success();
     }
     @Transactional
     public Response<Void> deleteAlarms(String email) {
@@ -116,9 +122,15 @@ public class AlarmService {
         Member member=memberRepository.findByEmail(email).orElseThrow(() ->
                 new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%S not found", email)));
 
-        //delete all the alarms.
-        alarmRepository.deleteAllByReceiverId(member.getId());
-        return null;
+        try {
+            // Delete all alarms for the user
+            alarmRepository.deleteAllByReceiverId(member.getId());
+        } catch (Exception e) {
+            throw new PizzaAppException(
+                    ErrorCode.ALARM_DELETE_FAILED, "Failed to delete alarms."
+            );
+        }
+        return Response.success();
     }
 
     //TODO 알람 리스트만 받아오면 끝!

@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Entity@Table(name = "alarm", indexes = {
-        @Index(name = "member_id_index", columnList = "memberId")
+        @Index(name = "receiver_id_index", columnList = "receiverId")
 })
 @EntityListeners(AuditingEntityListener.class)
 public class Alarm extends CreatedEntity {

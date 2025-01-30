@@ -80,7 +80,7 @@ public class MemberService {
         return UserDTO.fromMemberEntity(result);
     }
 
-
+//이거 이미 필터에 설정되서 필요없는거 같아..
     public Void login(String email, String password) {
         //회원가입 이메일인지 체크
         Member member=memberRepository.findByEmail(email).orElseThrow(()-> new PizzaAppException(ErrorCode.MEMBER_NOT_FOUND, String.format("%s is not founded ",email)));

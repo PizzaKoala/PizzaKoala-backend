@@ -5,9 +5,7 @@ import com.PizzaKoala.Pizza.domain.controller.request.PostModifyRequest;
 import com.PizzaKoala.Pizza.domain.controller.response.PostListResponse;
 import com.PizzaKoala.Pizza.domain.controller.response.Response;
 import com.PizzaKoala.Pizza.domain.exception.ErrorCode;
-import com.PizzaKoala.Pizza.domain.exception.PizzaAppException;
 import com.PizzaKoala.Pizza.domain.model.PostWithCommentsDTO;
-import com.PizzaKoala.Pizza.global.config.swagger.ApiDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,10 +23,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.List;
 
-@Tag(name = "게시글 기능 컨트롤러", description = "최근 게시글,유저,내가 팔로잉,좋아요순")
+//@Tag(name = "게시글APIs", description = "최근 게시글,유저,내가 팔로잉,좋아요순")
 public interface PostControllerDoc {
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "게시글이 완료되었습니다.",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = PostCreateRequest.class),
@@ -76,7 +75,7 @@ public interface PostControllerDoc {
                                             """
                             )))
     })
-    @Operation(summary = "게시글 올리기 with 사진", description = "사진과 함께 게시글을 해주세요. 사진은 1~5개까지 올려주세요. *사진을 하나 이상 올려야 실행됩니다.*")
+    @Operation(summary = "게시글 올리기 with 사진", description = "사진과 함께 게시글을 해주세요. 사진은 1~5개까지 올려주세요. *사진을 하나 이상 올려야 실행됩니다.*", tags = "게시글쓰기APIs")
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Response<Void> create(@RequestPart("files") List<MultipartFile> files,
                                  @RequestPart("request") PostCreateRequest request, Authentication authentication);
@@ -153,7 +152,8 @@ public interface PostControllerDoc {
                                             }
                                             """
                             )))})
-    @Operation(summary = "게시글 수정 기능", description = "사진과 함께 게시글을 해주세요. 사진은 1~5개까지 올려주세요. *사진을 하나 이상 올려야 실행됩니다.*")
+    @Operation(summary = "게시글 수정 기능", description = "사진과 함께 게시글을 해주세요. 사진은 1~5개까지 올려주세요. *사진을 하나 이상 올려야 실행됩니다.*",
+    tags = "게시글쓰기APIs")
     @PutMapping(value = "/{postId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Response<Void> Modify(    @Parameter(
             description = "해당 게시글 아이디 입력",
@@ -162,7 +162,7 @@ public interface PostControllerDoc {
                     @ExampleObject(name = "내 게시글이 아닌 게시글", value = "4"),
                     @ExampleObject(name = "존재하지않는 게시글", value = "-1")
             }
-    ) @PathVariable Long postId, @RequestPart List<MultipartFile> files, @RequestPart PostModifyRequest request, Authentication authentication);
+    ) @PathVariable Long postId, @RequestPart List<MultipartFile> files, @RequestPart PostModifyRequest request, Authentication authentication)throws IOException;
 
     /**
      * delete a post- 포스트 단건 삭제(soft delete)
@@ -210,7 +210,7 @@ public interface PostControllerDoc {
                                             """
                             )
                             }))})
-    @Operation(summary = "게시글 삭제 기능", description = "내 게시글을 삭제합니다.")
+    @Operation(summary = "게시글 삭제 기능", description = "내 게시글을 삭제합니다.", tags = "게시글쓰기APIs")
     @DeleteMapping("/{postId}")
     public Response<Void> delete(  @Parameter(
             description = "해당 게시글 아이디 입력",
@@ -276,8 +276,19 @@ public interface PostControllerDoc {
                                             }
                                             """
                             )
-                            }))})
-    @Operation(summary = "게시글 단건 조회", description = "게시글 아이디로 단건 조회합니다")
+                            })),
+            @ApiResponse(responseCode = "401", description = "로그인 하지 않았을 경우",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorCode.class),
+                            examples = {@ExampleObject(
+                                    name = "실패 예제) 로그인이 필요한 요청입니다.",
+                                    value = """
+                                            {
+                                              "resultCode": "INVALID_TOKEN",
+                                              "message": "Full authentication is required to access this resource"
+                                            }
+                                            """
+                            )}))})
+    @Operation(summary = "게시글 단건 조회", description = "게시글 아이디로 단건 조회합니다",tags = "게시글조회APIs")
      Response<PostWithCommentsDTO> getAPost(@Parameter(
             description = "해당 게시글 아이디 입력",
             examples = {
@@ -359,7 +370,7 @@ public interface PostControllerDoc {
                                             """
                             )
                             }))})
-    @Operation(summary = "내 게시글 다건 조회", description = "나의 게시글들을 조회합니다")
+    @Operation(summary = "내 게시글 다건 조회", description = "나의 게시글들을 조회합니다",tags = "게시글조회APIs")
     public Response<Page<PostListResponse>> myPosts(Authentication authentication, @ParameterObject @PageableDefault(
             page = 0,
             size = 20
@@ -449,13 +460,14 @@ public interface PostControllerDoc {
                                             }
                                             """
                             )}))})
-    @Operation(summary = "특정 맴버의 게시글들 조회", description = "맴버 아이디로 게시글 다건 조회합니다")
+    @Operation(summary = "특정 맴버의 게시글들 조회", description = "맴버 아이디로 게시글 다건 조회합니다",tags = "게시글조회APIs")
     public Response<Page<PostListResponse>> memberPosts(@Parameter(
             description = "유저 아이디를 입력해주세요.",
             examples = {
                     @ExampleObject(name = "예시1-성공", value = "1"),
-                    @ExampleObject(name = "예시2-성공", value = "2"),
-                    @ExampleObject(name = "예시3-성공", value = "3")}
+                    @ExampleObject(name = "예시2-실패", value = "0"),
+                    @ExampleObject(name = "예시3-성공", value = "2"),
+                    @ExampleObject(name = "예시4-성공", value = "3")}
     ) @PathVariable Long memberId, @ParameterObject @PageableDefault(
             page = 0,
             size = 20
@@ -468,7 +480,7 @@ public interface PostControllerDoc {
             @ApiResponse(responseCode = "200", description = "게시글 다건 조회) 내가 팔로일하는 유저들 게시글들.",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorCode.class),
                             examples = @ExampleObject(
-                                    name = "게시글 단건 조회 성공 예제",
+                                    name = "게시글 다건 조회 성공 예제",
                                     value = """
                                             {
                                               "resultCode": "SUCCESS",
@@ -515,8 +527,20 @@ public interface PostControllerDoc {
                                               }
                                             }
                                             """
-                            )))})
-    @Operation(summary = "메인 페이지 조회) 팔로잉 유저들의 게시글들", description = "내가 팔로우 하는 유저들의 게시글을 가져 옵니다 20개씩 게시글을 가져옵니다. 페이지번호 0부터 시작")
+                            ))),
+            @ApiResponse(responseCode = "401", description = "로그인 하지 않았을 경우",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorCode.class),
+                            examples = {@ExampleObject(
+                                    name = "실패 예제) 로그인이 필요한 요청입니다.",
+                                    value = """
+                                            {
+                                              "resultCode": "INVALID_TOKEN",
+                                              "message": "Full authentication is required to access this resource"
+                                            }
+                                            """
+                            )}))})
+    @Operation(summary = "메인 페이지 조회) 팔로잉 유저들의 게시글들", description = "내가 팔로우 하는 유저들의 게시글을 가져 옵니다 20개씩 게시글을 가져옵니다. 페이지번호 0부터 시작",
+    tags = "메인페이지APIs")
     public Response<Page<PostListResponse>> FollowingList(@ParameterObject @PageableDefault(
             page = 0,
             size = 20
@@ -596,7 +620,9 @@ public interface PostControllerDoc {
                                             }
                                             """
                             )))})
-    @Operation(summary = "메인 페이지 조회) 좋아요 순 게시글들", description = "로그인 없이 조회 가능합니다. 20개씩 게시글을 가져옵니다. 페이지번호 0부터 시작")
+    @Operation(summary = "메인 페이지 조회) 좋아요 순 게시글들", description = "로그인 없이 조회 가능합니다. 20개씩 게시글을 가져옵니다. 페이지번호 0부터 시작"
+            ,tags = {"메인페이지APIs","공개APIs"}
+    )
      Response<Page<PostListResponse>> LikedList(@ParameterObject @PageableDefault(
             page = 0,
             size = 20
