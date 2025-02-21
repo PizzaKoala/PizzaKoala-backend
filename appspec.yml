@@ -1,12 +1,12 @@
 version: 0.0
 os: linux
 files:
-  - sources: /
+  - source: /
     destination: /home/ubuntu/github_action
     overwrite: yes
 
 permission:
-  - object: /
+  - object: /home/ubuntu/github_action
     pattern: "**"
     owner: ubuntu
     group: ubuntu
