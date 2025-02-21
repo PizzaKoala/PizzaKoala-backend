@@ -36,8 +36,7 @@ public interface PostControllerDoc {
                                     name = "게시글 업로드 성공 예제",
                                     value = """
                                             {
-                                              "resultCode": "SUCCESS",
-                                              "result": "null"
+                                              "resultCode": "SUCCESS"
                                             }
                                             """
                             ))),

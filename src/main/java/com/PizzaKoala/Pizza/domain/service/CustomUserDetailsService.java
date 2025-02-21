@@ -16,17 +16,20 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
+
     private final MemberRepository memberRepository;
 
     public CustomUserDetailsService(MemberRepository memberRepository) {
+
         this.memberRepository = memberRepository;
     }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByMyEmail(email);
-        if (member!=null) {
+        if (member != null) {
             return new CustomUserDetailsDTO(member);
-        }else {
+        } else {
             log.error("Error: Member with email {} does not exist", email);
             throw new UsernameNotFoundException("Member with email " + email + "does not exist");
         }

@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - sources: /
+    destination: /home/ubuntu/github_action
+    overwrite: yes
+
+permission:
+  - object: /
+    pattern: "**"
+    group: ubuntu
+
+hooks:
+  ApplicationStart:
+    - location: scripts/gh_deploy.sh
+      timeout: 60
+      runas: ubuntu
