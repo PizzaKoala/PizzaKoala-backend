@@ -2,11 +2,11 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ubuntu/github_action
+    destination: /home/ubuntu/Pizza
     overwrite: yes
 
 permission:
-  - object: /home/ubuntu/github_action
+  - object: /home/ubuntu/Pizza
     pattern: "**"
     owner: ubuntu
     group: ubuntu
