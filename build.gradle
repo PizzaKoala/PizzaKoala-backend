@@ -78,7 +78,7 @@ tasks.named('test') {
 }
 
 jar {
-	enabled = false
+	enabled = true
 }
 /*
 * plain.jar는 jar파일과 다르게 dependencies를 제외한 class/resources 만을 포함하고 있어서 java -jar옵션으로 jar파일을 실행할수없다.
