@@ -10,6 +10,11 @@ JAR_NAME=$(basename $BUILD_JAR)
 
 echo "==== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
 
+echo "> GitHub Secrets에서 JWT_SECRET & TOKEN_EXPIRED_TIME_MS 불러오기" >> $DEPLOY_LOG_PATH
+echo "JWT_SECRET=${JWT_SECRET}" >> /etc/environment
+echo "TOKEN_EXPIRED_TIME_MS=${TOKEN_EXPIRED_TIME_MS}" >> /etc/environment
+source /etc/environment
+
 echo "> build 파일명: $JAR_NAME" >> $DEPLOY_LOG_PATH
 echo "> build 파일 복사" >> $DEPLOY_LOG_PATH
 cp $BUILD_JAR $DEPLOY_PATH
@@ -29,7 +34,7 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포" >> $DEPLOY_LOG_PATH
-nohup java -jar -Dspring.profiles.active=local $DEPLOY_JAR --server.port=8081 >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
+nohup java -jar -Dspring.profiles.active=local $DEPLOY_JAR --server.port=8080 >> $APPLICATION_LOG_PATH 2> $DEPLOY_ERR_LOG_PATH &
 
 sleep 3
 

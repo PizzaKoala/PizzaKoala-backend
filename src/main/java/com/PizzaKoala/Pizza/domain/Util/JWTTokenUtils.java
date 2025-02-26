@@ -18,7 +18,8 @@ public class JWTTokenUtils {
     private final RefreshRepository refreshRepository;
 
     public JWTTokenUtils(@Value("${jwt.secret-key}")String secret, RefreshRepository refreshRepository){
-        this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
+        String envSecret= System.getenv("JWT_SECRET");
+        this.secretKey = new SecretKeySpec((envSecret!=null?envSecret:secret).getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
         this.refreshRepository = refreshRepository;
     } //HS256-대칭키양방향 암호화
 
