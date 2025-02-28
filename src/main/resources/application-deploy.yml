@@ -8,8 +8,8 @@ spring:
       client:
         registration:
           google:
-            client-id: ${secret.GOOGLE_CLIENT_ID}
-            client-secret: ${secret.GOOGLE_CLIENT_SECRET}
+            client-id: ${secrets.GOOGLE_CLIENT_ID}
+            client-secret: ${secrets.GOOGLE_CLIENT_SECRET}
             redirect-uri: "http://localhost:8080/login/oauth2/code/google"
 
   datasource:
@@ -44,13 +44,13 @@ server:
   port: 8080
 forward-headers-strategy: FRAMEWORK
 jwt:
-  secret-key: ${secret.JWT_SECRET}
+  secret-key: ${secrets.JWT_SECRET}
 
 
 
 
 
-algorithm: ${ALGORITHM}
+algorithm: ${secrets.ALGORITHM}
 expiration_time: 2592000000
 #30day===== 60sec60min24hours*30days ->2592000 +000ms
 logging:
