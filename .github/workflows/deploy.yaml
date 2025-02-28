@@ -56,7 +56,7 @@ jobs:
 
       - name: Set JWT_SECRET on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i "your-key.pem" ubuntu@your-ec2-public-ip << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i "meep.pem" ubuntu@your-ec2-public-ip << 'EOF'
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a /etc/environment
             source /etc/environment
           EOF
