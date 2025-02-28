@@ -54,6 +54,7 @@ jobs:
           jwt.secret-key: ${{ secrets.JWT_SECRET}}
           google.client.id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google.client.secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          algorithm: ${{secrets.ALGORITHM}}
 
       - name: Code Deploy
         run: |
