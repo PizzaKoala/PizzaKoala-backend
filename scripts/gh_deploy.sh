@@ -15,6 +15,10 @@ echo "JWT_SECRET=${JWT_SECRET}" >> /etc/environment
 echo "TOKEN_EXPIRED_TIME_MS=${TOKEN_EXPIRED_TIME_MS}" >> /etc/environment
 source /etc/environment
 
+# 로그 확인
+echo "> JWT_SECRET = ${JWT_SECRET}" >> $DEPLOY_LOG_PATH
+echo "> TOKEN_EXPIRED_TIME_MS = ${TOKEN_EXPIRED_TIME_MS}" >> $DEPLOY_LOG_PATH
+
 echo "> build 파일명: $JAR_NAME" >> $DEPLOY_LOG_PATH
 echo "> build 파일 복사" >> $DEPLOY_LOG_PATH
 cp $BUILD_JAR $DEPLOY_PATH
