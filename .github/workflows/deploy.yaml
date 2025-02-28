@@ -46,6 +46,15 @@ jobs:
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
 
+      - name: Set yml file
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/main/resources/application-deploy.yml  # 실제 파일 경로로 수정
+        env:
+          jwt.key: ${{ secrets.JWT_SECRET}}
+          google.client.id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          google.client.secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+
       - name: Code Deploy
         run: |
           aws deploy create-deployment \
@@ -54,9 +63,3 @@ jobs:
           --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
           --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
 
-      - name: Set JWT_SECRET on EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no -i meep.pem ubuntu@your-ec2-public-ip << 'EOF'
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" | sudo tee -a /etc/environment
-            source /etc/environment
-          EOF

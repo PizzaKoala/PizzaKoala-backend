@@ -1,0 +1,66 @@
+spring:
+
+  security:
+    user:
+      name: sam
+      password: meep
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${secret.GOOGLE_CLIENT_ID}
+            client-secret: ${secret.GOOGLE_CLIENT_SECRET}
+            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+
+  datasource:
+    url: jdbc:h2:file:~/koala   # H2 데이터베이스 URL
+    driver-class-name: org.h2.Driver   # H2 드라이버 클래스명
+    username: sam   # 데이터베이스 사용자명
+    password: meep # 데이터베이스 비밀번호 (비워두거나 생략 가능)
+
+  jpa:
+    hibernate:
+      ddl-auto: update   # Hibernate 자동 DDL 설정
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      #사진 올릴떄 맥스가 1mb라서 더 크게 설정 해주었다.
+
+
+springdoc:
+  api-docs:
+    tags-sorter:
+  swagger-ui:
+    disable-swagger-default-url: true
+
+server:
+  port: 8080
+forward-headers-strategy: FRAMEWORK
+jwt:
+  secret-key: ${secret.JWT_SECRET}
+
+
+
+
+
+algorithm: ${ALGORITHM}
+expiration_time: 2592000000
+#30day===== 60sec60min24hours*30days ->2592000 +000ms
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
+      springframework:
+        security=TRACE:

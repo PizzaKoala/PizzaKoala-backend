@@ -10,15 +10,6 @@ JAR_NAME=$(basename $BUILD_JAR)
 
 echo "==== 배포 시작 : $(date +%c) =====" >> $DEPLOY_LOG_PATH
 
-echo "> GitHub Secrets에서 JWT_SECRET & TOKEN_EXPIRED_TIME_MS 불러오기" >> $DEPLOY_LOG_PATH
-echo "JWT_SECRET=${JWT_SECRET}" >> /etc/environment
-echo "TOKEN_EXPIRED_TIME_MS=${TOKEN_EXPIRED_TIME_MS}" >> /etc/environment
-source /etc/environment
-
-# 로그 확인
-echo "> JWT_SECRET = ${JWT_SECRET}" >> $DEPLOY_LOG_PATH
-echo "> TOKEN_EXPIRED_TIME_MS = ${TOKEN_EXPIRED_TIME_MS}" >> $DEPLOY_LOG_PATH
-
 echo "> build 파일명: $JAR_NAME" >> $DEPLOY_LOG_PATH
 echo "> build 파일 복사" >> $DEPLOY_LOG_PATH
 cp $BUILD_JAR $DEPLOY_PATH
