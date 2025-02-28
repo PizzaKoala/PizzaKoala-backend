@@ -9,7 +9,7 @@ env:
   S3_BUCKET_NAME: pizzakoala
   CODE_DEPLOY_APPLICATION_NAME: CODE-DEPLOY-PIZZAKOALA
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: AWS-DEPLOY-GROUP
-  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
 
 jobs:
   builds:
@@ -51,7 +51,7 @@ jobs:
         with:
           files: ./src/main/resources/application-deploy.yml  # 실제 파일 경로로 수정
         env:
-          jwt.key: ${{ secrets.JWT_SECRET}}
+          jwt.secret-key: ${{ secrets.JWT_SECRET}}
           google.client.id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google.client.secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
