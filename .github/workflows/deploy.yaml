@@ -11,6 +11,13 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: CODE-DEPLOY-PIZZAKOALA
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: AWS-DEPLOY-GROUP
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET }}
+  RDS_HOSTNAME: ${{ secrets.RDS_HOSTNAME }}  # RDS 호스트명
+  RDS_PORT: ${{ secrets.RDS_PORT }}  # RDS 포트
+  RDS_DB_NAME: ${{ secrets.RDS_DB_NAME }}  # RDS 데이터베이스 이름
+  RDS_USERNAME: ${{ secrets.RDS_USERNAME }}  # RDS 사용자명
+  RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}  # RDS 비밀번호
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}  # Google Client ID
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}  # Google Client Secret
 
 jobs:
   builds:
@@ -34,6 +41,11 @@ jobs:
           google.client.id: ${{ secrets.GOOGLE_CLIENT_ID }}
           google.client.secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           algorithm: ${{secrets.ALGORITHM}}
+          rds.hostname: ${{ secrets.RDS_HOSTNAME }}
+          rds.port: ${{ secrets.RDS_PORT }}
+          rds.db.name: ${{ secrets.RDS_DB_NAME }}
+          rds.username: ${{ secrets.RDS_USERNAME }}
+          rds.password: ${{ secrets.RDS_PASSWORD }}
 
       - name: Grant execute permission for gradle
         run: chmod +x ./gradlew

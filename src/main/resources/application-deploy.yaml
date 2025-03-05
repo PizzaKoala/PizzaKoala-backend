@@ -8,15 +8,16 @@ spring:
       client:
         registration:
           google:
-            client-id: ${secrets.GOOGLE_CLIENT_ID}
-            client-secret: ${secrets.GOOGLE_CLIENT_SECRET}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             redirect-uri: "http://localhost:8080/login/oauth2/code/google"
 
   datasource:
-    url: jdbc:h2:file:~/koala   # H2 데이터베이스 URL
-    driver-class-name: org.h2.Driver   # H2 드라이버 클래스명
-    username: sam   # 데이터베이스 사용자명
-    password: meep # 데이터베이스 비밀번호 (비워두거나 생략 가능)
+    # H2 데이터베이스를 AWS RDS MySQL로 변경
+    url: jdbc:mysql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}  # AWS RDS MySQL 연결 URL
+    driver-class-name: com.mysql.cj.jdbc.Driver   # MySQL 드라이버 클래스명
+    username: ${RDS_USERNAME}  # AWS RDS MySQL 사용자명
+    password: ${RDS_PASSWORD}  # AWS RDS MySQL 비밀번호
 
   jpa:
     hibernate:
@@ -44,13 +45,13 @@ server:
   port: 8080
 forward-headers-strategy: FRAMEWORK
 jwt:
-  secret-key: ${secrets.JWT_SECRET}
+  secret-key: ${JWT_SECRET}
 
 
 
 
 
-algorithm: ${secrets.ALGORITHM}
+algorithm: ${ALGORITHM}
 expiration_time: 2592000000
 #30day===== 60sec60min24hours*30days ->2592000 +000ms
 logging:
