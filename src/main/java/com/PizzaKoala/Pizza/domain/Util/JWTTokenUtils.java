@@ -3,7 +3,9 @@ package com.PizzaKoala.Pizza.domain.Util;
 import com.PizzaKoala.Pizza.domain.Repository.RefreshRepository;
 import com.PizzaKoala.Pizza.domain.entity.RefreshToken;
 import io.jsonwebtoken.Jwts;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,15 +14,23 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 // JWTUtil- 최신방식 0.12.13 (보통사용하는 JWTUtil-0.11.5와 많이 다르다고 함)
+@Slf4j
 @Component
 public class JWTTokenUtils {
     private final SecretKey secretKey;
     private final RefreshRepository refreshRepository;
 
+
     public JWTTokenUtils(@Value("${jwt.secret-key}")String secret, RefreshRepository refreshRepository){
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
         this.refreshRepository = refreshRepository;
     } //HS256-대칭키양방향 암호화
+
+    @PostConstruct
+    public void init(){
+        log.info("✅ JWT Secret Key: {}", secretKey);  // 서버 실행 시 로드된 값 출력
+    }
+
 
 //    @Value("${jwt.token.expired-time-ms}")
 //    private Long expiredTimeMs;
