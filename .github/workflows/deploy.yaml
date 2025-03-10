@@ -35,15 +35,25 @@ jobs:
 
       - name: Inject environment variables into application-deploy.yaml
         run: |
-          sed -i 's|${JWT_SECRET_KEY}|${{ secrets.JWT_SECRET }}|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${GOOGLE_CLIENT_ID}|${{ secrets.GOOGLE_CLIENT_ID }}|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${GOOGLE_CLIENT_SECRET}|${{ secrets.GOOGLE_CLIENT_SECRET }}|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_HOSTNAME}|${{ secrets.RDS_HOSTNAME }}|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_PORT}|${{ secrets.RDS_PORT }}|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_DB_NAME}|${{ secrets.RDS_DB_NAME }}|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_USERNAME}|${{ secrets.RDS_USERNAME }}|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_PASSWORD}|${{ secrets.RDS_PASSWORD }}|g' ${{ env.RESOURCE_PATH }}
+          # 환경 변수 설정
+          export JWT_SECRET_KEY="${{ secrets.JWT_SECRET }}"
+          export GOOGLE_CLIENT_ID="${{ secrets.GOOGLE_CLIENT_ID }}"
+          export GOOGLE_CLIENT_SECRET="${{ secrets.GOOGLE_CLIENT_SECRET }}"
+          export RDS_HOSTNAME="${{ secrets.RDS_HOSTNAME }}"
+          export RDS_PORT="${{ secrets.RDS_PORT }}"
+          export RDS_DB_NAME="${{ secrets.RDS_DB_NAME }}"
+          export RDS_USERNAME="${{ secrets.RDS_USERNAME }}"
+          export RDS_PASSWORD="${{ secrets.RDS_PASSWORD }}"
 
+          # 파일에서 변수 치환
+          sed -i 's|${JWT_SECRET_KEY}|'"$JWT_SECRET_KEY"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${GOOGLE_CLIENT_ID}|'"$GOOGLE_CLIENT_ID"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${GOOGLE_CLIENT_SECRET}|'"$GOOGLE_CLIENT_SECRET"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_HOSTNAME}|'"$RDS_HOSTNAME"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_PORT}|'"$RDS_PORT"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_DB_NAME}|'"$RDS_DB_NAME"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_USERNAME}|'"$RDS_USERNAME"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_PASSWORD}|'"$RDS_PASSWORD"'|g' ${{ env.RESOURCE_PATH }}
 #      - name: Set yml file
 #        uses: microsoft/variable-substitution@v1
 #        with:
@@ -67,6 +77,8 @@ jobs:
           echo "RDS_USERNAME=${{ secrets.RDS_USERNAME }}"
           echo "RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}"
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET }}"
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}"
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}"
 
 
       - name: Grant execute permission for gradle
