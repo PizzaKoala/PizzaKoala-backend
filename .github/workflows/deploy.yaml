@@ -6,6 +6,7 @@ on:
       - main
 
 env:
+  SPRING_PROFILES_ACTIVE: prod
   S3_BUCKET_NAME: pizzakoala
   RESOURCE_PATH: ./src/main/resources/application-deploy.yaml
   CODE_DEPLOY_APPLICATION_NAME: CODE-DEPLOY-PIZZAKOALA

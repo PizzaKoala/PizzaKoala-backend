@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: prod
 
   security:
     user:
@@ -64,4 +66,4 @@ logging:
             sql:
               BasicBinder: trace
       springframework:
-        security=TRACE:
+        security: TRACE
