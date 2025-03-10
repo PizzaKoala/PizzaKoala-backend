@@ -33,20 +33,41 @@ jobs:
         with:
           java-version: 21
 
-      - name: Set yml file
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ${{ env.RESOURCE_PATH }}
-        env:
-          jwt.secret-key: ${{ secrets.JWT_SECRET }}
-          google.client.id: ${{ secrets.GOOGLE_CLIENT_ID }}
-          google.client.secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          algorithm: ${{secrets.ALGORITHM}}
-          rds.hostname: ${{ secrets.RDS_HOSTNAME }}
-          rds.port: ${{ secrets.RDS_PORT }}
-          rds.db.name: ${{ secrets.RDS_DB_NAME }}
-          rds.username: ${{ secrets.RDS_USERNAME }}
-          rds.password: ${{ secrets.RDS_PASSWORD }}
+      - name: Inject environment variables into application-deploy.yaml
+        run: |
+          sed -i 's|${JWT_SECRET_KEY}|${{ secrets.JWT_SECRET }}|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${GOOGLE_CLIENT_ID}|${{ secrets.GOOGLE_CLIENT_ID }}|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${GOOGLE_CLIENT_SECRET}|${{ secrets.GOOGLE_CLIENT_SECRET }}|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_HOSTNAME}|${{ secrets.RDS_HOSTNAME }}|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_PORT}|${{ secrets.RDS_PORT }}|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_DB_NAME}|${{ secrets.RDS_DB_NAME }}|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_USERNAME}|${{ secrets.RDS_USERNAME }}|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|${RDS_PASSWORD}|${{ secrets.RDS_PASSWORD }}|g' ${{ env.RESOURCE_PATH }}
+
+#      - name: Set yml file
+#        uses: microsoft/variable-substitution@v1
+#        with:
+#          files: ${{ env.RESOURCE_PATH }}
+#        env:
+#          jwt.secret-key: ${{ secrets.JWT_SECRET }}
+#          google.client.id: ${{ secrets.GOOGLE_CLIENT_ID }}
+#          google.client.secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+#          algorithm: ${{secrets.ALGORITHM}}
+#          rds.hostname: ${{ secrets.RDS_HOSTNAME }}
+#          rds.port: ${{ secrets.RDS_PORT }}
+#          rds.db.name: ${{ secrets.RDS_DB_NAME }}
+#          rds.username: ${{ secrets.RDS_USERNAME }}
+#          rds.password: ${{ secrets.RDS_PASSWORD }}
+
+      - name: Debug Environment Variables
+        run: |
+          echo "RDS_HOSTNAME=${{ secrets.RDS_HOSTNAME }}"
+          echo "RDS_PORT=${{ secrets.RDS_PORT }}"
+          echo "RDS_DB_NAME=${{ secrets.RDS_DB_NAME }}"
+          echo "RDS_USERNAME=${{ secrets.RDS_USERNAME }}"
+          echo "RDS_PASSWORD=${{ secrets.RDS_PASSWORD }}"
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET }}"
+
 
       - name: Grant execute permission for gradle
         run: chmod +x ./gradlew
@@ -56,9 +77,12 @@ jobs:
         run: ./gradlew build
         shell: bash
 
+#      - name: Make zip file
+#        run: zip -r ./$GITHUB_SHA .
+#        shell: bash
+
       - name: Make zip file
-        run: zip -r ./$GITHUB_SHA .
-        shell: bash
+        run: zip -r $GITHUB_SHA.zip . -x "*.git*"
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -68,7 +92,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://${{ env.S3_BUCKET_NAME }} /$GITHUB_SHA.zip
 
       - name: Code Deploy
         run: |
@@ -76,5 +100,5 @@ jobs:
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
           --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
+          --s3-location bucket=${{ env.S3_BUCKET_NAME }},bundleType=zip,key=$GITHUB_SHA.zip
 

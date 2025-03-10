@@ -51,9 +51,9 @@ jwt:
 
 
 
-
-
-algorithm: ${ALGORITHM}
+#
+#
+#algorithm: ${ALGORITHM}
 expiration_time: 2592000000
 #30day===== 60sec60min24hours*30days ->2592000 +000ms
 logging:
