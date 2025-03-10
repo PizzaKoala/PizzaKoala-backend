@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -16,6 +17,7 @@ import java.sql.Date;
 // JWTUtil- 최신방식 0.12.13 (보통사용하는 JWTUtil-0.11.5와 많이 다르다고 함)
 @Slf4j
 @Component
+@PropertySource("classpath:/application-deploy.yaml")
 public class JWTTokenUtils {
     private final SecretKey secretKey;
     private final RefreshRepository refreshRepository;
