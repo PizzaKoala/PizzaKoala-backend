@@ -20,27 +20,46 @@ public class JWTTokenUtils {
     private final SecretKey secretKey;
     private final RefreshRepository refreshRepository;
 
-
-    public JWTTokenUtils(@Value("${jwt.secret-key}")String secret, RefreshRepository refreshRepository){
-        this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
-        this.refreshRepository = refreshRepository;
-    } //HS256-대칭키양방향 암호화
-
     @PostConstruct
     public void init(){
         log.info("✅ JWT Secret Key: {}", secretKey);  // 서버 실행 시 로드된 값 출력
     }
+    public JWTTokenUtils(@Value("${jwt.secret-key}")String secret, RefreshRepository refreshRepository){
+        this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
+        this.refreshRepository = refreshRepository;
+        log.info("JWTTokenUtils 생성자 호출됨. secretKey 초기화 완료.");
+    } //HS256-대칭키양방향 암호화
+
+
 
 
 //    @Value("${jwt.token.expired-time-ms}")
 //    private Long expiredTimeMs;
 
     public String getEmail(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
+        log.info("getEmail() 호출됨. 토큰: {}", token);
+        try {
+            String email = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
+            log.info("getEmail() 성공. email: {}", email);
+            return email;
+        } catch (Exception e) {
+            log.error("getEmail() 실패. 토큰: {}, 오류: {}", token, e.getMessage());
+            return null;
+        }
+//        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
 
     }
     public String getUsername(String token) {
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+        log.info("getUsername() 호출됨. 토큰: {}", token);
+        try {
+            String username = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+            log.info("getUsername() 성공. username: {}", username);
+            return username;
+        } catch (Exception e) {
+            log.error("getUsername() 실패. 토큰: {}, 오류: {}", token, e.getMessage());
+            return null;
+        }
+//        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
 
     }
     public String getRole(String token) {
@@ -53,11 +72,13 @@ public class JWTTokenUtils {
     }
 
     public Cookie createCookie(String key, String jwtValue) {
+        log.info("createCookie() 호출됨. key: {}, jwtValue: {}", key, jwtValue);
         Cookie cookie = new Cookie(key, jwtValue);
         cookie.setMaxAge(24 * 60 * 60);
         cookie.setHttpOnly(true); // prevent from javascript attack
 //        cookie.setSecure(true); <--https 일 경우
         cookie.setPath("/"); //@.@ ㅇㅣ게 맞남..?
+        log.info("createCookie() 성공. 쿠키 생성 완료.");
         return cookie;
     }
 
@@ -65,6 +86,7 @@ public class JWTTokenUtils {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
     }
     public String generatedToken(String category,String email, String role, long expiredTimeMs) {
+        log.info("jwt token gernerate "+ email);
 
         return Jwts.builder()
                 .claim("category", category)
