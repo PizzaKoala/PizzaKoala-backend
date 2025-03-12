@@ -35,7 +35,18 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
       #사진 올릴떄 맥스가 1mb라서 더 크게 설정 해주었다.
-
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    region:
+      static: ${AWS_REGION}
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
 
 springdoc:
   api-docs:
@@ -48,7 +59,8 @@ server:
 forward-headers-strategy: FRAMEWORK
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-
+  token:
+    expired-time-ms: 2592000
 
 
 #
@@ -66,4 +78,4 @@ logging:
             sql:
               BasicBinder: trace
       springframework:
-        security: TRACE
+        security=TRACE:

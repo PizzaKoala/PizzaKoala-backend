@@ -46,14 +46,14 @@ jobs:
           export RDS_PASSWORD="${{ secrets.RDS_PASSWORD }}"
 
           # 파일에서 변수 치환
-          sed -i 's|${JWT_SECRET_KEY}|'"$JWT_SECRET_KEY"'|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${GOOGLE_CLIENT_ID}|'"$GOOGLE_CLIENT_ID"'|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${GOOGLE_CLIENT_SECRET}|'"$GOOGLE_CLIENT_SECRET"'|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_HOSTNAME}|'"$RDS_HOSTNAME"'|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_PORT}|'"$RDS_PORT"'|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_DB_NAME}|'"$RDS_DB_NAME"'|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_USERNAME}|'"$RDS_USERNAME"'|g' ${{ env.RESOURCE_PATH }}
-          sed -i 's|${RDS_PASSWORD}|'"$RDS_PASSWORD"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${JWT_SECRET_KEY}|'$JWT_SECRET_KEY'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${GOOGLE_CLIENT_ID}|'"$GOOGLE_CLIENT_ID"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${GOOGLE_CLIENT_SECRET}|'"$GOOGLE_CLIENT_SECRET"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${RDS_HOSTNAME}|'"$RDS_HOSTNAME"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${RDS_PORT}|'"$RDS_PORT"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${RDS_DB_NAME}|'"$RDS_DB_NAME"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${RDS_USERNAME}|'"$RDS_USERNAME"'|g' ${{ env.RESOURCE_PATH }}
+          sed -i 's|\${RDS_PASSWORD}|'"$RDS_PASSWORD"'|g' ${{ env.RESOURCE_PATH }}
 #      - name: Set yml file
 #        uses: microsoft/variable-substitution@v1
 #        with:
